@@ -1,0 +1,27 @@
+# To verify variable substitution from environment:
+# $ docker-compose config
+# If there's a .env file in the same directory, it will be sourced automatically
+
+version: "3"
+
+services:
+  jenkins_master:
+    build: .
+    restart: always
+    expose:
+      - "8080"
+      - "50000"
+    ports:
+      - "50000:50000"
+    environment:
+      LETSENCRYPT_EMAIL: "fiba@futurice.com"
+      LETSENCRYPT_HOST: "${MASTER_DOMAIN}"
+      VIRTUAL_HOST: "${MASTER_DOMAIN}"
+      VIRTUAL_PORT: "8080"
+      MASTER_DOMAIN: "${MASTER_DOMAIN}"
+      MASTER_ADMIN_USERNAME: "${MASTER_ADMIN_USERNAME}"
+      MASTER_ADMIN_PASSWORD: "${MASTER_ADMIN_PASSWORD}"
+    volumes:
+      - "/data/jenkins:/var/jenkins_home"
+
+# Support services are inherited from the baseline defined by the "docker_host" module

@@ -1,0 +1,59 @@
+# To verify variable substitution from environment:
+# $ docker-compose config
+# If there's a .env file in the same directory, it will be sourced automatically
+
+version: "3"
+
+services:
+
+  # Main service is defined in docker-compose.override.yml
+  # See https://docs.docker.com/compose/extends/#multiple-compose-files
+
+  # Support services:
+
+  nginx:
+    image: jwilder/nginx-proxy:0.7.0
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      # https://github.com/jwilder/nginx-proxy#how-ssl-support-works
+      HTTPS_METHOD: "nohttp" # don't ever allow talking to the services over plain HTTP
+    volumes:
+      - "/var/run/docker.sock:/tmp/docker.sock:ro"
+      - "/data/nginx-certs:/etc/nginx/certs:ro"
+      - "/data/nginx-data:/etc/nginx/vhost.d"
+      - "/data/nginx-data:/usr/share/nginx/html"
+      - "./nginx-status.conf:/etc/nginx/conf.d/nginx-status.conf:ro"
+    labels:
+      - "com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy=true"
+
+  letsencrypt:
+    image: jrcs/letsencrypt-nginx-proxy-companion:v1.9.1
+    restart: always
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "/data/nginx-certs:/etc/nginx/certs:rw"
+      - "/data/nginx-data:/etc/nginx/vhost.d"
+      - "/data/nginx-data:/usr/share/nginx/html"
+
+  backup:
+    image: futurice/docker-volume-backup:2.0.1
+    restart: always
+    hostname: "${DOCKER_HOST_HOSTNAME}"
+    environment:
+      BACKUP_SOURCES: "${BACKUP_SOURCES}"
+      BACKUP_CRON_EXPRESSION: "$BACKUP_CRON_EXPRESSION"
+      BACKUP_FILENAME: "latest.tar.gz" # because the bucket is versioned, we can always use the same file name
+      AWS_S3_BUCKET_NAME: "${AWS_S3_BUCKET_NAME}"
+      AWS_ACCESS_KEY_ID: "${AWS_ACCESS_KEY_ID}"
+      AWS_SECRET_ACCESS_KEY: "${AWS_SECRET_ACCESS_KEY}"
+      AWS_DEFAULT_REGION: "${AWS_DEFAULT_REGION}"
+      INFLUXDB_URL: "https://metrics-db.infra.fiba3x3.com"
+      INFLUXDB_DB: "metrics_custom"
+      INFLUXDB_CREDENTIALS: "agent:${METRICS_INFLUXDB_AGENT_PASSWORD}"
+      INFLUXDB_MEASUREMENT: "docker_host_backups"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro" # allow Docker commands from within the container
+      - "/data:/data:ro" # expose the data volume, which we want to back up
