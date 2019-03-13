@@ -1,0 +1,8 @@
+.DS_Store
+.history
+.vscode/
+.env
+.ssh
+.terraform
+terraform.tfvars
+terraform.tfstate*
