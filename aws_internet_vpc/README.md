@@ -5,5 +5,8 @@ Creates an [AWS Virtual Private Cloud (VPC)](https://docs.aws.amazon.com/vpc/lat
 ## Example
 
 ```tf
-# TODO
+module "vpc" {
+  source   = "github.com/futurice/terraform-utils/aws_internet_vpc"
+  vpc_name = "my-vpc"
+}
 ```
