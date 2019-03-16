@@ -4,11 +4,11 @@ data "aws_availability_zones" "this" {}
 # Retrieve info about the VPC this host should join
 
 data "aws_vpc" "this" {
-  tags = {
-    Name = "${var.vpc_name}"
-  }
+  default = "${var.vpc_id == "" ? true : false}"
+  id      = "${var.vpc_id}"
 }
 
 data "aws_subnet" "this" {
-  vpc_id = "${data.aws_vpc.this.id}"
+  vpc_id            = "${data.aws_vpc.this.id}"
+  availability_zone = "${data.aws_availability_zones.this.names[0]}"
 }

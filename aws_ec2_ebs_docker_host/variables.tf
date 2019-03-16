@@ -46,9 +46,9 @@ variable "ssh_username" {
   default     = "ubuntu"
 }
 
-variable "vpc_name" {
-  description = "Name (i.e. tag) of the VPC our host should join"
-  default     = "terraform-default-vpc"
+variable "vpc_id" {
+  description = "ID of the VPC our host should join; if empty, joins your Default VPC"
+  default     = ""
 }
 
 variable "reprovision_trigger" {
