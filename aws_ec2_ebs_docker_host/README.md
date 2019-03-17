@@ -4,7 +4,7 @@ Creates a standalone Docker host on EC2, optionally attaching an external EBS vo
 
 This is convenient for quickly setting up non-production-critical Docker workloads. If you need something fancier, consider e.g. ECS, EKS or Fargate.
 
-## Example 1
+## Example 1: Running a docker container
 
 Assuming you have the [AWS provider](https://www.terraform.io/docs/providers/aws/index.html) set up:
 
@@ -32,7 +32,7 @@ $ DOCKER_HOST=localhost:2377 docker run -d -p 80:80 nginx
 
 Visit the IP address of your host in a browser to make sure it works.
 
-## Example 2
+## Example 2: Using a persistent data volume
 
 Assuming you have the [AWS provider](https://www.terraform.io/docs/providers/aws/index.html) set up:
 
@@ -85,3 +85,32 @@ tmpfs            99M     0   99M   0% /run/user/1000
 ```
 
 That is, you can see the 25 GB data volume mounted at `/data`.
+
+## Example 3: Running additional provisioners
+
+Assuming you have the [AWS provider](https://www.terraform.io/docs/providers/aws/index.html) set up:
+
+```tf
+module "my_host" {
+  source = "./aws_ec2_ebs_docker_host"
+
+  hostname             = "my-docker-host"
+  ssh_private_key_path = "~/.ssh/id_rsa"
+  ssh_public_key_path  = "~/.ssh/id_rsa.pub"
+}
+
+resource "null_resource" "provisioners" {
+  depends_on = ["module.my_host"] # wait until other provisioners within the module have finished
+
+  connection {
+    host        = "${module.my_host.public_ip}"
+    user        = "${module.my_host.ssh_username}"
+    private_key = "${module.my_host.ssh_private_key}"
+    agent       = false
+  }
+
+  provisioner "remote-exec" {
+    inline = ["echo HELLO WORLD"]
+  }
+}
+```
