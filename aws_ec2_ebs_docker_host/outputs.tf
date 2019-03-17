@@ -15,7 +15,7 @@ output "instance_id" {
 
 output "availability_zone" {
   description = "AWS Availability Zone in which the EC2 instance was created"
-  value       = "${aws_instance.this.availability_zone}"
+  value       = "${local.availability_zone}"
 }
 
 output "ssh_username" {

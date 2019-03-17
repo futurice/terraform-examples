@@ -16,6 +16,10 @@ locals {
   EOF
 }
 
+locals {
+  availability_zone = "${data.aws_availability_zones.this.names[0]}" # use the first available AZ in the region (AWS ensures this is constant per user)
+}
+
 variable "hostname" {
   description = "Hostname by which this service is identified in metrics, logs etc"
   default     = "aws-ec2-ebs-docker-host"

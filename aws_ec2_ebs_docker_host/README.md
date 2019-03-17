@@ -37,18 +37,16 @@ Visit the IP address of your host in a browser to make sure it works.
 Assuming you have the [AWS provider](https://www.terraform.io/docs/providers/aws/index.html) set up:
 
 ```tf
-data "aws_availability_zones" "this" {}
-
 resource "aws_ebs_volume" "my_data" {
-  availability_zone = "${data.aws_availability_zones.this.names[0]}" # ensure the volume is created in the same AZ the docker host defaults to
-  type              = "gp2"                                          # i.e. "Amazon EBS General Purpose SSD"
-  size              = 25                                             # in GB; if you change this in-place, you need to SSH over and run e.g. $ sudo resize2fs /dev/xvdh
+  availability_zone = "${module.my_host.availability_zone}" # ensure the volume is created in the same AZ the docker host
+  type              = "gp2"                                 # i.e. "Amazon EBS General Purpose SSD"
+  size              = 25                                    # in GiB; if you change this in-place, you need to SSH over and run e.g. $ sudo resize2fs /dev/xvdh
 }
 
 module "my_host" {
   source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_ec2_ebs_docker_host?ref=master"
 
-  hostname             = "my-docker-host"
+  hostname             = "my-host"
   ssh_private_key_path = "~/.ssh/id_rsa"                # note that with a shared Terraform state, paths with "~" will become problematic
   ssh_public_key_path  = "~/.ssh/id_rsa.pub"
   data_volume_id       = "${aws_ebs_volume.my_data.id}" # attach our EBS data volume
@@ -86,4 +84,4 @@ tmpfs           492M     0  492M   0% /sys/fs/cgroup
 tmpfs            99M     0   99M   0% /run/user/1000
 ```
 
-You can see the 25 GB data volume mounted at `/data`.
+That is, you can see the 25 GB data volume mounted at `/data`.

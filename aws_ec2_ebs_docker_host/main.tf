@@ -3,11 +3,11 @@
 resource "aws_instance" "this" {
   instance_type          = "${var.instance_type}"
   ami                    = "${var.instance_ami}"
-  availability_zone      = "${data.aws_availability_zones.this.names[0]}" # use the first available AZ in the region (AWS ensures this is constant per user)
-  key_name               = "${aws_key_pair.this.id}"                      # the name of the SSH keypair to use for provisioning
+  availability_zone      = "${local.availability_zone}"
+  key_name               = "${aws_key_pair.this.id}"            # the name of the SSH keypair to use for provisioning
   vpc_security_group_ids = ["${aws_security_group.this.id}"]
   subnet_id              = "${data.aws_subnet.this.id}"
-  user_data              = "${sha1(local.reprovision_trigger)}"           # this value isn't used by the EC2 instance, but its change will trigger re-creation of the resource
+  user_data              = "${sha1(local.reprovision_trigger)}" # this value isn't used by the EC2 instance, but its change will trigger re-creation of the resource
 
   tags {
     Name = "${var.hostname}"
