@@ -4,9 +4,11 @@ Creates an [AWS Virtual Private Cloud (VPC)](https://docs.aws.amazon.com/vpc/lat
 
 ## Example
 
+Assuming you have the [AWS provider](https://www.terraform.io/docs/providers/aws/index.html) set up:
+
 ```tf
-module "vpc" {
-  source   = "github.com/futurice/terraform-utils/aws_internet_vpc"
+module "my_vpc" {
+  source   = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_internet_vpc?ref=v2.0"
   vpc_name = "my-vpc"
 }
 ```
