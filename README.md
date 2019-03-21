@@ -11,6 +11,7 @@ In addition to the modules here, there's a lot of useful ones in the wild. For e
 ## Release
 
 ```bash
+git push origin master # make sure all changes are pushed
 # Go to https://github.com/futurice/terraform-utils/releases and make a new one
 git fetch # pull the tag created by the release
 TAG="$(git tag | tail -n 1)" # figure out the latest tag
