@@ -14,7 +14,7 @@ resource "aws_instance" "this" {
   }
 
   volume_tags = {
-    Name = "${var.hostname}--root" # give the root EBS volume a name that makes it easier to identify as belonging to this host
+    Name = "${var.hostname}" # give the root EBS volume a name that makes it easier to identify as belonging to this host
   }
 
   root_block_device {
