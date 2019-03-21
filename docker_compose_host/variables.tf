@@ -42,3 +42,8 @@ variable "docker_compose_up_command" {
   description = "Command to start services with; you can customize this to do work before/after, or to disable this completely in favor of your own provisioning scripts"
   default     = "docker-compose pull --quiet && docker-compose up -d"
 }
+
+variable "docker_compose_down_command" {
+  description = "Command to remove services with; will be run during un- or re-provisioning"
+  default     = "docker-compose stop && docker-compose rm -f"
+}
