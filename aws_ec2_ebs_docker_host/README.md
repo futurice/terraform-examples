@@ -10,6 +10,7 @@ Assuming you have the [AWS provider](https://www.terraform.io/docs/providers/aws
 
 ```tf
 module "my_host" {
+  # Check for updates at: https://github.com/futurice/terraform-utils/compare/v3.0...master
   source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_ec2_ebs_docker_host?ref=v3.0"
 
   hostname             = "my-docker-host"
@@ -44,6 +45,7 @@ resource "aws_ebs_volume" "my_data" {
 }
 
 module "my_host" {
+  # Check for updates at: https://github.com/futurice/terraform-utils/compare/v3.0...master
   source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_ec2_ebs_docker_host?ref=v3.0"
 
   hostname             = "my-host"
@@ -92,6 +94,7 @@ Assuming you have the [AWS provider](https://www.terraform.io/docs/providers/aws
 
 ```tf
 module "my_host" {
+  # Check for updates at: https://github.com/futurice/terraform-utils/compare/v3.0...master
   source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_ec2_ebs_docker_host?ref=v3.0"
 
   hostname             = "my-docker-host"
@@ -123,6 +126,7 @@ Assuming you have the [AWS provider](https://www.terraform.io/docs/providers/aws
 
 ```tf
 module "my_host" {
+  # Check for updates at: https://github.com/futurice/terraform-utils/compare/v3.0...master
   source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_ec2_ebs_docker_host?ref=v3.0"
 
   hostname             = "my-docker-host"

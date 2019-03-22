@@ -16,6 +16,7 @@ git push origin master # make sure all changes are pushed
 git fetch # pull the tag created by the release
 TAG="$(git tag | tail -n 1)" # figure out the latest tag
 find . -name README.md | grep -v \\.terraform | xargs sed -i '.sed-bak' -E "s/\?ref=v[0-9.]+\"/?ref=$TAG\"/g" # update all "source" links in examples
+find . -name README.md | grep -v \\.terraform | xargs sed -i '.sed-bak' -E "s#/compare/v[0-9.]+...master#/compare/$TAG...master#g" # update all "check for updates" links in examples
 find . -name README.md.sed-bak | xargs rm # remove sed's backup files
 git add --patch
 git commit -m "Update module versions in examples."
