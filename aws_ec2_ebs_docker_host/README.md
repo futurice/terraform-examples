@@ -92,7 +92,7 @@ Assuming you have the [AWS provider](https://www.terraform.io/docs/providers/aws
 
 ```tf
 module "my_host" {
-  source = "./aws_ec2_ebs_docker_host"
+  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_ec2_ebs_docker_host?ref=v3.0"
 
   hostname             = "my-docker-host"
   ssh_private_key_path = "~/.ssh/id_rsa"
@@ -114,3 +114,57 @@ resource "null_resource" "provisioners" {
   }
 }
 ```
+
+## Example 4: Using the `docker` provider
+
+Note that until [direct support for the SSH protocol in the `docker` provider](https://github.com/terraform-providers/terraform-provider-docker/pull/113) lands in Terraform, this is a bit cumbersome. But it's documented here in case it's useful.
+
+Assuming you have the [AWS provider](https://www.terraform.io/docs/providers/aws/index.html) set up:
+
+```tf
+module "my_host" {
+  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_ec2_ebs_docker_host?ref=v3.0"
+
+  hostname             = "my-docker-host"
+  ssh_private_key_path = "~/.ssh/id_rsa"
+  ssh_public_key_path  = "~/.ssh/id_rsa.pub"
+  allow_incoming_http  = true
+}
+
+output "docker_tunnel_command" {
+  description = "Run this command to create a port-forward to the remote docker daemon"
+  value       = "ssh -i ${module.my_host.ssh_private_key_path} -o StrictHostKeyChecking=no -L localhost:2377:/var/run/docker.sock ${module.my_host.ssh_username}@${module.my_host.public_ip}"
+}
+
+provider "docker" {
+  version = "~> 1.1"
+  host    = "tcp://127.0.0.1:2377/" # Important: this is expected to be an SSH tunnel; see "docker_tunnel_command" in $ terraform output
+}
+
+resource "docker_image" "nginx" {
+  name = "nginx"
+}
+
+resource "docker_container" "nginx" {
+  image    = "${docker_image.nginx.latest}"
+  name     = "nginx"
+  must_run = true
+
+  ports {
+    internal = 80
+    external = 80
+  }
+}
+
+output "test_link" {
+  value = "http://${module.my_host.public_ip}/"
+}
+```
+
+Because the tunnel won't exist before the host is up, this needs to be applied with:
+
+```bash
+$ terraform apply -target module.my_host
+```
+
+This should finish by giving you the `docker_tunnel_command` output. Run that in another terminal, and then finish with another `terraform apply`. Afterwards, you should be able to visit the `test_link` and see nginx greeting you.
