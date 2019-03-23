@@ -20,3 +20,15 @@ variable "redirect_cache_ttl" {
   description = "How long (in seconds) to keep responses in CloudFront before requesting again from S3; this effectively dictates worst case update lag after making changes"
   default     = 10
 }
+
+variable "redirect_code" {
+  description = "HTTP status code to use for the redirect; the common ones are 301 for 'Moved Permanently', and 302 for 'Moved Temporarily'"
+  default     = 302
+}
+
+# Because S3 routing rules expect the URL to be provided as components, we need to do a bit of URL "parsing"
+locals {
+  url_protocol = "${replace("${var.redirect_url}", "/^(?:(\\w+):\\/\\/).*/", "$1")}"
+  url_hostname = "${replace("${var.redirect_url}", "/^(?:\\w+:\\/\\/)?([^/]+).*/", "$1")}"
+  url_path     = "${replace("${var.redirect_url}", "/^(?:\\w+:\\/\\/)?[^/]+(?:\\/(.*)|$)/", "$1")}"
+}
