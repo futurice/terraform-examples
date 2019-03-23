@@ -17,22 +17,45 @@ variable "redirect_price_class" {
 }
 
 variable "redirect_cache_ttl" {
-  description = "How long (in seconds) to keep responses in CloudFront before requesting again from S3; this effectively dictates worst case update lag after making changes"
+  description = "How long (in seconds) to keep responses in CloudFront before requesting again from the origin; this effectively dictates worst case update lag after making changes"
   default     = 10
 }
 
-variable "redirect_code" {
-  description = "HTTP status code to use for the redirect; the common ones are 301 for 'Moved Permanently', and 302 for 'Moved Temporarily'"
-  default     = 302
+variable "redirect_permanently" {
+  description = "Which HTTP status code to use for the redirect; if true, uses 301 'Moved Permanently', instead of 302 'Moved Temporarily'"
+  default     = false
+}
+
+variable "redirect_with_hsts" {
+  description = "Whether to send the 'Strict-Transport-Security' header with the redirect (recommended for security)"
+  default     = true
+}
+
+variable "basic_auth_username" {
+  description = "When non-empty, require this username with HTTP Basic Auth"
+  default     = ""
+}
+
+variable "basic_auth_password" {
+  description = "When non-empty, require this password with HTTP Basic Auth"
+  default     = ""
+}
+
+variable "basic_auth_realm" {
+  description = "When using HTTP Basic Auth, this will be displayed by the browser in the auth prompt"
+  default     = "Authentication Required"
+}
+
+variable "basic_auth_body" {
+  description = "When using HTTP Basic Auth, and authentication has failed, this will be displayed by the browser as the page content"
+  default     = "Unauthorized"
+}
+
+variable "lambda_logging_enabled" {
+  description = "When true, writes information about incoming requests to the Lambda function's CloudWatch group"
+  default     = false
 }
 
 locals {
   prefix_with_domain = "${var.name_prefix}${replace("${var.redirect_domain}", "/[^a-z0-9-]+/", "-")}" # only lowercase alphanumeric characters and hyphens are allowed in S3 bucket names
-}
-
-# Because S3 routing rules expect the URL to be provided as components, we need to do a bit of URL "parsing"
-locals {
-  url_protocol = "${replace("${var.redirect_url}", "/^(?:(\\w+):\\/\\/).*/", "$1")}"
-  url_hostname = "${replace("${var.redirect_url}", "/^(?:\\w+:\\/\\/)?([^/]+).*/", "$1")}"
-  url_path     = "${replace("${var.redirect_url}", "/^(?:\\w+:\\/\\/)?[^/]+(?:\\/(.*)|$)/", "$1")}"
 }

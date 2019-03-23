@@ -1,4 +1,3 @@
-# Create the CloudFront distribution through which the S3 bucket contents will be served
 # https://www.terraform.io/docs/providers/aws/r/cloudfront_distribution.html
 resource "aws_cloudfront_distribution" "this" {
   enabled             = true
@@ -8,9 +7,10 @@ resource "aws_cloudfront_distribution" "this" {
   price_class         = "PriceClass_${var.redirect_price_class}"
   comment             = "Redirect for domain: ${var.redirect_domain}"
 
-  # Define the S3 bucket as the "upstream" for the CloudFront distribution
+  # Define a default origin; note that this domain won't ever be contacted, because our Lambda function will intercept any requests before that.
+  # CloudFront requires a default origin to be provided, however, hence this placeholder.
   origin {
-    domain_name = "${aws_s3_bucket.this.website_endpoint}"
+    domain_name = "example.org"
     origin_id   = "aws_domain_redirect"
     origin_path = ""
 
@@ -35,7 +35,7 @@ resource "aws_cloudfront_distribution" "this" {
     max_ttl     = "${var.redirect_cache_ttl}" # default is 31536000 (i.e. one year)
 
     forwarded_values {
-      query_string = false # since we're forwarding to S3, no need to forward anything
+      query_string = false
 
       cookies {
         forward = "none"
@@ -45,7 +45,7 @@ resource "aws_cloudfront_distribution" "this" {
     # Note: This will make the Lambda undeletable, as long as this distribution/association exists
     # https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/lambda-edge-delete-replicas.html
     lambda_function_association {
-      event_type = "viewer-response"                                                     # one of [ viewer-request, origin-request, viewer-response, origin-response ]
+      event_type = "viewer-request"                                                      # one of [ viewer-request, origin-request, viewer-response, origin-response ]
       lambda_arn = "${aws_lambda_function.this.arn}:${aws_lambda_function.this.version}"
     }
   }
@@ -87,29 +87,58 @@ resource "aws_acm_certificate_validation" "this" {
   validation_record_fqdns = ["${aws_route53_record.cert_validation.fqdn}"]
 }
 
+provider "template" {
+  version = "~> 2.1"
+}
+
+locals {
+  config = {
+    redirect_url         = "${var.redirect_url}"
+    redirect_permanently = "${var.redirect_permanently ? "1" :""}" # booleans need to be encoded as strings
+    redirect_with_hsts   = "${var.redirect_with_hsts ? "1" :""}"   # booleans need to be encoded as strings
+    basic_auth_username  = "${var.basic_auth_username}"
+    basic_auth_password  = "${var.basic_auth_password}"
+    basic_auth_realm     = "${var.basic_auth_realm}"
+    basic_auth_body      = "${var.basic_auth_body}"
+  }
+}
+
+# Because: error creating CloudFront Distribution: InvalidLambdaFunctionAssociation: The function cannot have environment variables.
+data "template_file" "lambda" {
+  template = "${file("${path.module}/lambda.tpl.js")}"
+
+  vars = {
+    config = "${replace(jsonencode(local.config), "'", "\\'")}" # single quotes need to be escaped, lest we end up with a parse error on the JS side
+  }
+}
+
 provider "archive" {
   version = "~> 1.2"
 }
 
 data "archive_file" "lambda" {
   type        = "zip"
-  source_file = "${path.module}/lambda.js"
   output_path = "${path.module}/lambda.zip"
+
+  source {
+    filename = "lambda.js"
+    content  = "${data.template_file.lambda.rendered}"
+  }
 }
 
 resource "aws_lambda_function" "this" {
   provider         = "aws.us_east_1"                                   # because: error creating CloudFront Distribution: InvalidLambdaFunctionAssociation: The function must be in region 'us-east-1'
-  filename         = "lambda.zip"
+  filename         = "${path.module}/lambda.zip"
   source_code_hash = "${data.archive_file.lambda.output_base64sha256}"
   function_name    = "${local.prefix_with_domain}"
   role             = "${aws_iam_role.this.arn}"
   description      = "Redirect for domain: ${var.redirect_domain}"
-  handler          = "lambda.handler"
+  handler          = "lambda.viewer_request"
   runtime          = "nodejs8.10"
   publish          = true                                              # because: error creating CloudFront Distribution: InvalidLambdaFunctionAssociation: The function ARN must reference a specific function version. (The ARN must end with the version number.)
 }
 
-# Allow Lambda@Edge to invoke our function
+# Allow Lambda@Edge to invoke our functions
 resource "aws_iam_role" "this" {
   name = "${local.prefix_with_domain}"
 
@@ -132,9 +161,10 @@ resource "aws_iam_role" "this" {
 EOF
 }
 
-# Allow writing logs to CloudWatch from our function
+# Allow writing logs to CloudWatch from our functions
 resource "aws_iam_policy" "this" {
-  name = "${local.prefix_with_domain}"
+  count = "${var.lambda_logging_enabled ? 1 : 0}"
+  name  = "${local.prefix_with_domain}"
 
   policy = <<EOF
 {
@@ -155,6 +185,7 @@ EOF
 }
 
 resource "aws_iam_role_policy_attachment" "this" {
+  count      = "${var.lambda_logging_enabled ? 1 : 0}"
   role       = "${aws_iam_role.this.name}"
   policy_arn = "${aws_iam_policy.this.arn}"
 }
