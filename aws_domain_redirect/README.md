@@ -16,13 +16,14 @@ Luckily, this module encapsulates this configuration quite neatly.
 Assuming you have the [AWS provider](https://www.terraform.io/docs/providers/aws/index.html) set up, and a DNS zone for `example.com` configured on Route 53:
 
 ```tf
-# "To use an ACM Certificate with CloudFront, you must request or import the certificate in the US East (N. Virginia) region."
+# Several AWS services (such as ACM & Lambda@Edge) are presently only available in the US East region.
+# To be able to use them, we need a separate AWS provider for that region, which can be used with an alias.
 # https://docs.aws.amazon.com/acm/latest/userguide/acm-services.html
 # https://www.terraform.io/docs/configuration/providers.html#multiple-provider-instances
 provider "aws" {
-  alias                   = "acm_provider" # the aws_domain_redirect module expects an "aws" provider with this alias to be present
-  shared_credentials_file = "./aws.key"    # make sure you customize this to match your regular AWS provider config
-  region                  = "us-east-1"    # this is the important bit, due to the aforementioned limitation of AWS regions and ACM
+  alias                   = "us_east_1"
+  shared_credentials_file = "./aws.key" # make sure you customize this to match your regular AWS provider config
+  region                  = "us-east-1"
 }
 
 module "my_redirect" {

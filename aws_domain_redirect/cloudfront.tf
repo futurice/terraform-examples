@@ -6,7 +6,7 @@ resource "aws_cloudfront_distribution" "this" {
   default_root_object = ""
   aliases             = ["${var.redirect_domain}"]
   price_class         = "PriceClass_${var.redirect_price_class}"
-  comment             = "Redirect domain: ${var.redirect_domain}"
+  comment             = "Redirect for domain: ${var.redirect_domain}"
 
   # Define the S3 bucket as the "upstream" for the CloudFront distribution
   origin {
@@ -27,7 +27,7 @@ resource "aws_cloudfront_distribution" "this" {
     allowed_methods        = ["GET", "HEAD"]
     cached_methods         = ["GET", "HEAD"]
     target_origin_id       = "aws_domain_redirect"
-    viewer_protocol_policy = "redirect-to-https"
+    viewer_protocol_policy = "redirect-to-https"   # only allow requests over HTTPS
     compress               = true
 
     min_ttl     = 0                           # default is 0
@@ -40,6 +40,13 @@ resource "aws_cloudfront_distribution" "this" {
       cookies {
         forward = "none"
       }
+    }
+
+    # Note: This will make the Lambda undeletable, as long as this distribution/association exists
+    # https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/lambda-edge-delete-replicas.html
+    lambda_function_association {
+      event_type = "viewer-response"                                                     # one of [ viewer-request, origin-request, viewer-response, origin-response ]
+      lambda_arn = "${aws_lambda_function.this.arn}:${aws_lambda_function.this.version}"
     }
   }
 
@@ -61,7 +68,7 @@ resource "aws_cloudfront_distribution" "this" {
 
 # https://www.terraform.io/docs/providers/aws/r/acm_certificate.html
 resource "aws_acm_certificate" "this" {
-  provider          = "aws.acm_provider"       # because ACM is only available in the "us-east-1" region
+  provider          = "aws.us_east_1"          # because ACM is only available in the "us-east-1" region
   domain_name       = "${var.redirect_domain}"
   validation_method = "DNS"
 }
@@ -75,7 +82,79 @@ resource "aws_route53_record" "cert_validation" {
 }
 
 resource "aws_acm_certificate_validation" "this" {
-  provider                = "aws.acm_provider"                             # because ACM is only available in the "us-east-1" region
+  provider                = "aws.us_east_1"                                # because ACM is only available in the "us-east-1" region
   certificate_arn         = "${aws_acm_certificate.this.arn}"
   validation_record_fqdns = ["${aws_route53_record.cert_validation.fqdn}"]
+}
+
+provider "archive" {
+  version = "~> 1.2"
+}
+
+data "archive_file" "lambda" {
+  type        = "zip"
+  source_file = "${path.module}/lambda.js"
+  output_path = "${path.module}/lambda.zip"
+}
+
+resource "aws_lambda_function" "this" {
+  provider         = "aws.us_east_1"                                   # because: error creating CloudFront Distribution: InvalidLambdaFunctionAssociation: The function must be in region 'us-east-1'
+  filename         = "lambda.zip"
+  source_code_hash = "${data.archive_file.lambda.output_base64sha256}"
+  function_name    = "${local.prefix_with_domain}"
+  role             = "${aws_iam_role.this.arn}"
+  description      = "Redirect for domain: ${var.redirect_domain}"
+  handler          = "lambda.handler"
+  runtime          = "nodejs8.10"
+  publish          = true                                              # because: error creating CloudFront Distribution: InvalidLambdaFunctionAssociation: The function ARN must reference a specific function version. (The ARN must end with the version number.)
+}
+
+# Allow Lambda@Edge to invoke our function
+resource "aws_iam_role" "this" {
+  name = "${local.prefix_with_domain}"
+
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Service": [
+          "lambda.amazonaws.com",
+          "edgelambda.amazonaws.com"
+        ]
+      },
+      "Action": "sts:AssumeRole"
+    }
+  ]
+}
+EOF
+}
+
+# Allow writing logs to CloudWatch from our function
+resource "aws_iam_policy" "this" {
+  name = "${local.prefix_with_domain}"
+
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": [
+        "logs:CreateLogGroup",
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+      ],
+      "Resource": "arn:aws:logs:*:*:*",
+      "Effect": "Allow"
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_iam_role_policy_attachment" "this" {
+  role       = "${aws_iam_role.this.name}"
+  policy_arn = "${aws_iam_policy.this.arn}"
 }

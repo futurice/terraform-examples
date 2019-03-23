@@ -6,8 +6,8 @@ variable "redirect_url" {
   description = "The URL this domain redirect should send clients to; e.g. 'https://readthedocs.org/projects/example'"
 }
 
-variable "bucket_prefix" {
-  description = "Name prefix to use for the S3 bucket that's created internally for the redirect (only lowercase alphanumeric characters and hyphens allowed)"
+variable "name_prefix" {
+  description = "Name prefix to use for objects that need to be created (only lowercase alphanumeric characters and hyphens allowed, for S3 bucket name compatibility)"
   default     = "aws-domain-redirect---"
 }
 
@@ -24,6 +24,10 @@ variable "redirect_cache_ttl" {
 variable "redirect_code" {
   description = "HTTP status code to use for the redirect; the common ones are 301 for 'Moved Permanently', and 302 for 'Moved Temporarily'"
   default     = 302
+}
+
+locals {
+  prefix_with_domain = "${var.name_prefix}${replace("${var.redirect_domain}", "/[^a-z0-9-]+/", "-")}" # only lowercase alphanumeric characters and hyphens are allowed in S3 bucket names
 }
 
 # Because S3 routing rules expect the URL to be provided as components, we need to do a bit of URL "parsing"
