@@ -31,26 +31,6 @@ variable "redirect_with_hsts" {
   default     = true
 }
 
-variable "basic_auth_username" {
-  description = "When non-empty, require this username with HTTP Basic Auth"
-  default     = ""
-}
-
-variable "basic_auth_password" {
-  description = "When non-empty, require this password with HTTP Basic Auth"
-  default     = ""
-}
-
-variable "basic_auth_realm" {
-  description = "When using HTTP Basic Auth, this will be displayed by the browser in the auth prompt"
-  default     = "Authentication Required"
-}
-
-variable "basic_auth_body" {
-  description = "When using HTTP Basic Auth, and authentication has failed, this will be displayed by the browser as the page content"
-  default     = "Unauthorized"
-}
-
 variable "lambda_logging_enabled" {
   description = "When true, writes information about incoming requests to the Lambda function's CloudWatch group"
   default     = false

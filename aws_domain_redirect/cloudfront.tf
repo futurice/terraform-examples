@@ -96,10 +96,6 @@ locals {
     redirect_url         = "${var.redirect_url}"
     redirect_permanently = "${var.redirect_permanently ? "1" :""}" # booleans need to be encoded as strings
     redirect_with_hsts   = "${var.redirect_with_hsts ? "1" :""}"   # booleans need to be encoded as strings
-    basic_auth_username  = "${var.basic_auth_username}"
-    basic_auth_password  = "${var.basic_auth_password}"
-    basic_auth_realm     = "${var.basic_auth_realm}"
-    basic_auth_body      = "${var.basic_auth_body}"
   }
 }
 
