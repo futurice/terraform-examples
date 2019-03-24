@@ -5,11 +5,13 @@ Creates the necessary resources on AWS to implement an HTTP redirect from a doma
 Implementing this on AWS actually requires quite a few resources:
 
 - DNS records on [Route 53](https://aws.amazon.com/route53/)
-- A [CloudFront](https://aws.amazon.com/cloudfront/) distribution for SSL termination, for allowing secure redirection over HTTPS
+- A [CloudFront](https://aws.amazon.com/cloudfront/) distribution for SSL termination
 - An SSL certificate for the distribution from [ACM](https://aws.amazon.com/certificate-manager/)
-- An [S3](https://aws.amazon.com/s3/) bucket with the relevant [redirect rules](https://docs.aws.amazon.com/AmazonS3/latest/dev/how-to-page-redirect.html#advanced-conditional-redirects)
+- A [Lambda@Edge](https://docs.aws.amazon.com/lambda/latest/dg/lambda-edge.html) function that implements the redirect itself
 
 Luckily, this module encapsulates this configuration quite neatly.
+
+The Lambda function also adds [HSTS](https://en.wikipedia.org/wiki/HTTP_Strict_Transport_Security) headers to prevent [man-in-the-middle attacks](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security#An_example_scenario).
 
 ## Example
 
