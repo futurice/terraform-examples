@@ -1,10 +1,12 @@
+# Generate a certificate for the domain automatically using ACM
 # https://www.terraform.io/docs/providers/aws/r/acm_certificate.html
 resource "aws_acm_certificate" "this" {
   provider          = "aws.us_east_1"          # because ACM is only available in the "us-east-1" region
   domain_name       = "${var.redirect_domain}"
-  validation_method = "DNS"
+  validation_method = "DNS"                           # the required records are created below
 }
 
+# Add the DNS records needed by the ACM validation process
 resource "aws_route53_record" "cert_validation" {
   name    = "${aws_acm_certificate.this.domain_validation_options.0.resource_record_name}"
   type    = "${aws_acm_certificate.this.domain_validation_options.0.resource_record_type}"
@@ -13,6 +15,7 @@ resource "aws_route53_record" "cert_validation" {
   ttl     = 60
 }
 
+# Request a validation for the cert with ACM
 resource "aws_acm_certificate_validation" "this" {
   provider                = "aws.us_east_1"                                # because ACM is only available in the "us-east-1" region
   certificate_arn         = "${aws_acm_certificate.this.arn}"
