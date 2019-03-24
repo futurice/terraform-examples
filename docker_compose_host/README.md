@@ -12,8 +12,8 @@ Assuming you have the [AWS provider](https://www.terraform.io/docs/providers/aws
 
 ```tf
 module "my_host" {
-  # Check for updates at: https://github.com/futurice/terraform-utils/compare/v4.0...master
-  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_ec2_ebs_docker_host?ref=v4.0"
+  # Check for updates at: https://github.com/futurice/terraform-utils/compare/v4.1...master
+  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_ec2_ebs_docker_host?ref=v4.1"
 
   hostname             = "my-docker-host"
   ssh_private_key_path = "~/.ssh/id_rsa"
@@ -23,8 +23,8 @@ module "my_host" {
 }
 
 module "my_docker_compose" {
-  # Check for updates at: https://github.com/futurice/terraform-utils/compare/v4.0...master
-  source = "git::ssh://git@github.com/futurice/terraform-utils.git//docker_compose_host?ref=v4.0"
+  # Check for updates at: https://github.com/futurice/terraform-utils/compare/v4.1...master
+  source = "git::ssh://git@github.com/futurice/terraform-utils.git//docker_compose_host?ref=v4.1"
 
   public_ip          = "${module.my_host.public_ip}"
   ssh_username       = "${module.my_host.ssh_username}"

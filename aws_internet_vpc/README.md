@@ -8,8 +8,8 @@ Assuming you have the [AWS provider](https://www.terraform.io/docs/providers/aws
 
 ```tf
 module "my_vpc" {
-  # Check for updates at: https://github.com/futurice/terraform-utils/compare/v4.0...master
-  source   = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_internet_vpc?ref=v4.0"
+  # Check for updates at: https://github.com/futurice/terraform-utils/compare/v4.1...master
+  source   = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_internet_vpc?ref=v4.1"
   vpc_name = "my-vpc"
 }
 ```
