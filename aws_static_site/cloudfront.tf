@@ -41,6 +41,20 @@ resource "aws_cloudfront_distribution" "this" {
         forward = "none" # ^ ditto
       }
     }
+
+    # Note: This will make the Lambda undeletable, as long as this distribution/association exists
+    # https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/lambda-edge-delete-replicas.html
+    lambda_function_association {
+      event_type = "viewer-request"                                                                          # one of [ viewer-request, origin-request, viewer-response, origin-response ]
+      lambda_arn = "${aws_lambda_function.viewer_request.arn}:${aws_lambda_function.viewer_request.version}"
+    }
+
+    # Note: This will make the Lambda undeletable, as long as this distribution/association exists
+    # https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/lambda-edge-delete-replicas.html
+    lambda_function_association {
+      event_type = "viewer-response"                                                                           # one of [ viewer-request, origin-request, viewer-response, origin-response ]
+      lambda_arn = "${aws_lambda_function.viewer_response.arn}:${aws_lambda_function.viewer_response.version}"
+    }
   }
 
   # This is mandatory in Terraform :shrug:

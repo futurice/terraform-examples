@@ -32,6 +32,36 @@ variable "default_root_object" {
   default     = "index.html"
 }
 
+variable "use_hsts" {
+  description = "Whether to send the 'Strict-Transport-Security' header with responses (recommended for security)"
+  default     = true
+}
+
+variable "basic_auth_username" {
+  description = "When non-empty, require this username with HTTP Basic Auth"
+  default     = ""
+}
+
+variable "basic_auth_password" {
+  description = "When non-empty, require this password with HTTP Basic Auth"
+  default     = ""
+}
+
+variable "basic_auth_realm" {
+  description = "When using HTTP Basic Auth, this will be displayed by the browser in the auth prompt"
+  default     = "Authentication Required"
+}
+
+variable "basic_auth_body" {
+  description = "When using HTTP Basic Auth, and authentication has failed, this will be displayed by the browser as the page content"
+  default     = "Unauthorized"
+}
+
+variable "lambda_logging_enabled" {
+  description = "When true, writes information about incoming requests to the Lambda function's CloudWatch group"
+  default     = false
+}
+
 locals {
   prefix_with_domain = "${var.name_prefix}${replace("${var.site_domain}", "/[^a-z0-9-]+/", "-")}"                    # only lowercase alphanumeric characters and hyphens are allowed in S3 bucket names
   bucket_name        = "${var.bucket_override == 0 ? "${local.prefix_with_domain}" : "${var.bucket_override_name}"}" # select between externally-provided or auto-generated bucket names
