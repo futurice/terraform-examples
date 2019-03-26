@@ -6,16 +6,15 @@ This module creates:
 - DNS records on [Route 53](https://aws.amazon.com/route53/)
 - A [CloudFront](https://aws.amazon.com/cloudfront/) distribution for SSL termination
 - An SSL certificate for the distribution from [ACM](https://aws.amazon.com/certificate-manager/)
+- A [Lambda@Edge](https://docs.aws.amazon.com/lambda/latest/dg/lambda-edge.html) function for custom response headers, and Basic Auth support
 
 Optionally, you can create the S3 bucket outside of this module, and just pass it in as an override.
 
-## How CloudFront caching works
+## Example 1: Simple static site
 
-It's important to understand that CloudFront, by default, **respects cache headers given by the origin**, in this case S3.
+**Important:** CloudFront operations are generally very slow. Your `terraform apply` may take anywhere **from 10 minutes up to 45 minutes** to complete. Additionally, because Lambda@Edge functions are replicated, [they can't be deleted immediately](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/lambda-edge-delete-replicas.html). This means a `terraform destroy` won't successfully remove all resources on its first run. It should complete successfully when running it again after a few hours, however.
 
-### Default cache behaviour
-
-Consider the simplest possible configuration below:
+Assuming you have the [AWS provider](https://www.terraform.io/docs/providers/aws/index.html) set up, and a DNS zone for `example.com` configured on Route 53:
 
 ```tf
 # Several AWS services (such as ACM & Lambda@Edge) are presently only available in the US East region.
@@ -48,7 +47,94 @@ output "bucket_name" {
 }
 ```
 
-After applying for the first time, any changes you make to the file on S3 **will be reflected immediately** on the CloudFront distribution. This is because we didn't specify any `Cache-Control` headers for the S3 object, and the `aws_static_site` module will **by default** not cache such objects at all. This is a sensible default, because the AWS default TTL for CloudFront is 24 hours, and for an origin that doesn't explicitly send `Cache-Control` headers, it's rarely the desired behaviour: your site will be serving stale content for up to 24 hours. Users will be sad, and engineers will be yelled at.
+After `terraform apply` (which may take a **very** long time), you should be able to visit `hello.example.com`, be redirected to HTTPS, and be greeted by the above `Hello World!` message.
+
+You may (and probably will) want to upload more files into the bucket outside of Terraform. Using the official [AWS CLI](https://aws.amazon.com/cli/) this could look like:
+
+```bash
+aws s3 cp --cache-control=no-store,must-revalidate image.jpg "s3://$(terraform output bucket_name)/"
+```
+
+After this, `image.jpg` will be available at `https://hello.example.com/image.jpg`.
+
+## Example 2: Basic Authentication
+
+The `aws_static_site` module supports password-protecting your site with HTTP Basic Authentication, via a Lambda@Edge function.
+
+Update the `my_site` module in Example 1 as follows:
+
+```tf
+module "my_site" {
+  # Check for updates at: https://github.com/futurice/terraform-utils/compare/v4.1...master
+  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_static_site?ref=v4.1"
+
+  site_domain = "hello.example.com"
+
+  basic_auth_username = "admin"
+  basic_auth_password = "secret"
+}
+```
+
+After `terraform apply` (which may take a **very** long time), visiting `hello.example.com` should pop out the browser's authentication dialog, and not let you proceed without the above credentials.
+
+## Example 3: Custom response headers
+
+The `aws_static_site` module supports injecting custom headers into CloudFront responses, via a Lambda@Edge function.
+
+By default, the function only adds `Strict-Transport-Security` headers (as it [significantly improves security](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security#An_example_scenario) with HTTPS), but you may need other customization.
+
+For [additional security hardening of your static site](https://aws.amazon.com/blogs/networking-and-content-delivery/adding-http-security-headers-using-lambdaedge-and-amazon-cloudfront/), update the `my_site` module in Example 1 as follows:
+
+```tf
+module "my_site" {
+  # Check for updates at: https://github.com/futurice/terraform-utils/compare/v4.1...master
+  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_static_site?ref=v4.1"
+
+  site_domain = "hello.example.com"
+
+  add_response_headers = {
+    "Strict-Transport-Security" = "max-age=63072000; includeSubdomains; preload"
+    "Content-Security-Policy"   = "default-src 'none'; img-src 'self'; script-src 'self'; style-src 'self'; object-src 'none'"
+    "X-Content-Type-Options"    = "nosniff"
+    "X-Frame-Options"           = "DENY"
+    "X-XSS-Protection"          = "1; mode=block"
+    "Referrer-Policy"           = "same-origin"
+  }
+}
+```
+
+After `terraform apply` (which may take a **very** long time), visiting `hello.example.com` should give you these extra headers.
+
+It's also possible to override existing headers. For example:
+
+```tf
+module "my_site" {
+  # Check for updates at: https://github.com/futurice/terraform-utils/compare/v4.1...master
+  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_static_site?ref=v4.1"
+
+  site_domain = "hello.example.com"
+
+  add_response_headers = {
+    "Server" = "My Secret Origin Server"
+  }
+}
+```
+
+After `terraform apply`, checking with `curl --silent -I https://hello.example.com | grep Server` should give you `My Secret Origin Server` instead of the default `AmazonS3`.
+
+## Example 4: Using your own bucket
+
+If you already have an S3 bucket that you want to use, you can provide e.g. `bucket_override_name = "my-existing-s3-bucket"` as a variable for the `aws_static_site` module.
+
+When `bucket_override_name` is provided, an S3 bucket is not automatically created for you. Note that you're then also responsible for setting up a bucket policy allowing CloudFront access to the bucket contents.
+
+## How CloudFront caching works
+
+It's important to understand that CloudFront, by default, **respects cache headers given by the origin**, in this case S3.
+
+### Default cache behaviour
+
+Consider the configuration in Example 1. After applying for the first time, any changes you make to the file on S3 **will be reflected immediately** on the CloudFront distribution. This is because we didn't specify any `Cache-Control` headers for the S3 object, and the `aws_static_site` module will **by default** not cache such objects at all. This is a sensible default, because the AWS default TTL for CloudFront is 24 hours, and for an origin that doesn't explicitly send `Cache-Control` headers, it's rarely the desired behaviour: your site will be serving stale content for up to 24 hours. Users will be sad, and engineers will be yelled at.
 
 Having immediate updates on CloudFront is convenient, but the downside is that every request for every file will be forwarded to S3, to make sure the CloudFront cache still has the latest version. This will increase request latency for users, and infrastructure costs for you.
 

@@ -1,6 +1,5 @@
 locals {
   config = {
-    use_hsts            = "${var.use_hsts ? "1" :""}"  # booleans need to be encoded as strings
     basic_auth_username = "${var.basic_auth_username}"
     basic_auth_password = "${var.basic_auth_password}"
     basic_auth_realm    = "${var.basic_auth_realm}"
@@ -18,7 +17,8 @@ data "template_file" "lambda" {
   template = "${file("${path.module}/lambda.tpl.js")}"
 
   vars = {
-    config = "${replace(jsonencode(local.config), "'", "\\'")}" # single quotes need to be escaped, lest we end up with a parse error on the JS side
+    config               = "${replace(jsonencode(local.config), "'", "\\'")}"             # single quotes need to be escaped, lest we end up with a parse error on the JS side
+    add_response_headers = "${replace(jsonencode(var.add_response_headers), "'", "\\'")}" # ^ ditto
   }
 }
 
@@ -38,27 +38,27 @@ data "archive_file" "lambda" {
 }
 
 resource "aws_lambda_function" "viewer_request" {
-  provider         = "aws.us_east_1"                                   # because: error creating CloudFront Distribution: InvalidLambdaFunctionAssociation: The function must be in region 'us-east-1'
+  provider         = "aws.us_east_1"                                                        # because: error creating CloudFront Distribution: InvalidLambdaFunctionAssociation: The function must be in region 'us-east-1'
   filename         = "${path.module}/lambda.zip"
   source_code_hash = "${data.archive_file.lambda.output_base64sha256}"
   function_name    = "${local.prefix_with_domain}---viewer_request"
   role             = "${aws_iam_role.this.arn}"
-  description      = "Static site ${var.site_domain} request handler"
+  description      = "${var.distribution_comment_prefix}${var.site_domain} request handler"
   handler          = "lambda.viewer_request"
   runtime          = "nodejs8.10"
-  publish          = true                                              # because: error creating CloudFront Distribution: InvalidLambdaFunctionAssociation: The function ARN must reference a specific function version. (The ARN must end with the version number.)
+  publish          = true                                                                   # because: error creating CloudFront Distribution: InvalidLambdaFunctionAssociation: The function ARN must reference a specific function version. (The ARN must end with the version number.)
 }
 
 resource "aws_lambda_function" "viewer_response" {
-  provider         = "aws.us_east_1"                                   # because: error creating CloudFront Distribution: InvalidLambdaFunctionAssociation: The function must be in region 'us-east-1'
+  provider         = "aws.us_east_1"                                                         # because: error creating CloudFront Distribution: InvalidLambdaFunctionAssociation: The function must be in region 'us-east-1'
   filename         = "${path.module}/lambda.zip"
   source_code_hash = "${data.archive_file.lambda.output_base64sha256}"
   function_name    = "${local.prefix_with_domain}---viewer_response"
   role             = "${aws_iam_role.this.arn}"
-  description      = "Static site ${var.site_domain} response handler"
+  description      = "${var.distribution_comment_prefix}${var.site_domain} response handler"
   handler          = "lambda.viewer_response"
   runtime          = "nodejs8.10"
-  publish          = true                                              # because: error creating CloudFront Distribution: InvalidLambdaFunctionAssociation: The function ARN must reference a specific function version. (The ARN must end with the version number.)
+  publish          = true                                                                    # because: error creating CloudFront Distribution: InvalidLambdaFunctionAssociation: The function ARN must reference a specific function version. (The ARN must end with the version number.)
 }
 
 # Allow Lambda@Edge to invoke our functions
