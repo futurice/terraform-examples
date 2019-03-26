@@ -1,3 +1,4 @@
+# Add an IPv4 DNS record pointing to the CloudFront distribution
 resource "aws_route53_record" "ipv4" {
   zone_id = "${data.aws_route53_zone.this.zone_id}"
   name    = "${var.redirect_domain}"
@@ -10,6 +11,7 @@ resource "aws_route53_record" "ipv4" {
   }
 }
 
+# Add an IPv6 DNS record pointing to the CloudFront distribution
 resource "aws_route53_record" "ipv6" {
   zone_id = "${data.aws_route53_zone.this.zone_id}"
   name    = "${var.redirect_domain}"
