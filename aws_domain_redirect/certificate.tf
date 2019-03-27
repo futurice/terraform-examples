@@ -3,7 +3,7 @@
 resource "aws_acm_certificate" "this" {
   provider          = "aws.us_east_1"          # because ACM is only available in the "us-east-1" region
   domain_name       = "${var.redirect_domain}"
-  validation_method = "DNS"                           # the required records are created below
+  validation_method = "DNS"                    # the required records are created below
 }
 
 # Add the DNS records needed by the ACM validation process
