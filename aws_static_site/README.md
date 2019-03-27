@@ -128,6 +128,27 @@ If you already have an S3 bucket that you want to use, you can provide e.g. `buc
 
 When `bucket_override_name` is provided, an S3 bucket is not automatically created for you. Note that you're then also responsible for setting up a bucket policy allowing CloudFront access to the bucket contents.
 
+## Example 5: Overriding the response completely
+
+In very specific circumstances, you may want to always return a specific response, and not forward any requests to S3.
+
+Update the `my_site` module in Example 1 as follows:
+
+```tf
+module "my_site" {
+  # Check for updates at: https://github.com/futurice/terraform-utils/compare/v4.1...master
+  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_static_site?ref=v4.1"
+
+  site_domain = "hello.example.com"
+
+  bucket_override_name = "-" # providing this ensures an S3 bucket isn't unnecessarily created, even if this isn't a valid bucket name
+
+  override_response_status             = "500"
+  override_response_status_description = "Internal Server Error"
+  override_response_body               = "<pre>The server made a boo-boo :(</pre>"
+}
+```
+
 ## How CloudFront caching works
 
 It's important to understand that CloudFront, by default, **respects cache headers given by the origin**, in this case S3.

@@ -1,8 +1,8 @@
 'use strict';
 
 // Lambda@Edge doesn't support environment variables, so this config will be expanded from a Terraform template
-const config = JSON.parse('${config}');
-const addResponseHeaders = JSON.parse('${add_response_headers}');
+const config = ${config};
+const addResponseHeaders = ${add_response_headers};
 const validCredentials = config.basic_auth_username + ':' + config.basic_auth_password;
 const validAuthHeader = 'Basic ' + new Buffer(validCredentials).toString('base64');
 
@@ -15,7 +15,16 @@ exports.viewer_request = (event, context, callback) => {
 
   log('aws_static_site.viewer_request.before', request);
 
-  if (
+  if (config.override_response_status && config.override_response_status_description && config.override_response_body) {
+    const response = {
+      status: config.override_response_status,
+      statusDescription: config.override_response_status_description,
+      body: config.override_response_body,
+      headers: formatHeaders(addResponseHeaders),
+    };
+    callback(null, response); // reply to the client with the overridden content, and don't forward request to origin
+    log('aws_static_site.viewer_request.after', response);
+  } else if (
     (config.basic_auth_username || config.basic_auth_password) &&
     (typeof headers.authorization == 'undefined' || headers.authorization[0].value != validAuthHeader)
   ) {

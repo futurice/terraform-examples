@@ -1,9 +1,12 @@
 locals {
   config = {
-    basic_auth_username = "${var.basic_auth_username}"
-    basic_auth_password = "${var.basic_auth_password}"
-    basic_auth_realm    = "${var.basic_auth_realm}"
-    basic_auth_body     = "${var.basic_auth_body}"
+    basic_auth_username                  = "${var.basic_auth_username}"
+    basic_auth_password                  = "${var.basic_auth_password}"
+    basic_auth_realm                     = "${var.basic_auth_realm}"
+    basic_auth_body                      = "${var.basic_auth_body}"
+    override_response_status             = "${var.override_response_status}"
+    override_response_status_description = "${var.override_response_status_description}"
+    override_response_body               = "${var.override_response_body}"
   }
 }
 
@@ -17,8 +20,8 @@ data "template_file" "lambda" {
   template = "${file("${path.module}/lambda.tpl.js")}"
 
   vars = {
-    config               = "${replace(jsonencode(local.config), "'", "\\'")}"             # single quotes need to be escaped, lest we end up with a parse error on the JS side
-    add_response_headers = "${replace(jsonencode(var.add_response_headers), "'", "\\'")}" # ^ ditto
+    config               = "${jsonencode(local.config)}"             # single quotes need to be escaped, lest we end up with a parse error on the JS side
+    add_response_headers = "${jsonencode(var.add_response_headers)}" # ^ ditto
   }
 }
 
