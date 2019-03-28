@@ -28,8 +28,8 @@ provider "aws" {
 }
 
 module "my_site" {
-  # Check for updates at: https://github.com/futurice/terraform-utils/compare/v5.0...master
-  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_static_site?ref=v5.0"
+  # Check for updates at: https://github.com/futurice/terraform-utils/compare/v6.0...master
+  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_static_site?ref=v6.0"
 
   site_domain = "hello.example.com"
 }
@@ -65,8 +65,8 @@ Update the `my_site` module in Example 1 as follows:
 
 ```tf
 module "my_site" {
-  # Check for updates at: https://github.com/futurice/terraform-utils/compare/v5.0...master
-  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_static_site?ref=v5.0"
+  # Check for updates at: https://github.com/futurice/terraform-utils/compare/v6.0...master
+  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_static_site?ref=v6.0"
 
   site_domain = "hello.example.com"
 
@@ -87,8 +87,8 @@ For [additional security hardening of your static site](https://aws.amazon.com/b
 
 ```tf
 module "my_site" {
-  # Check for updates at: https://github.com/futurice/terraform-utils/compare/v5.0...master
-  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_static_site?ref=v5.0"
+  # Check for updates at: https://github.com/futurice/terraform-utils/compare/v6.0...master
+  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_static_site?ref=v6.0"
 
   site_domain = "hello.example.com"
 
@@ -109,8 +109,8 @@ It's also possible to override existing headers. For example:
 
 ```tf
 module "my_site" {
-  # Check for updates at: https://github.com/futurice/terraform-utils/compare/v5.0...master
-  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_static_site?ref=v5.0"
+  # Check for updates at: https://github.com/futurice/terraform-utils/compare/v6.0...master
+  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_static_site?ref=v6.0"
 
   site_domain = "hello.example.com"
 
@@ -136,8 +136,8 @@ Update the `my_site` module in Example 1 as follows:
 
 ```tf
 module "my_site" {
-  # Check for updates at: https://github.com/futurice/terraform-utils/compare/v5.0...master
-  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_static_site?ref=v5.0"
+  # Check for updates at: https://github.com/futurice/terraform-utils/compare/v6.0...master
+  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_static_site?ref=v6.0"
 
   site_domain = "hello.example.com"
 
