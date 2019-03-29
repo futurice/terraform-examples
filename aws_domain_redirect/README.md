@@ -29,8 +29,8 @@ provider "aws" {
 }
 
 module "my_redirect" {
-  # Check for updates at: https://github.com/futurice/terraform-utils/compare/v6.0...master
-  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_domain_redirect?ref=v6.0"
+  # Check for updates at: https://github.com/futurice/terraform-utils/compare/v6.1...master
+  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_domain_redirect?ref=v6.1"
 
   redirect_domain = "go.example.com"
   redirect_url    = "https://www.futurice.com/careers/"
@@ -45,11 +45,11 @@ Applying this **will take a very long time**, because both ACM and especially Cl
 | Name | Description | Type | Default | Required |
 |------|-------------|:----:|:-----:|:-----:|
 | distribution_comment_prefix | This will be included as a comment on the CloudFront distribution that's created | string | `"Domain redirect "` | no |
-| lambda_logging_enabled | When true, writes information about incoming requests to the Lambda function's CloudWatch group | string | `"false"` | no |
+| lambda_logging_enabled | When `true`, writes information about incoming requests to the Lambda function's CloudWatch group | string | `"false"` | no |
 | name_prefix | Name prefix to use for objects that need to be created (only lowercase alphanumeric characters and hyphens allowed, for S3 bucket name compatibility) | string | `"aws-domain-redirect---"` | no |
-| redirect_domain | Domain which will redirect to the given 'redirect_url'; e.g. 'docs.example.com' | string | n/a | yes |
-| redirect_permanently | Which HTTP status code to use for the redirect; if true, uses 301 'Moved Permanently', instead of 302 'Found' | string | `"false"` | no |
-| redirect_price_class | Price class to use (100, 200 or All, see https://aws.amazon.com/cloudfront/pricing/) | string | `"100"` | no |
-| redirect_url | The URL this domain redirect should send clients to; e.g. 'https://readthedocs.org/projects/example' | string | n/a | yes |
-| redirect_with_hsts | Whether to send the 'Strict-Transport-Security' header with the redirect (recommended for security) | string | `"true"` | no |
+| redirect_domain | Domain which will redirect to the given `redirect_url`; e.g. `"docs.example.com"` | string | n/a | yes |
+| redirect_permanently | Which HTTP status code to use for the redirect; if `true`, uses `301 Moved Permanently`, instead of `302 Found` | string | `"false"` | no |
+| redirect_price_class | Price class to use (`100`, `200` or `"All"`, see https://aws.amazon.com/cloudfront/pricing/) | string | `"100"` | no |
+| redirect_url | The URL this domain redirect should send clients to; e.g. `"https://readthedocs.org/projects/example"` | string | n/a | yes |
+| redirect_with_hsts | Whether to send the `Strict-Transport-Security` header with the redirect (recommended for security) | string | `"true"` | no |
 <!-- terraform-docs:end -->

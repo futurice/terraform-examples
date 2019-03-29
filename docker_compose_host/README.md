@@ -12,8 +12,8 @@ Assuming you have the [AWS provider](https://www.terraform.io/docs/providers/aws
 
 ```tf
 module "my_host" {
-  # Check for updates at: https://github.com/futurice/terraform-utils/compare/v6.0...master
-  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_ec2_ebs_docker_host?ref=v6.0"
+  # Check for updates at: https://github.com/futurice/terraform-utils/compare/v6.1...master
+  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_ec2_ebs_docker_host?ref=v6.1"
 
   hostname             = "my-docker-host"
   ssh_private_key_path = "~/.ssh/id_rsa"
@@ -23,8 +23,8 @@ module "my_host" {
 }
 
 module "my_docker_compose" {
-  # Check for updates at: https://github.com/futurice/terraform-utils/compare/v6.0...master
-  source = "git::ssh://git@github.com/futurice/terraform-utils.git//docker_compose_host?ref=v6.0"
+  # Check for updates at: https://github.com/futurice/terraform-utils/compare/v6.1...master
+  source = "git::ssh://git@github.com/futurice/terraform-utils.git//docker_compose_host?ref=v6.1"
 
   public_ip          = "${module.my_host.public_ip}"
   ssh_username       = "${module.my_host.ssh_username}"
@@ -69,14 +69,14 @@ When running `terraform apply`, the previous `nginx` service will be stopped and
 | Name | Description | Type | Default | Required |
 |------|-------------|:----:|:-----:|:-----:|
 | docker_compose_down_command | Command to remove services with; will be run during un- or re-provisioning | string | `"docker-compose stop 00260026 docker-compose rm -f"` | no |
-| docker_compose_env | Env-vars (in .env syntax) that will be substituted into docker-compose.yml (see https://docs.docker.com/compose/environment-variables/#the-env-file) | string | `"# No env-vars set"` | no |
-| docker_compose_override_yml | Contents for the docker-compose.override.yml file (see https://docs.docker.com/compose/extends/#multiple-compose-files) | string | `"# Any docker-compose services defined here will be merged on top of docker-compose.yml
+| docker_compose_env | Env-vars (in `.env` file syntax) that will be substituted into docker-compose.yml (see https://docs.docker.com/compose/environment-variables/#the-env-file) | string | `"# No env-vars set"` | no |
+| docker_compose_override_yml | Contents for the `docker-compose.override.yml` file (see https://docs.docker.com/compose/extends/#multiple-compose-files) | string | `"# Any docker-compose services defined here will be merged on top of docker-compose.yml
 # See: https://docs.docker.com/compose/extends/#multiple-compose-files
 version: "3"
 "` | no |
 | docker_compose_up_command | Command to start services with; you can customize this to do work before/after, or to disable this completely in favor of your own provisioning scripts | string | `"docker-compose pull --quiet 00260026 docker-compose up -d"` | no |
 | docker_compose_version | Version of docker-compose to install during provisioning (see https://github.com/docker/compose/releases) | string | `"1.23.2"` | no |
-| docker_compose_yml | Contents for the docker-compose.yml file | string | n/a | yes |
+| docker_compose_yml | Contents for the `docker-compose.yml` file | string | n/a | yes |
 | public_ip | Public IP address of a host running docker | string | n/a | yes |
 | ssh_private_key | SSH private key, which can be used for provisioning the host | string | n/a | yes |
 | ssh_username | SSH username, which can be used for provisioning the host | string | `"ubuntu"` | no |
@@ -85,5 +85,5 @@ version: "3"
 
 | Name | Description |
 |------|-------------|
-| reprovision_trigger | Hash of all docker-compose configuration used for this host; can be used as the 'reprovision_trigger' input to an aws_ec2_ebs_docker_host |
+| reprovision_trigger | Hash of all docker-compose configuration used for this host; can be used as the `reprovision_trigger` input to an `aws_ec2_ebs_docker_host` module |
 <!-- terraform-docs:end -->
