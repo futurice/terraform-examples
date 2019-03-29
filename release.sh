@@ -5,7 +5,7 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )" # dir of
 set -e # exit on error
 
 echo -n "Checking dependencies... "
-deps="git curl node"
+deps="git curl node terraform-docs"
 if [ "$(echo $deps | tr ' ' '\n' | wc -l)" != "$(command -v $deps | wc -l)" ]; then
   echo -e "ERROR\n\nRequired commands not available: $deps"
   exit 1
