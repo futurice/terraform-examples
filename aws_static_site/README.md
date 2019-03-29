@@ -1,6 +1,6 @@
 # aws_static_site
 
-This module creates:
+This module implements a website for hosting static content on AWS, by creating:
 
 - An [S3](https://aws.amazon.com/s3/) bucket for hosting your static site
 - DNS records on [Route 53](https://aws.amazon.com/route53/)
@@ -9,38 +9,6 @@ This module creates:
 - A [Lambda@Edge](https://docs.aws.amazon.com/lambda/latest/dg/lambda-edge.html) function for custom response headers, and Basic Auth support
 
 Optionally, you can create the S3 bucket outside of this module, and just pass it in as an override.
-
-<!-- terraform-docs:begin -->
-## Inputs
-
-| Name | Description | Type | Default | Required |
-|------|-------------|:----:|:-----:|:-----:|
-| add_response_headers | Map of HTTP headers (if any) to add to outgoing responses before sending them to clients | map | `<map>` | no |
-| basic_auth_body | When using HTTP Basic Auth, and authentication has failed, this will be displayed by the browser as the page content | string | `"Unauthorized"` | no |
-| basic_auth_password | When non-empty, require this password with HTTP Basic Auth | string | `""` | no |
-| basic_auth_realm | When using HTTP Basic Auth, this will be displayed by the browser in the auth prompt | string | `"Authentication Required"` | no |
-| basic_auth_username | When non-empty, require this username with HTTP Basic Auth | string | `""` | no |
-| bucket_override_name | When provided, assume a bucket with this name already exists for the site content, instead of creating the bucket automatically (e.g. 'my-bucket') | string | `""` | no |
-| cache_ttl_override | When >= 0, override the cache behaviour for ALL objects in S3, so that they stay in the CloudFront cache for this amount of seconds | string | `"-1"` | no |
-| default_root_object | The object to return when the root URL is requested | string | `"index.html"` | no |
-| distribution_comment_prefix | This will be included as a comment on the CloudFront distribution that's created | string | `"Static site "` | no |
-| lambda_logging_enabled | When true, writes information about incoming requests to the Lambda function's CloudWatch group | string | `"false"` | no |
-| name_prefix | Name prefix to use for objects that need to be created (only lowercase alphanumeric characters and hyphens allowed, for S3 bucket name compatibility) | string | `"aws-static-site---"` | no |
-| override_response_body | Same as 'override_response_status' | string | `""` | no |
-| override_response_status | When this and the other 'override_response_' variables are non-empty, skip sending the request to the origin altogether, and instead respond as instructed here | string | `""` | no |
-| override_response_status_description | Same as 'override_response_status' | string | `""` | no |
-| price_class | Price class to use (100, 200 or All, see https://aws.amazon.com/cloudfront/pricing/) | string | `"100"` | no |
-| site_domain | Domain on which the static site will be made available (e.g. 'www.example.com') | string | n/a | yes |
-
-## Outputs
-
-| Name | Description |
-|------|-------------|
-| bucket_domain_name | Full S3 domain name for the bucket used for hosting the content (e.g. 'aws-static-site---hello-example-com.s3-website.eu-central-1.amazonaws.com') |
-| bucket_name | The name of the S3 bucket that's used for hosting the content (either auto-generated or externally provided) |
-| cloudfront_id | The ID of the CloudFront distribution that's used for hosting the content |
-| site_domain | Domain on which the static site will be made available |
-<!-- terraform-docs:end -->
 
 ## Example 1: Simple static site
 
@@ -214,3 +182,35 @@ If the tool you're using for S3 uploads doesn't support setting cache headers, o
 That is, if you specify `cache_ttl_override = 0` for your site, every object will always be fetched from S3, for every request. Importantly, though, this won't invalidate objects that *are already* in the CloudFront cache with a longer TTL. If you have an object that's "stuck" in your cache and you can't shake it, the CloudFront feature you're looking for is [file invalidation](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Invalidation.html).
 
 Conversely, if you specify `cache_ttl_override = 300`, every object will stay in CloudFront for 5 minutes, regardless of its cache headers. This can be a good performance boost for your site, since only 1 request per file per 5 minutes will need to go all the way to S3, and all the others can be served immediately from the CloudFront edge location. Keep in mind the aforementioned warning about "inconsistent versions", however: each object has their own TTL counter, so `index.html` and `image.jpg` may update at different times in the cache, even if you upload an update to S3 at the same time.
+
+<!-- terraform-docs:begin -->
+## Inputs
+
+| Name | Description | Type | Default | Required |
+|------|-------------|:----:|:-----:|:-----:|
+| add_response_headers | Map of HTTP headers (if any) to add to outgoing responses before sending them to clients | map | `<map>` | no |
+| basic_auth_body | When using HTTP Basic Auth, and authentication has failed, this will be displayed by the browser as the page content | string | `"Unauthorized"` | no |
+| basic_auth_password | When non-empty, require this password with HTTP Basic Auth | string | `""` | no |
+| basic_auth_realm | When using HTTP Basic Auth, this will be displayed by the browser in the auth prompt | string | `"Authentication Required"` | no |
+| basic_auth_username | When non-empty, require this username with HTTP Basic Auth | string | `""` | no |
+| bucket_override_name | When provided, assume a bucket with this name already exists for the site content, instead of creating the bucket automatically (e.g. 'my-bucket') | string | `""` | no |
+| cache_ttl_override | When >= 0, override the cache behaviour for ALL objects in S3, so that they stay in the CloudFront cache for this amount of seconds | string | `"-1"` | no |
+| default_root_object | The object to return when the root URL is requested | string | `"index.html"` | no |
+| distribution_comment_prefix | This will be included as a comment on the CloudFront distribution that's created | string | `"Static site "` | no |
+| lambda_logging_enabled | When true, writes information about incoming requests to the Lambda function's CloudWatch group | string | `"false"` | no |
+| name_prefix | Name prefix to use for objects that need to be created (only lowercase alphanumeric characters and hyphens allowed, for S3 bucket name compatibility) | string | `"aws-static-site---"` | no |
+| override_response_body | Same as 'override_response_status' | string | `""` | no |
+| override_response_status | When this and the other 'override_response_' variables are non-empty, skip sending the request to the origin altogether, and instead respond as instructed here | string | `""` | no |
+| override_response_status_description | Same as 'override_response_status' | string | `""` | no |
+| price_class | Price class to use (100, 200 or All, see https://aws.amazon.com/cloudfront/pricing/) | string | `"100"` | no |
+| site_domain | Domain on which the static site will be made available (e.g. 'www.example.com') | string | n/a | yes |
+
+## Outputs
+
+| Name | Description |
+|------|-------------|
+| bucket_domain_name | Full S3 domain name for the bucket used for hosting the content (e.g. 'aws-static-site---hello-example-com.s3-website.eu-central-1.amazonaws.com') |
+| bucket_name | The name of the S3 bucket that's used for hosting the content (either auto-generated or externally provided) |
+| cloudfront_id | The ID of the CloudFront distribution that's used for hosting the content |
+| site_domain | Domain on which the static site will be made available |
+<!-- terraform-docs:end -->

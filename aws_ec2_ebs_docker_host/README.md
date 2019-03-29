@@ -4,41 +4,6 @@ Creates a standalone Docker host on EC2, optionally attaching an external EBS vo
 
 This is convenient for quickly setting up non-production-critical Docker workloads. If you need something fancier, consider e.g. ECS, EKS or Fargate.
 
-<!-- terraform-docs:begin -->
-## Inputs
-
-| Name | Description | Type | Default | Required |
-|------|-------------|:----:|:-----:|:-----:|
-| allow_incoming_dns | Whether to allow incoming DNS traffic on the host security group | string | `"false"` | no |
-| allow_incoming_http | Whether to allow incoming HTTP traffic on the host security group | string | `"false"` | no |
-| allow_incoming_https | Whether to allow incoming HTTPS traffic on the host security group | string | `"false"` | no |
-| data_volume_id | The ID of the EBS volume to mount as /data | string | `""` | no |
-| hostname | Hostname by which this service is identified in metrics, logs etc | string | `"aws-ec2-ebs-docker-host"` | no |
-| instance_ami | See https://cloud-images.ubuntu.com/locator/ec2/ for options | string | `"ami-0bdf93799014acdc4"` | no |
-| instance_type | See https://aws.amazon.com/ec2/instance-types/ for options; for example, typical values for small workloads are [ t2.nano, t2.micro, t2.small, t2.medium, t2.large ] | string | `"t2.micro"` | no |
-| reprovision_trigger | An arbitrary string value; when this value changes, the host needs to be reprovisioned | string | `""` | no |
-| root_volume_size | Size (in GiB) of the EBS volume that will be created and mounted as the root fs for the host | string | `"8"` | no |
-| ssh_private_key_path | SSH private key file path, relative to Terraform project root | string | `"ssh.private.key"` | no |
-| ssh_public_key_path | SSH public key file path, relative to Terraform project root | string | `"ssh.public.key"` | no |
-| ssh_username | Default username built into the AMI (see 'instance_ami') | string | `"ubuntu"` | no |
-| swap_file_size | Size of the swap file allocated on the root volume | string | `"512M"` | no |
-| swap_swappiness | Swappiness value provided when creating the swap file | string | `"10"` | no |
-| vpc_id | ID of the VPC our host should join; if empty, joins your Default VPC | string | `""` | no |
-
-## Outputs
-
-| Name | Description |
-|------|-------------|
-| availability_zone | AWS Availability Zone in which the EC2 instance was created |
-| hostname | Hostname by which this service is identified in metrics, logs etc |
-| instance_id | AWS ID for the EC2 instance used |
-| public_ip | Public IP address assigned to the host by EC2 |
-| security_group_id | Security Group ID, for attaching additional security rules externally |
-| ssh_private_key | SSH private key that can be used to access the EC2 instance |
-| ssh_private_key_path | Path to SSH private key that can be used to access the EC2 instance |
-| ssh_username | Username that can be used to access the EC2 instance over SSH |
-<!-- terraform-docs:end -->
-
 ## Example 1: Running a docker container
 
 Assuming you have the [AWS provider](https://www.terraform.io/docs/providers/aws/index.html) set up:
@@ -207,3 +172,38 @@ $ terraform apply -target module.my_host
 ```
 
 This should finish by giving you the `docker_tunnel_command` output. Run that in another terminal, and then finish with another `terraform apply`. Afterwards, you should be able to visit the `test_link` and see nginx greeting you.
+
+<!-- terraform-docs:begin -->
+## Inputs
+
+| Name | Description | Type | Default | Required |
+|------|-------------|:----:|:-----:|:-----:|
+| allow_incoming_dns | Whether to allow incoming DNS traffic on the host security group | string | `"false"` | no |
+| allow_incoming_http | Whether to allow incoming HTTP traffic on the host security group | string | `"false"` | no |
+| allow_incoming_https | Whether to allow incoming HTTPS traffic on the host security group | string | `"false"` | no |
+| data_volume_id | The ID of the EBS volume to mount as /data | string | `""` | no |
+| hostname | Hostname by which this service is identified in metrics, logs etc | string | `"aws-ec2-ebs-docker-host"` | no |
+| instance_ami | See https://cloud-images.ubuntu.com/locator/ec2/ for options | string | `"ami-0bdf93799014acdc4"` | no |
+| instance_type | See https://aws.amazon.com/ec2/instance-types/ for options; for example, typical values for small workloads are [ t2.nano, t2.micro, t2.small, t2.medium, t2.large ] | string | `"t2.micro"` | no |
+| reprovision_trigger | An arbitrary string value; when this value changes, the host needs to be reprovisioned | string | `""` | no |
+| root_volume_size | Size (in GiB) of the EBS volume that will be created and mounted as the root fs for the host | string | `"8"` | no |
+| ssh_private_key_path | SSH private key file path, relative to Terraform project root | string | `"ssh.private.key"` | no |
+| ssh_public_key_path | SSH public key file path, relative to Terraform project root | string | `"ssh.public.key"` | no |
+| ssh_username | Default username built into the AMI (see 'instance_ami') | string | `"ubuntu"` | no |
+| swap_file_size | Size of the swap file allocated on the root volume | string | `"512M"` | no |
+| swap_swappiness | Swappiness value provided when creating the swap file | string | `"10"` | no |
+| vpc_id | ID of the VPC our host should join; if empty, joins your Default VPC | string | `""` | no |
+
+## Outputs
+
+| Name | Description |
+|------|-------------|
+| availability_zone | AWS Availability Zone in which the EC2 instance was created |
+| hostname | Hostname by which this service is identified in metrics, logs etc |
+| instance_id | AWS ID for the EC2 instance used |
+| public_ip | Public IP address assigned to the host by EC2 |
+| security_group_id | Security Group ID, for attaching additional security rules externally |
+| ssh_private_key | SSH private key that can be used to access the EC2 instance |
+| ssh_private_key_path | Path to SSH private key that can be used to access the EC2 instance |
+| ssh_username | Username that can be used to access the EC2 instance over SSH |
+<!-- terraform-docs:end -->
