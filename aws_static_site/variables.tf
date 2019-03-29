@@ -1,5 +1,5 @@
 variable "site_domain" {
-  description = "Domain on which the static site will be made available (e.g. 'www.example.com')"
+  description = "Domain on which the static site will be made available (e.g. `\"www.example.com\"`)"
 }
 
 variable "name_prefix" {
@@ -13,13 +13,13 @@ variable "distribution_comment_prefix" {
 }
 
 variable "bucket_override_name" {
-  description = "When provided, assume a bucket with this name already exists for the site content, instead of creating the bucket automatically (e.g. 'my-bucket')"
+  description = "When provided, assume a bucket with this name already exists for the site content, instead of creating the bucket automatically (e.g. `\"my-bucket\"`)"
   default     = ""
 }
 
 variable "price_class" {
-  description = "Price class to use (100, 200 or All, see https://aws.amazon.com/cloudfront/pricing/)"
-  default     = "100"
+  description = "Price class to use (`100`, `200` or `\"All\"`, see https://aws.amazon.com/cloudfront/pricing/)"
+  default     = 100
 }
 
 variable "cache_ttl_override" {
@@ -42,17 +42,17 @@ variable "add_response_headers" {
 }
 
 variable "override_response_status" {
-  description = "When this and the other 'override_response_' variables are non-empty, skip sending the request to the origin altogether, and instead respond as instructed here"
+  description = "When this and the other `override_response_*` variables are non-empty, skip sending the request to the origin altogether, and instead respond as instructed here"
   default     = ""
 }
 
 variable "override_response_status_description" {
-  description = "Same as 'override_response_status'"
+  description = "Same as `override_response_status`"
   default     = ""
 }
 
 variable "override_response_body" {
-  description = "Same as 'override_response_status'"
+  description = "Same as `override_response_status`"
   default     = ""
 }
 

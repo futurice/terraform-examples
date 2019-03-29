@@ -17,7 +17,7 @@ variable "docker_compose_version" {
 }
 
 variable "docker_compose_env" {
-  description = "Env-vars (in .env syntax) that will be substituted into docker-compose.yml (see https://docs.docker.com/compose/environment-variables/#the-env-file)"
+  description = "Env-vars (in `.env` file syntax) that will be substituted into docker-compose.yml (see https://docs.docker.com/compose/environment-variables/#the-env-file)"
 
   # The reason for this default is that Terraform doesn't seem to want to provision an empty file
   # https://github.com/hashicorp/terraform/issues/15932
@@ -25,11 +25,11 @@ variable "docker_compose_env" {
 }
 
 variable "docker_compose_yml" {
-  description = "Contents for the docker-compose.yml file"
+  description = "Contents for the `docker-compose.yml` file"
 }
 
 variable "docker_compose_override_yml" {
-  description = "Contents for the docker-compose.override.yml file (see https://docs.docker.com/compose/extends/#multiple-compose-files)"
+  description = "Contents for the `docker-compose.override.yml` file (see https://docs.docker.com/compose/extends/#multiple-compose-files)"
 
   default = <<EOF
 # Any docker-compose services defined here will be merged on top of docker-compose.yml

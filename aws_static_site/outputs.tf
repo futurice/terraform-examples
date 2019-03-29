@@ -14,6 +14,6 @@ output "site_domain" {
 }
 
 output "bucket_domain_name" {
-  description = "Full S3 domain name for the bucket used for hosting the content (e.g. 'aws-static-site---hello-example-com.s3-website.eu-central-1.amazonaws.com')"
+  description = "Full S3 domain name for the bucket used for hosting the content (e.g. `\"aws-static-site---hello-example-com.s3-website.eu-central-1.amazonaws.com\"`)"
   value       = "${local.bucket_domain_name}"
 }

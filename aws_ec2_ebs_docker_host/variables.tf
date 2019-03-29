@@ -26,7 +26,7 @@ variable "hostname" {
 }
 
 variable "instance_type" {
-  description = "See https://aws.amazon.com/ec2/instance-types/ for options; for example, typical values for small workloads are [ t2.nano, t2.micro, t2.small, t2.medium, t2.large ]"
+  description = "See https://aws.amazon.com/ec2/instance-types/ for options; for example, typical values for small workloads are `\"t2.nano\"`, `\"t2.micro\"`, `\"t2.small\"`, `\"t2.medium\"`, and `\"t2.large\"`"
   default     = "t2.micro"
 }
 
@@ -66,8 +66,8 @@ variable "root_volume_size" {
 }
 
 variable "data_volume_id" {
-  description = "The ID of the EBS volume to mount as /data"
-  default     = ""                                           # empty string means no EBS volume will be attached
+  description = "The ID of the EBS volume to mount as `/data`"
+  default     = ""                                             # empty string means no EBS volume will be attached
 }
 
 variable "swap_file_size" {
