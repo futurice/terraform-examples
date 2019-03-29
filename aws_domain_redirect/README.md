@@ -38,3 +38,18 @@ module "my_redirect" {
 ```
 
 Applying this **will take a very long time**, because both ACM and especially CloudFront are quite slow to update. After that, both `http://go.example.com` and `https://go.example.com` should redirect clients to `https://www.futurice.com/careers/`.
+
+<!-- terraform-docs:begin -->
+## Inputs
+
+| Name | Description | Type | Default | Required |
+|------|-------------|:----:|:-----:|:-----:|
+| distribution_comment_prefix | This will be included as a comment on the CloudFront distribution that's created | string | `"Domain redirect "` | no |
+| lambda_logging_enabled | When true, writes information about incoming requests to the Lambda function's CloudWatch group | string | `"false"` | no |
+| name_prefix | Name prefix to use for objects that need to be created (only lowercase alphanumeric characters and hyphens allowed, for S3 bucket name compatibility) | string | `"aws-domain-redirect---"` | no |
+| redirect_domain | Domain which will redirect to the given 'redirect_url'; e.g. 'docs.example.com' | string | n/a | yes |
+| redirect_permanently | Which HTTP status code to use for the redirect; if true, uses 301 'Moved Permanently', instead of 302 'Found' | string | `"false"` | no |
+| redirect_price_class | Price class to use (100, 200 or All, see https://aws.amazon.com/cloudfront/pricing/) | string | `"100"` | no |
+| redirect_url | The URL this domain redirect should send clients to; e.g. 'https://readthedocs.org/projects/example' | string | n/a | yes |
+| redirect_with_hsts | Whether to send the 'Strict-Transport-Security' header with the redirect (recommended for security) | string | `"true"` | no |
+<!-- terraform-docs:end -->

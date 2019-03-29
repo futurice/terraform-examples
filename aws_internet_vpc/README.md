@@ -13,3 +13,19 @@ module "my_vpc" {
   vpc_name = "my-vpc"
 }
 ```
+
+<!-- terraform-docs:begin -->
+## Inputs
+
+| Name | Description | Type | Default | Required |
+|------|-------------|:----:|:-----:|:-----:|
+| vpc_name | Name given to the VPC; in addition to human-readability, can be used to fetch this VPC using a 'aws_vpc' data block | string | `"terraform-default-vpc"` | no |
+
+## Outputs
+
+| Name | Description |
+|------|-------------|
+| subnet_id | ID of the created AWS VPC subnet which e.g. EC2 machines can join |
+| vpc_id | ID of the created AWS VPC which e.g. EC2 machines can join |
+| vpc_name | Name tag of the VPC created |
+<!-- terraform-docs:end -->
