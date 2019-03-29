@@ -10,8 +10,8 @@ Assuming you have the [AWS provider](https://www.terraform.io/docs/providers/aws
 
 ```tf
 module "my_host" {
-  # Check for updates at: https://github.com/futurice/terraform-utils/compare/v6.1...master
-  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_ec2_ebs_docker_host?ref=v6.1"
+  # Check for updates at: https://github.com/futurice/terraform-utils/compare/v7.0...master
+  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_ec2_ebs_docker_host?ref=v7.0"
 
   hostname             = "my-docker-host"
   ssh_private_key_path = "~/.ssh/id_rsa"     # if you use shared Terraform state, consider changing this to something that doesn't depend on "~"
@@ -45,8 +45,8 @@ resource "aws_ebs_volume" "my_data" {
 }
 
 module "my_host" {
-  # Check for updates at: https://github.com/futurice/terraform-utils/compare/v6.1...master
-  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_ec2_ebs_docker_host?ref=v6.1"
+  # Check for updates at: https://github.com/futurice/terraform-utils/compare/v7.0...master
+  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_ec2_ebs_docker_host?ref=v7.0"
 
   hostname             = "my-host"
   ssh_private_key_path = "~/.ssh/id_rsa"                # note that with a shared Terraform state, paths with "~" will become problematic
@@ -94,8 +94,8 @@ Assuming you have the [AWS provider](https://www.terraform.io/docs/providers/aws
 
 ```tf
 module "my_host" {
-  # Check for updates at: https://github.com/futurice/terraform-utils/compare/v6.1...master
-  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_ec2_ebs_docker_host?ref=v6.1"
+  # Check for updates at: https://github.com/futurice/terraform-utils/compare/v7.0...master
+  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_ec2_ebs_docker_host?ref=v7.0"
 
   hostname             = "my-docker-host"
   ssh_private_key_path = "~/.ssh/id_rsa"
@@ -126,8 +126,8 @@ Assuming you have the [AWS provider](https://www.terraform.io/docs/providers/aws
 
 ```tf
 module "my_host" {
-  # Check for updates at: https://github.com/futurice/terraform-utils/compare/v6.1...master
-  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_ec2_ebs_docker_host?ref=v6.1"
+  # Check for updates at: https://github.com/futurice/terraform-utils/compare/v7.0...master
+  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_ec2_ebs_docker_host?ref=v7.0"
 
   hostname             = "my-docker-host"
   ssh_private_key_path = "~/.ssh/id_rsa"

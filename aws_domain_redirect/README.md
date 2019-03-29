@@ -29,8 +29,8 @@ provider "aws" {
 }
 
 module "my_redirect" {
-  # Check for updates at: https://github.com/futurice/terraform-utils/compare/v6.1...master
-  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_domain_redirect?ref=v6.1"
+  # Check for updates at: https://github.com/futurice/terraform-utils/compare/v7.0...master
+  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_domain_redirect?ref=v7.0"
 
   redirect_domain = "go.example.com"
   redirect_url    = "https://www.futurice.com/careers/"
