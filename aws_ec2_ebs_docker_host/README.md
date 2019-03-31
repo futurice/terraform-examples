@@ -10,7 +10,8 @@ Assuming you have the [AWS provider](https://www.terraform.io/docs/providers/aws
 
 ```tf
 module "my_host" {
-  # Check for updates at: https://github.com/futurice/terraform-utils/compare/v7.0...master
+  # Available inputs: https://github.com/futurice/terraform-utils/tree/master/aws_ec2_ebs_docker_host#inputs
+  # Check for updates: https://github.com/futurice/terraform-utils/compare/v7.0...master
   source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_ec2_ebs_docker_host?ref=v7.0"
 
   hostname             = "my-docker-host"
@@ -45,7 +46,8 @@ resource "aws_ebs_volume" "my_data" {
 }
 
 module "my_host" {
-  # Check for updates at: https://github.com/futurice/terraform-utils/compare/v7.0...master
+  # Available inputs: https://github.com/futurice/terraform-utils/tree/master/aws_ec2_ebs_docker_host#inputs
+  # Check for updates: https://github.com/futurice/terraform-utils/compare/v7.0...master
   source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_ec2_ebs_docker_host?ref=v7.0"
 
   hostname             = "my-host"
@@ -94,7 +96,8 @@ Assuming you have the [AWS provider](https://www.terraform.io/docs/providers/aws
 
 ```tf
 module "my_host" {
-  # Check for updates at: https://github.com/futurice/terraform-utils/compare/v7.0...master
+  # Available inputs: https://github.com/futurice/terraform-utils/tree/master/aws_ec2_ebs_docker_host#inputs
+  # Check for updates: https://github.com/futurice/terraform-utils/compare/v7.0...master
   source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_ec2_ebs_docker_host?ref=v7.0"
 
   hostname             = "my-docker-host"
@@ -126,7 +129,8 @@ Assuming you have the [AWS provider](https://www.terraform.io/docs/providers/aws
 
 ```tf
 module "my_host" {
-  # Check for updates at: https://github.com/futurice/terraform-utils/compare/v7.0...master
+  # Available inputs: https://github.com/futurice/terraform-utils/tree/master/aws_ec2_ebs_docker_host#inputs
+  # Check for updates: https://github.com/futurice/terraform-utils/compare/v7.0...master
   source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_ec2_ebs_docker_host?ref=v7.0"
 
   hostname             = "my-docker-host"
