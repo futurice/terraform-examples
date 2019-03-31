@@ -9,8 +9,8 @@ Assuming you have the [AWS provider](https://www.terraform.io/docs/providers/aws
 ```tf
 module "my_mailgun_domain" {
   # Available inputs: https://github.com/futurice/terraform-utils/tree/master/aws_mailgun_domain#inputs
-  # Check for updates: https://github.com/futurice/terraform-utils/compare/v7.0...master
-  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_mailgun_domain?ref=v7.0"
+  # Check for updates: https://github.com/futurice/terraform-utils/compare/v7.1...master
+  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_mailgun_domain?ref=v7.1"
 
   api_key               = "SECRET SECRET SECRET"
   mailgun_domain        = "example.com"
