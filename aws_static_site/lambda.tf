@@ -10,10 +10,6 @@ locals {
   }
 }
 
-provider "template" {
-  version = "~> 2.1"
-}
-
 # Lambda@Edge functions don't support environment variables, so let's inline the relevant parts of the config to the JS file.
 # (see: "error creating CloudFront Distribution: InvalidLambdaFunctionAssociation: The function cannot have environment variables")
 data "template_file" "lambda" {
@@ -23,10 +19,6 @@ data "template_file" "lambda" {
     config               = "${jsonencode(local.config)}"             # single quotes need to be escaped, lest we end up with a parse error on the JS side
     add_response_headers = "${jsonencode(var.add_response_headers)}" # ^ ditto
   }
-}
-
-provider "archive" {
-  version = "~> 1.2"
 }
 
 # Lambda functions can only be uploaded as ZIP files, so we need to package our JS file into one
