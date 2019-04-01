@@ -24,8 +24,8 @@ provider "mailgun" {
 
 module "my_mailgun_domain" {
   # Available inputs: https://github.com/futurice/terraform-utils/tree/master/aws_mailgun_domain#inputs
-  # Check for updates: https://github.com/futurice/terraform-utils/compare/v7.2...master
-  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_mailgun_domain?ref=v7.2"
+  # Check for updates: https://github.com/futurice/terraform-utils/compare/v7.3...master
+  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_mailgun_domain?ref=v7.3"
 
   mail_domain   = "example.com"
   smtp_password = "SECRET SECRET SECRET"
