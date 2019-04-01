@@ -1,10 +1,3 @@
-# Configure the Mailgun provider
-# https://www.terraform.io/docs/providers/mailgun/index.html
-provider "mailgun" {
-  version = "~> 0.1"
-  api_key = "${var.api_key}"
-}
-
 # Create a new Mailgun domain
 resource "mailgun_domain" "this" {
   name          = "${var.mail_domain}"

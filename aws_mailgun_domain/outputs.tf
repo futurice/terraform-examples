@@ -7,8 +7,3 @@ output "api_base_url" {
   value       = "https://api.mailgun.net/v3/${var.mail_domain}/"
   description = "Base URL of the Mailgun API for your domain"
 }
-
-output "api_credentials" {
-  value       = "api:${var.api_key}"
-  description = "HTTP Basic Auth credentials for acessing the Mailgun API"
-}

@@ -1,7 +1,3 @@
-variable "api_key" {
-  description = "Your secret Mailgun API key"
-}
-
 variable "mail_domain" {
   description = "Domain which you want to use for sending/receiving email (e.g. `\"example.com\"`)"
 }
