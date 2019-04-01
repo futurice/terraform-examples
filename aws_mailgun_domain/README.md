@@ -24,8 +24,8 @@ provider "mailgun" {
 
 module "my_mailgun_domain" {
   # Available inputs: https://github.com/futurice/terraform-utils/tree/master/aws_mailgun_domain#inputs
-  # Check for updates: https://github.com/futurice/terraform-utils/compare/v7.1...master
-  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_mailgun_domain?ref=v7.1"
+  # Check for updates: https://github.com/futurice/terraform-utils/compare/v7.2...master
+  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_mailgun_domain?ref=v7.2"
 
   mail_domain   = "example.com"
   smtp_password = "SECRET SECRET SECRET"
@@ -69,7 +69,6 @@ After Mailgun is happy with your DNS records, however, you should get something 
 
 | Name | Description | Type | Default | Required |
 |------|-------------|:----:|:-----:|:-----:|
-| api_key | Your secret Mailgun API key | string | n/a | yes |
 | mail_domain | Domain which you want to use for sending/receiving email (e.g. `"example.com"`) | string | n/a | yes |
 | smtp_password | Password that Mailgun will require for sending out SMPT mail via this domain | string | n/a | yes |
 | spam_action | See https://www.terraform.io/docs/providers/mailgun/r/domain.html#spam_action | string | `"disabled"` | no |
@@ -80,6 +79,5 @@ After Mailgun is happy with your DNS records, however, you should get something 
 | Name | Description |
 |------|-------------|
 | api_base_url | Base URL of the Mailgun API for your domain |
-| api_credentials | HTTP Basic Auth credentials for acessing the Mailgun API |
 | mail_domain | Domain which you want to use for sending/receiving email (e.g. `"example.com"`) |
 <!-- terraform-docs:end -->
