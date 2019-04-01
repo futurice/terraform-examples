@@ -6,6 +6,7 @@ This repository contains reusable [Terraform](https://www.terraform.io/) utility
 
 In addition to the modules here, there's a lot of useful ones in the wild. For example:
 
+- https://registry.terraform.io/ - lots of solutions to common problems, some verified by Hashicorp themselves
 - https://github.com/cloudposse - look for repos starting with `terraform-` for lots of good building blocks
 
 ## Releasing
