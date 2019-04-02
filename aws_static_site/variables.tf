@@ -9,7 +9,7 @@ variable "name_prefix" {
 
 variable "distribution_comment_prefix" {
   description = "This will be included as a comment on the CloudFront distribution that's created"
-  default     = "Static site "
+  default     = "Static site: "
 }
 
 variable "bucket_override_name" {

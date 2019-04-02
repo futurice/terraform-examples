@@ -13,7 +13,7 @@ variable "name_prefix" {
 
 variable "distribution_comment_prefix" {
   description = "This will be included as a comment on the CloudFront distribution that's created"
-  default     = "Domain redirect "
+  default     = "Domain redirect: "
 }
 
 variable "redirect_price_class" {
