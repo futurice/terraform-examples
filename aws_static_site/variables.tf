@@ -18,8 +18,13 @@ variable "bucket_override_name" {
 }
 
 variable "price_class" {
-  description = "Price class to use (`100`, `200` or `\"All\"`, see https://aws.amazon.com/cloudfront/pricing/)"
+  description = "CloudFront price class to use (`100`, `200` or `\"All\"`, see https://aws.amazon.com/cloudfront/pricing/)"
   default     = 100
+}
+
+variable "https_only" {
+  description = "Set this to `false` if you want to support insecure HTTP access, in addition to HTTPS"
+  default     = true
 }
 
 variable "cache_ttl_override" {

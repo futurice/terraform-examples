@@ -27,7 +27,7 @@ resource "aws_cloudfront_distribution" "this" {
     allowed_methods        = ["GET", "HEAD"]
     cached_methods         = ["GET", "HEAD"]
     target_origin_id       = "aws_static_site"
-    viewer_protocol_policy = "redirect-to-https" # only allow requests over HTTPS
+    viewer_protocol_policy = "${var.https_only ? "redirect-to-https" : "allow-all"}"
     compress               = true
 
     min_ttl     = "${var.cache_ttl_override >= 0 ? var.cache_ttl_override : 0}"     # for reference: AWS default is 0
