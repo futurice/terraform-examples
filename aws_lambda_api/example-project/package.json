@@ -8,5 +8,8 @@
     "@types/node": "^8.10.45",
     "check-node-version": "^3.3.0",
     "typescript": "^3.4.1"
+  },
+  "dependencies": {
+    "one-liner-joke": "^1.2.0"
   }
 }

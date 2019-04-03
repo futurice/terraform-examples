@@ -1,8 +1,9 @@
 import { APIGatewayProxyHandler } from "aws-lambda";
+import { getRandomJoke } from "one-liner-joke";
 
-export const handler: APIGatewayProxyHandler = (event, context) => {
+export const handler: APIGatewayProxyHandler = () => {
   return Promise.resolve({
     statusCode: 200,
-    body: JSON.stringify({ message: "Hello TS!", event, context }, null, 2)
+    body: JSON.stringify(getRandomJoke(), null, 2)
   });
 };
