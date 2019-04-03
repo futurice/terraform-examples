@@ -57,6 +57,65 @@ resource "aws_cloudfront_distribution" "this" {
     }
   }
 
+  # This (and other custom_error_response's below) are important, because otherwise CloudFront defaults to caching errors for 5 minutes.
+  # This means that if you accidentally deploy broken code, your users will be stuck seeing the error regardless of how quickly you roll back.
+  # Unless a "cache_ttl_override" is provided, we never cache errors.
+  # https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/custom-error-pages-expiration.html
+  custom_error_response {
+    error_code            = 400                  # Bad Request
+    error_caching_min_ttl = "${local.error_ttl}"
+  }
+
+  custom_error_response {
+    error_code            = 403                  # Forbidden
+    error_caching_min_ttl = "${local.error_ttl}"
+  }
+
+  custom_error_response {
+    error_code            = 404                  # Not Found
+    error_caching_min_ttl = "${local.error_ttl}"
+  }
+
+  custom_error_response {
+    error_code            = 405                  # Method Not Allowed
+    error_caching_min_ttl = "${local.error_ttl}"
+  }
+
+  custom_error_response {
+    error_code            = 414                  # Request-URI Too Long
+    error_caching_min_ttl = "${local.error_ttl}"
+  }
+
+  custom_error_response {
+    error_code            = 416                  # Requested Range Not Satisfiable
+    error_caching_min_ttl = "${local.error_ttl}"
+  }
+
+  custom_error_response {
+    error_code            = 500                  # Internal Server Error
+    error_caching_min_ttl = "${local.error_ttl}"
+  }
+
+  custom_error_response {
+    error_code            = 501                  # Not Implemented
+    error_caching_min_ttl = "${local.error_ttl}"
+  }
+
+  custom_error_response {
+    error_code            = 502                  # Bad Gateway
+    error_caching_min_ttl = "${local.error_ttl}"
+  }
+
+  custom_error_response {
+    error_code            = 503                  # Service Unavailable
+    error_caching_min_ttl = "${local.error_ttl}"
+  }
+
+  custom_error_response {
+    error_code            = 504                  # Gateway Timeout
+    error_caching_min_ttl = "${local.error_ttl}"
+  }
+
   # This is mandatory in Terraform :shrug:
   restrictions {
     geo_restriction {
