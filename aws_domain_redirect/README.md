@@ -20,12 +20,11 @@ Assuming you have the [AWS provider](https://www.terraform.io/docs/providers/aws
 ```tf
 # Several AWS services (such as ACM & Lambda@Edge) are presently only available in the US East region.
 # To be able to use them, we need a separate AWS provider for that region, which can be used with an alias.
-# https://docs.aws.amazon.com/acm/latest/userguide/acm-services.html
+# Make sure you customize this block to match your regular AWS provider configuration.
 # https://www.terraform.io/docs/configuration/providers.html#multiple-provider-instances
 provider "aws" {
-  alias                   = "us_east_1"
-  shared_credentials_file = "./aws.key" # make sure you customize this to match your regular AWS provider config
-  region                  = "us-east-1"
+  alias  = "us_east_1"
+  region = "us-east-1"
 }
 
 module "my_redirect" {
