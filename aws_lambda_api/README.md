@@ -73,7 +73,51 @@ The associated API Gateway has been configured to route **all requests** to our 
 
 Say you want to do something non-trivial in your Lambda. This probably means installing some libraries from [npm](https://www.npmjs.com/), and possibly writing the Lambda in [TypeScript](https://www.typescriptlang.org/).
 
-TODO
+An [example project](./example-project) is included with these docs. It demonstrates a simple workflow for:
+
+1. Compiling your Lambda function from TypeScript
+1. Including external dependencies from npm (the [`one-liner-joke`](https://www.npmjs.com/package/one-liner-joke) package serves as an example)
+1. Releasing code changes via Terraform
+
+Importantly, the most recent compiled version of the Lambda function should always exist in `example-project/dist/lambda.zip`, **and be committed to version control**. This seems counter to best practices, but otherwise developers who have just cloned your Terraform repo will be unable to e.g. `terraform apply`, before installing the full `node` toolchain locally, to be able to compile the Lambda function. The same applies to your CI server, for example. This may not be the correct workflow for larger projects, however; see below for suggestions in that regard.
+
+Assuming you have the [AWS provider](https://www.terraform.io/docs/providers/aws/index.html) set up, and a DNS zone for `example.com` configured on Route 53:
+
+```tf
+# Several AWS services (such as ACM & Lambda@Edge) are presently only available in the US East region.
+# To be able to use them, we need a separate AWS provider for that region, which can be used with an alias.
+# https://docs.aws.amazon.com/acm/latest/userguide/acm-services.html
+# https://www.terraform.io/docs/configuration/providers.html#multiple-provider-instances
+provider "aws" {
+  alias                   = "us_east_1"
+  shared_credentials_file = "./aws.key" # make sure you customize this to match your regular AWS provider config
+  region                  = "us-east-1"
+}
+
+module "my_api" {
+  # Available inputs: https://github.com/futurice/terraform-utils/tree/master/aws_lambda_api#inputs
+  # Check for updates: https://github.com/futurice/terraform-utils/compare/v7.3...master
+  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_lambda_api?ref=v7.3"
+
+  api_domain             = "api.example.com"
+  lambda_logging_enabled = true
+  function_zipfile       = "./path/to/example-project/dist/lambda.zip"
+}
+```
+
+After `terraform apply` (which may take a **very** long time), you should be able to receive a random joke with:
+
+```bash
+$ curl https://api.example.com
+{
+  "body": "You look like a before picture.",
+  "tags": [
+    "insults"
+  ]
+}
+```
+
+Whenever you make changes to the function code, make sure you run `build.sh` again, commit the result, and then `terraform apply` to deploy your changes.
 
 <!-- terraform-docs:begin -->
 TODO
