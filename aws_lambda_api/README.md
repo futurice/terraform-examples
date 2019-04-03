@@ -119,6 +119,83 @@ $ curl https://api.example.com
 
 Whenever you make changes to the function code, make sure you run `build.sh` again, commit the result, and then `terraform apply` to deploy your changes.
 
+## Example 3: Separating Lambda code from infra code
+
+Bundling the code and build artifacts for your Lambda function is all well and good when you just want to get things done. However, for a larger or more active project, you're probably better off separating the JavaScript project for the Lambda function into a separate repository. In that case, the process usually looks something like this:
+
+1. Changes to the Lambda code are pushed to version control
+1. A CI process picks up the changes, builds the code into a zipfile
+1. The zipfile gets named with some versioning scheme, e.g. `lambda-v123.zip`
+1. The CI process uploads the zipfile into an S3 bucket
+1. The release is made by updating the Terraform config accordingly
+
+This also makes it easy to support multiple environments, and release promotions between them. For example:
+
+```tf
+# Several AWS services (such as ACM & Lambda@Edge) are presently only available in the US East region.
+# To be able to use them, we need a separate AWS provider for that region, which can be used with an alias.
+# https://docs.aws.amazon.com/acm/latest/userguide/acm-services.html
+# https://www.terraform.io/docs/configuration/providers.html#multiple-provider-instances
+provider "aws" {
+  alias                   = "us_east_1"
+  shared_credentials_file = "./aws.key" # make sure you customize this to match your regular AWS provider config
+  region                  = "us-east-1"
+}
+
+resource "aws_s3_bucket" "my_builds" {
+  bucket = "my-builds"
+}
+
+module "my_api_stage" {
+  # Available inputs: https://github.com/futurice/terraform-utils/tree/master/aws_lambda_api#inputs
+  # Check for updates: https://github.com/futurice/terraform-utils/compare/v7.3...master
+  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_lambda_api?ref=v7.3"
+
+  api_domain         = "api-stage.example.com"
+  function_s3_bucket = "${aws_s3_bucket.my_builds.id}"
+  function_zipfile   = "lambda-v123.zip"
+
+  function_env_vars = {
+    ENV_NAME = "stage"
+  }
+}
+
+module "my_api_prod" {
+  # Available inputs: https://github.com/futurice/terraform-utils/tree/master/aws_lambda_api#inputs
+  # Check for updates: https://github.com/futurice/terraform-utils/compare/v7.3...master
+  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_lambda_api?ref=v7.3"
+
+  api_domain         = "api-prod.example.com"
+  function_s3_bucket = "${aws_s3_bucket.my_builds.id}"
+  function_zipfile   = "lambda-v122.zip"
+
+  function_env_vars = {
+    ENV_NAME = "prod"
+  }
+}
+```
+
+You'll note how the `stage` environment is running the latest `v123` release, while `prod` is still on the previous `v122` release. Once the `v123` release has been thoroughly tested on the `stage` environment, it can be promoted to `prod` by changing the `function_zipfile` variable, and issuing a `terraform apply`. This process supports immutable releases, easy rollbacks, and an audit trail of past releases.
+
+## Example 4: Releasing without Terraform
+
+Sometimes it's convenient to let your CI perform the release unattended. One way to accomplish this is to use just `function_zipfile = "lambda-stage.zip"` and `function_zipfile = "lambda-prod.zip"` in your Terraform configuration, but then do something like this for releases to `stage`:
+
+```bash
+./build.sh
+aws s3 cp ./dist/lambda.zip s3://my-builds/lambda-stage.zip
+aws lambda update-function-code --function-name my-stage-function-name --s3-bucket my-builds --s3-key lambda-stage.zip
+```
+
+And then to promote the current `stage` to `prod`:
+
+```bash
+aws s3 cp s3://my-builds/lambda-stage.zip s3://my-builds/lambda-prod.zip
+aws lambda update-function-code --function-name my-prod-function-name --s3-bucket my-builds --s3-key lambda-prod.zip
+```
+
+...or some variation thereof. You get the idea.
+
 <!-- terraform-docs:begin -->
 TODO
 <!-- terraform-docs:end -->
