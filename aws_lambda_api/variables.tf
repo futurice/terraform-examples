@@ -26,6 +26,11 @@ variable "function_zipfile" {
   description = "Path to a ZIP file that will be installed as the Lambda function (e.g. `\"my-api.zip\"`)"
 }
 
+variable "function_s3_bucket" {
+  description = "When provided, the zipfile is retrieved from an S3 bucket by this name instead (filename is still provided via `function_zipfile`)"
+  default     = ""
+}
+
 variable "function_handler" {
   description = "Instructs Lambda on which function to invoke within the ZIP file"
   default     = "index.handler"

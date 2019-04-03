@@ -25,7 +25,7 @@ EOF
 resource "aws_lambda_permission" "this" {
   statement_id  = "AllowAPIGatewayInvoke"
   action        = "lambda:InvokeFunction"
-  function_name = "${aws_lambda_function.this.arn}"
+  function_name = "${local.function_arn}"
   principal     = "apigateway.amazonaws.com"
   source_arn    = "${aws_api_gateway_deployment.this.execution_arn}/*/*" # the /*/* portion grants access from any method on any resource within the API Gateway "REST API"
 }
