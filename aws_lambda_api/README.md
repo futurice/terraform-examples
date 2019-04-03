@@ -1,6 +1,6 @@
 # aws_lambda_api
 
-This module implements a Lambda-based API endpoint, and makes it available via a custom domain, complete with SSL termination: e.g. `https://api.example.com/`. This includes:
+This module creates a Lambda function, and makes it available via a custom domain, complete with SSL termination: e.g. `https://api.example.com/`. This includes:
 
 - DNS records on [Route 53](https://aws.amazon.com/route53/)
 - A [CloudFront](https://aws.amazon.com/cloudfront/) distribution for SSL termination
@@ -67,7 +67,7 @@ After `terraform apply` (which may take a **very** long time), you should be abl
 
 Because we included the `lambda_logging_enabled` option, you can also log into CloudWatch and check out the properties Lambda makes available in the `event` and `context` properties.
 
-The associated API Gateway has been configured to route all paths to our Lambda function. Try visiting `https://api.example.com/foo/bar?baz=123`, and you should get the same message, but with different parameters in the `event` object. This allows you to implement arbitrary routing rules in JavaScript, instead of defining them in API Gateway.
+The associated API Gateway has been configured to route **all requests** to our Lambda function. Try visiting `https://api.example.com/foo/bar?baz=123` for instance, and you should get the same message, but with different parameters in the `event` object. This allows you to implement arbitrary routing rules in JavaScript, without having to define them in API Gateway also.
 
 ## Example 2: Adding a build step
 
