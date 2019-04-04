@@ -36,6 +36,16 @@ variable "function_handler" {
   default     = "index.handler"
 }
 
+variable "function_timeout" {
+  description = "The amount of time your Lambda Function has to run in seconds"
+  default     = 3
+}
+
+variable "memory_size" {
+  description = "Amount of memory in MB your Lambda Function can use at runtime"
+  default     = 128
+}
+
 variable "function_runtime" {
   description = "Which node.js version should Lambda use for this function"
   default     = "nodejs8.10"

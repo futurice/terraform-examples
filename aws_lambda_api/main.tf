@@ -6,12 +6,17 @@
 resource "aws_lambda_function" "local_zipfile" {
   count = "${var.function_s3_bucket == "" ? 1 : 0}"
 
+  # These are SPECIFIC to the deployment method:
   filename         = "${var.function_zipfile}"
   source_code_hash = "${var.function_s3_bucket == "" ? "${base64sha256(file("${var.function_zipfile}"))}" : ""}"
 
+  # These are the SAME for both:
+  description   = "${var.distribution_comment_prefix}${var.api_domain}"
   function_name = "${local.prefix_with_domain}"
   handler       = "${var.function_handler}"
   runtime       = "${var.function_runtime}"
+  timeout       = "${var.function_timeout}"
+  memory_size   = "${var.memory_size}"
   role          = "${aws_iam_role.this.arn}"
 
   environment {
@@ -23,12 +28,17 @@ resource "aws_lambda_function" "local_zipfile" {
 resource "aws_lambda_function" "s3_zipfile" {
   count = "${var.function_s3_bucket == "" ? 0 : 1}"
 
+  # These are SPECIFIC to the deployment method:
   s3_bucket = "${var.function_s3_bucket}"
   s3_key    = "${var.function_zipfile}"
 
+  # These are the SAME for both:
+  description   = "${var.distribution_comment_prefix}${var.api_domain}"
   function_name = "${local.prefix_with_domain}"
   handler       = "${var.function_handler}"
   runtime       = "${var.function_runtime}"
+  timeout       = "${var.function_timeout}"
+  memory_size   = "${var.memory_size}"
   role          = "${aws_iam_role.this.arn}"
 
   environment {
