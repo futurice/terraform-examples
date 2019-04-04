@@ -6,7 +6,7 @@ resource "aws_cloudfront_distribution" "this" {
   default_root_object = ""
   aliases             = ["${var.api_domain}"]
   price_class         = "PriceClass_${var.price_class}"
-  comment             = "${var.distribution_comment_prefix}${var.api_domain}"
+  comment             = "${var.comment_prefix}${var.api_domain}"
 
   # Define API Gateway as the "upstream" for the CloudFront distribution
   origin {

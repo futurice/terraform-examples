@@ -38,7 +38,7 @@ resource "aws_lambda_function" "viewer_request" {
   source_code_hash = "${data.archive_file.lambda.output_base64sha256}"
   function_name    = "${local.prefix_with_domain}---viewer_request"
   role             = "${aws_iam_role.this.arn}"
-  description      = "${var.distribution_comment_prefix}${var.site_domain} request handler"
+  description      = "${var.comment_prefix}${var.site_domain} request handler"
   handler          = "lambda.viewer_request"
   runtime          = "nodejs8.10"
   publish          = true                                                                   # because: error creating CloudFront Distribution: InvalidLambdaFunctionAssociation: The function ARN must reference a specific function version. (The ARN must end with the version number.)
@@ -50,7 +50,7 @@ resource "aws_lambda_function" "viewer_response" {
   source_code_hash = "${data.archive_file.lambda.output_base64sha256}"
   function_name    = "${local.prefix_with_domain}---viewer_response"
   role             = "${aws_iam_role.this.arn}"
-  description      = "${var.distribution_comment_prefix}${var.site_domain} response handler"
+  description      = "${var.comment_prefix}${var.site_domain} response handler"
   handler          = "lambda.viewer_response"
   runtime          = "nodejs8.10"
   publish          = true                                                                    # because: error creating CloudFront Distribution: InvalidLambdaFunctionAssociation: The function ARN must reference a specific function version. (The ARN must end with the version number.)

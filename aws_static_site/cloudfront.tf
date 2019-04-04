@@ -6,7 +6,7 @@ resource "aws_cloudfront_distribution" "this" {
   default_root_object = "${var.default_root_object}"
   aliases             = ["${var.site_domain}"]
   price_class         = "PriceClass_${var.price_class}"
-  comment             = "${var.distribution_comment_prefix}${var.site_domain}"
+  comment             = "${var.comment_prefix}${var.site_domain}"
 
   # Define the S3 bucket as the "upstream" for the CloudFront distribution
   origin {

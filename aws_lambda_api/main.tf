@@ -11,7 +11,7 @@ resource "aws_lambda_function" "local_zipfile" {
   source_code_hash = "${var.function_s3_bucket == "" ? "${base64sha256(file("${var.function_zipfile}"))}" : ""}"
 
   # These are the SAME for both:
-  description   = "${var.distribution_comment_prefix}${var.api_domain}"
+  description   = "${var.comment_prefix}${var.api_domain}"
   function_name = "${local.prefix_with_domain}"
   handler       = "${var.function_handler}"
   runtime       = "${var.function_runtime}"
@@ -33,7 +33,7 @@ resource "aws_lambda_function" "s3_zipfile" {
   s3_key    = "${var.function_zipfile}"
 
   # These are the SAME for both:
-  description   = "${var.distribution_comment_prefix}${var.api_domain}"
+  description   = "${var.comment_prefix}${var.api_domain}"
   function_name = "${local.prefix_with_domain}"
   handler       = "${var.function_handler}"
   runtime       = "${var.function_runtime}"

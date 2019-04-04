@@ -7,8 +7,8 @@ variable "name_prefix" {
   default     = "aws-static-site---"
 }
 
-variable "distribution_comment_prefix" {
-  description = "This will be included as a comment on the CloudFront distribution that's created"
+variable "comment_prefix" {
+  description = "This will be included in comments for resources that are created"
   default     = "Static site: "
 }
 
