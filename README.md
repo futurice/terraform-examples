@@ -16,13 +16,14 @@ Please use the included release script. For example:
 ```
 $ ./release.sh
 Checking dependencies... OK
+Running terraform fmt... OK
 Checking for clean working copy... OK
 Parsing git remote... OK
 Verifying GitHub API access... OK
 Fetching previous tags from GitHub... OK
 
-Previous release was: v6.1
-This release will be: v7.0
+Previous release was: v9.1
+This release will be: v9.2
 
 Tagging new release... OK
 Pushing release to GitHub... OK
@@ -33,7 +34,7 @@ Creating commit from docs updates... OK
 Pushing updated docs to GitHub... OK
 Cleaning up... OK
 
-New release is: https://github.com/futurice/terraform-utils/releases/tag/v7.0
+New release is: https://github.com/futurice/terraform-utils/releases/tag/v9.2
 
 ```
 
