@@ -19,7 +19,10 @@ done
 echo OK
 
 echo -n "Checking for clean working copy... "
-git diff-index HEAD
+if [ "$(git diff-index HEAD)" != "" ]; then
+  echo -e "ERROR\n\nThere's uncommitted changes in the working copy"
+  exit 1
+fi
 echo OK
 
 echo -n "Parsing git remote... "
