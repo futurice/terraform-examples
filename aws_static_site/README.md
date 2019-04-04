@@ -28,8 +28,8 @@ provider "aws" {
 
 module "my_site" {
   # Available inputs: https://github.com/futurice/terraform-utils/tree/master/aws_static_site#inputs
-  # Check for updates: https://github.com/futurice/terraform-utils/compare/v8.0...master
-  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_static_site?ref=v8.0"
+  # Check for updates: https://github.com/futurice/terraform-utils/compare/v9.0...master
+  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_static_site?ref=v9.0"
 
   site_domain = "hello.example.com"
 }
@@ -66,8 +66,8 @@ Update the `my_site` module in Example 1 as follows:
 ```tf
 module "my_site" {
   # Available inputs: https://github.com/futurice/terraform-utils/tree/master/aws_static_site#inputs
-  # Check for updates: https://github.com/futurice/terraform-utils/compare/v8.0...master
-  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_static_site?ref=v8.0"
+  # Check for updates: https://github.com/futurice/terraform-utils/compare/v9.0...master
+  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_static_site?ref=v9.0"
 
   site_domain = "hello.example.com"
 
@@ -89,8 +89,8 @@ For [additional security hardening of your static site](https://aws.amazon.com/b
 ```tf
 module "my_site" {
   # Available inputs: https://github.com/futurice/terraform-utils/tree/master/aws_static_site#inputs
-  # Check for updates: https://github.com/futurice/terraform-utils/compare/v8.0...master
-  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_static_site?ref=v8.0"
+  # Check for updates: https://github.com/futurice/terraform-utils/compare/v9.0...master
+  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_static_site?ref=v9.0"
 
   site_domain = "hello.example.com"
 
@@ -112,8 +112,8 @@ It's also possible to override existing headers. For example:
 ```tf
 module "my_site" {
   # Available inputs: https://github.com/futurice/terraform-utils/tree/master/aws_static_site#inputs
-  # Check for updates: https://github.com/futurice/terraform-utils/compare/v8.0...master
-  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_static_site?ref=v8.0"
+  # Check for updates: https://github.com/futurice/terraform-utils/compare/v9.0...master
+  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_static_site?ref=v9.0"
 
   site_domain = "hello.example.com"
 
@@ -140,8 +140,8 @@ Update the `my_site` module in Example 1 as follows:
 ```tf
 module "my_site" {
   # Available inputs: https://github.com/futurice/terraform-utils/tree/master/aws_static_site#inputs
-  # Check for updates: https://github.com/futurice/terraform-utils/compare/v8.0...master
-  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_static_site?ref=v8.0"
+  # Check for updates: https://github.com/futurice/terraform-utils/compare/v9.0...master
+  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_static_site?ref=v9.0"
 
   site_domain = "hello.example.com"
 
@@ -199,8 +199,8 @@ Conversely, if you specify `cache_ttl_override = 300`, every object will stay in
 | basic_auth_username | When non-empty, require this username with HTTP Basic Auth | string | `""` | no |
 | bucket_override_name | When provided, assume a bucket with this name already exists for the site content, instead of creating the bucket automatically (e.g. `"my-bucket"`) | string | `""` | no |
 | cache_ttl_override | When >= 0, override the cache behaviour for ALL objects in S3, so that they stay in the CloudFront cache for this amount of seconds | string | `"-1"` | no |
+| comment_prefix | This will be included in comments for resources that are created | string | `"Static site: "` | no |
 | default_root_object | The object to return when the root URL is requested | string | `"index.html"` | no |
-| distribution_comment_prefix | This will be included as a comment on the CloudFront distribution that's created | string | `"Static site: "` | no |
 | https_only | Set this to `false` if you want to support insecure HTTP access, in addition to HTTPS | string | `"true"` | no |
 | lambda_logging_enabled | When true, writes information about incoming requests to the Lambda function's CloudWatch group | string | `"false"` | no |
 | name_prefix | Name prefix to use for objects that need to be created (only lowercase alphanumeric characters and hyphens allowed, for S3 bucket name compatibility) | string | `"aws-static-site---"` | no |

@@ -29,8 +29,8 @@ provider "aws" {
 
 module "my_redirect" {
   # Available inputs: https://github.com/futurice/terraform-utils/tree/master/aws_domain_redirect#inputs
-  # Check for updates: https://github.com/futurice/terraform-utils/compare/v8.0...master
-  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_domain_redirect?ref=v8.0"
+  # Check for updates: https://github.com/futurice/terraform-utils/compare/v9.0...master
+  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_domain_redirect?ref=v9.0"
 
   redirect_domain = "go.example.com"
   redirect_url    = "https://www.futurice.com/careers/"
@@ -44,7 +44,7 @@ Applying this **will take a very long time**, because both ACM and especially Cl
 
 | Name | Description | Type | Default | Required |
 |------|-------------|:----:|:-----:|:-----:|
-| distribution_comment_prefix | This will be included as a comment on the CloudFront distribution that's created | string | `"Domain redirect: "` | no |
+| comment_prefix | This will be included in comments for resources that are created | string | `"Domain redirect: "` | no |
 | lambda_logging_enabled | When `true`, writes information about incoming requests to the Lambda function's CloudWatch group | string | `"false"` | no |
 | name_prefix | Name prefix to use for objects that need to be created (only lowercase alphanumeric characters and hyphens allowed, for S3 bucket name compatibility) | string | `"aws-domain-redirect---"` | no |
 | redirect_domain | Domain which will redirect to the given `redirect_url`; e.g. `"docs.example.com"` | string | n/a | yes |
