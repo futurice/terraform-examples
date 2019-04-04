@@ -33,7 +33,7 @@ data "archive_file" "lambda" {
 }
 
 resource "aws_lambda_function" "viewer_request" {
-  provider         = "aws.us_east_1"                                                        # because: error creating CloudFront Distribution: InvalidLambdaFunctionAssociation: The function must be in region 'us-east-1'
+  provider         = "aws.us_east_1"                                             # because: error creating CloudFront Distribution: InvalidLambdaFunctionAssociation: The function must be in region 'us-east-1'
   filename         = "${path.module}/lambda.zip"
   source_code_hash = "${data.archive_file.lambda.output_base64sha256}"
   function_name    = "${local.prefix_with_domain}---viewer_request"
@@ -41,11 +41,11 @@ resource "aws_lambda_function" "viewer_request" {
   description      = "${var.comment_prefix}${var.site_domain} (request handler)"
   handler          = "lambda.viewer_request"
   runtime          = "nodejs8.10"
-  publish          = true                                                                   # because: error creating CloudFront Distribution: InvalidLambdaFunctionAssociation: The function ARN must reference a specific function version. (The ARN must end with the version number.)
+  publish          = true                                                        # because: error creating CloudFront Distribution: InvalidLambdaFunctionAssociation: The function ARN must reference a specific function version. (The ARN must end with the version number.)
 }
 
 resource "aws_lambda_function" "viewer_response" {
-  provider         = "aws.us_east_1"                                                         # because: error creating CloudFront Distribution: InvalidLambdaFunctionAssociation: The function must be in region 'us-east-1'
+  provider         = "aws.us_east_1"                                              # because: error creating CloudFront Distribution: InvalidLambdaFunctionAssociation: The function must be in region 'us-east-1'
   filename         = "${path.module}/lambda.zip"
   source_code_hash = "${data.archive_file.lambda.output_base64sha256}"
   function_name    = "${local.prefix_with_domain}---viewer_response"
@@ -53,7 +53,7 @@ resource "aws_lambda_function" "viewer_response" {
   description      = "${var.comment_prefix}${var.site_domain} (response handler)"
   handler          = "lambda.viewer_response"
   runtime          = "nodejs8.10"
-  publish          = true                                                                    # because: error creating CloudFront Distribution: InvalidLambdaFunctionAssociation: The function ARN must reference a specific function version. (The ARN must end with the version number.)
+  publish          = true                                                         # because: error creating CloudFront Distribution: InvalidLambdaFunctionAssociation: The function ARN must reference a specific function version. (The ARN must end with the version number.)
 }
 
 # Allow Lambda@Edge to invoke our functions

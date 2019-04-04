@@ -6,7 +6,7 @@ module "aws_static_site" {
   site_domain                 = "${var.redirect_domain}"
   name_prefix                 = "${var.name_prefix}"
   distribution_comment_prefix = "${var.comment_prefix}"
-  bucket_override_name        = "-"                                  # providing this ensures an S3 bucket isn't unnecessarily created, even if this isn't a valid bucket name
+  bucket_override_name        = "-"                             # providing this ensures an S3 bucket isn't unnecessarily created, even if this isn't a valid bucket name
   price_class                 = "${var.redirect_price_class}"
   lambda_logging_enabled      = "${var.lambda_logging_enabled}"
 
