@@ -5,11 +5,17 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )" # dir of
 set -e # exit on error
 
 echo -n "Checking dependencies... "
-deps="git curl node terraform-docs"
+deps="git curl node terraform terraform-docs"
 if [ "$(echo $deps | tr ' ' '\n' | wc -l)" != "$(command -v $deps | wc -l)" ]; then
   echo -e "ERROR\n\nRequired commands not available: $deps"
   exit 1
 fi
+echo OK
+
+echo -n "Running terraform fmt... "
+for dir in $(echo */); do
+  terraform fmt $dir
+done
 echo OK
 
 echo -n "Checking for clean working copy... "
