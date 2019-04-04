@@ -22,7 +22,7 @@ data "template_file" "lambda" {
 }
 
 # Lambda functions can only be uploaded as ZIP files, so we need to package our JS file into one
-data "archive_file" "lambda" {
+data "archive_file" "lambda_zip" {
   type        = "zip"
   output_path = "${path.module}/lambda.zip"
 
@@ -33,9 +33,14 @@ data "archive_file" "lambda" {
 }
 
 resource "aws_lambda_function" "viewer_request" {
-  provider         = "aws.us_east_1"                                             # because: error creating CloudFront Distribution: InvalidLambdaFunctionAssociation: The function must be in region 'us-east-1'
-  filename         = "${path.module}/lambda.zip"
-  source_code_hash = "${data.archive_file.lambda.output_base64sha256}"
+  provider = "aws.us_east_1" # because: error creating CloudFront Distribution: InvalidLambdaFunctionAssociation: The function must be in region 'us-east-1'
+
+  # lambda_zip.output_path will be absolute, i.e. different on different machines.
+  # This can cause Terraform to notice differences that aren't actually there, so let's convert it to a relative one.
+  # https://github.com/hashicorp/terraform/issues/7613#issuecomment-332238441
+  filename = "${substr(data.archive_file.lambda_zip.output_path, length(path.cwd) + 1, -1)}"
+
+  source_code_hash = "${data.archive_file.lambda_zip.output_base64sha256}"
   function_name    = "${local.prefix_with_domain}---viewer_request"
   role             = "${aws_iam_role.this.arn}"
   description      = "${var.comment_prefix}${var.site_domain} (request handler)"
@@ -45,9 +50,14 @@ resource "aws_lambda_function" "viewer_request" {
 }
 
 resource "aws_lambda_function" "viewer_response" {
-  provider         = "aws.us_east_1"                                              # because: error creating CloudFront Distribution: InvalidLambdaFunctionAssociation: The function must be in region 'us-east-1'
-  filename         = "${path.module}/lambda.zip"
-  source_code_hash = "${data.archive_file.lambda.output_base64sha256}"
+  provider = "aws.us_east_1" # because: error creating CloudFront Distribution: InvalidLambdaFunctionAssociation: The function must be in region 'us-east-1'
+
+  # lambda_zip.output_path will be absolute, i.e. different on different machines.
+  # This can cause Terraform to notice differences that aren't actually there, so let's convert it to a relative one.
+  # https://github.com/hashicorp/terraform/issues/7613#issuecomment-332238441
+  filename = "${substr(data.archive_file.lambda_zip.output_path, length(path.cwd) + 1, -1)}"
+
+  source_code_hash = "${data.archive_file.lambda_zip.output_base64sha256}"
   function_name    = "${local.prefix_with_domain}---viewer_response"
   role             = "${aws_iam_role.this.arn}"
   description      = "${var.comment_prefix}${var.site_domain} (response handler)"
