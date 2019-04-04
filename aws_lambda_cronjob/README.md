@@ -26,8 +26,8 @@ data "archive_file" "lambda_zip" {
 
 module "my_cronjob" {
   # Available inputs: https://github.com/futurice/terraform-utils/tree/master/aws_lambda_cronjob#inputs
-  # Check for updates: https://github.com/futurice/terraform-utils/compare/v9.0...master
-  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_lambda_cronjob?ref=v9.0"
+  # Check for updates: https://github.com/futurice/terraform-utils/compare/v9.1...master
+  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_lambda_cronjob?ref=v9.1"
 
   cronjob_name           = "my-cronjob"
   schedule_expression    = "rate(5 minutes)" # note: full cron expressions are also supported

@@ -49,8 +49,8 @@ data "archive_file" "lambda_zip" {
 
 module "my_api" {
   # Available inputs: https://github.com/futurice/terraform-utils/tree/master/aws_lambda_api#inputs
-  # Check for updates: https://github.com/futurice/terraform-utils/compare/v9.0...master
-  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_lambda_api?ref=v9.0"
+  # Check for updates: https://github.com/futurice/terraform-utils/compare/v9.1...master
+  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_lambda_api?ref=v9.1"
 
   api_domain             = "api.example.com"
   lambda_logging_enabled = true
@@ -94,8 +94,8 @@ provider "aws" {
 
 module "my_api" {
   # Available inputs: https://github.com/futurice/terraform-utils/tree/master/aws_lambda_api#inputs
-  # Check for updates: https://github.com/futurice/terraform-utils/compare/v9.0...master
-  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_lambda_api?ref=v9.0"
+  # Check for updates: https://github.com/futurice/terraform-utils/compare/v9.1...master
+  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_lambda_api?ref=v9.1"
 
   api_domain             = "api.example.com"
   lambda_logging_enabled = true
@@ -145,8 +145,8 @@ resource "aws_s3_bucket" "my_builds" {
 
 module "my_api_stage" {
   # Available inputs: https://github.com/futurice/terraform-utils/tree/master/aws_lambda_api#inputs
-  # Check for updates: https://github.com/futurice/terraform-utils/compare/v9.0...master
-  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_lambda_api?ref=v9.0"
+  # Check for updates: https://github.com/futurice/terraform-utils/compare/v9.1...master
+  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_lambda_api?ref=v9.1"
 
   api_domain         = "api-stage.example.com"
   function_s3_bucket = "${aws_s3_bucket.my_builds.id}"
@@ -159,8 +159,8 @@ module "my_api_stage" {
 
 module "my_api_prod" {
   # Available inputs: https://github.com/futurice/terraform-utils/tree/master/aws_lambda_api#inputs
-  # Check for updates: https://github.com/futurice/terraform-utils/compare/v9.0...master
-  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_lambda_api?ref=v9.0"
+  # Check for updates: https://github.com/futurice/terraform-utils/compare/v9.1...master
+  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_lambda_api?ref=v9.1"
 
   api_domain         = "api-prod.example.com"
   function_s3_bucket = "${aws_s3_bucket.my_builds.id}"
