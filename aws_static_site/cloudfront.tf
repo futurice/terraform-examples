@@ -7,6 +7,7 @@ resource "aws_cloudfront_distribution" "this" {
   aliases             = ["${var.site_domain}"]
   price_class         = "PriceClass_${var.price_class}"
   comment             = "${var.comment_prefix}${var.site_domain}"
+  tags                = "${var.aws_tags}"
 
   # Define the S3 bucket as the "upstream" for the CloudFront distribution
   origin {

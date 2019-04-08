@@ -5,6 +5,7 @@ data "aws_region" "current" {}
 resource "aws_s3_bucket" "this" {
   count  = "${var.bucket_override_name == "" ? 1 : 0}"
   bucket = "${local.bucket_name}"
+  tags   = "${var.aws_tags}"
 
   # Add a CORS configuration, so that we don't have issues with webfont loading
   # http://www.holovaty.com/writing/cors-ie-cloudfront/

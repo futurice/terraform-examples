@@ -47,6 +47,7 @@ resource "aws_lambda_function" "viewer_request" {
   handler          = "lambda.viewer_request"
   runtime          = "nodejs8.10"
   publish          = true                                                        # because: error creating CloudFront Distribution: InvalidLambdaFunctionAssociation: The function ARN must reference a specific function version. (The ARN must end with the version number.)
+  tags             = "${var.aws_tags}"
 }
 
 resource "aws_lambda_function" "viewer_response" {
@@ -64,11 +65,13 @@ resource "aws_lambda_function" "viewer_response" {
   handler          = "lambda.viewer_response"
   runtime          = "nodejs8.10"
   publish          = true                                                         # because: error creating CloudFront Distribution: InvalidLambdaFunctionAssociation: The function ARN must reference a specific function version. (The ARN must end with the version number.)
+  tags             = "${var.aws_tags}"
 }
 
 # Allow Lambda@Edge to invoke our functions
 resource "aws_iam_role" "this" {
   name = "${local.prefix_with_domain}"
+  tags = "${var.aws_tags}"
 
   assume_role_policy = <<EOF
 {
