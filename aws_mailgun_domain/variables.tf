@@ -15,3 +15,9 @@ variable "wildcard" {
   description = "See https://www.terraform.io/docs/providers/mailgun/r/domain.html#wildcard"
   default     = false
 }
+
+variable "aws_tags" {
+  description = "AWS Tags to add to all resources created (where possible); see https://aws.amazon.com/answers/account-management/aws-tagging-strategies/"
+  type        = "map"
+  default     = {}
+}

@@ -72,6 +72,12 @@ variable "lambda_logging_enabled" {
   default     = false
 }
 
+variable "aws_tags" {
+  description = "AWS Tags to add to all resources created (where possible); see https://aws.amazon.com/answers/account-management/aws-tagging-strategies/"
+  type        = "map"
+  default     = {}
+}
+
 # IMPORTANT! Due to the way API Gateway works, if the related config is ever is changed, you probably need to:
 # $ terraform taint aws_api_gateway_deployment.this
 

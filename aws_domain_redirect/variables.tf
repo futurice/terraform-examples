@@ -35,3 +35,9 @@ variable "lambda_logging_enabled" {
   description = "When `true`, writes information about incoming requests to the Lambda function's CloudWatch group"
   default     = false
 }
+
+variable "aws_tags" {
+  description = "AWS Tags to add to all resources created (where possible); see https://aws.amazon.com/answers/account-management/aws-tagging-strategies/"
+  type        = "map"
+  default     = {}
+}

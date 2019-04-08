@@ -86,6 +86,12 @@ variable "lambda_logging_enabled" {
   default     = false
 }
 
+variable "aws_tags" {
+  description = "AWS Tags to add to all resources created (where possible); see https://aws.amazon.com/answers/account-management/aws-tagging-strategies/"
+  type        = "map"
+  default     = {}
+}
+
 locals {
   prefix_with_domain = "${var.name_prefix}${replace("${var.site_domain}", "/[^a-z0-9-]+/", "-")}"                          # only lowercase alphanumeric characters and hyphens are allowed in S3 bucket names
   bucket_name        = "${var.bucket_override_name == "" ? "${local.prefix_with_domain}" : "${var.bucket_override_name}"}" # select between externally-provided or auto-generated bucket names
