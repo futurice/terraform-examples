@@ -1,16 +1,14 @@
 # Create an AWS Virtual Private Cloud (VPC)
 resource "aws_vpc" "this" {
   cidr_block           = "10.0.0.0/16"
-  enable_dns_hostnames = true          # https://stackoverflow.com/a/33443018
-
-  tags = {
-    Name = "${var.vpc_name}"
-  }
+  enable_dns_hostnames = true                                                     # https://stackoverflow.com/a/33443018
+  tags                 = "${merge(var.aws_tags, map("Name", "${var.vpc_name}"))}"
 }
 
 # Create an internet gateway to give our subnet access to the outside world
 resource "aws_internet_gateway" "this" {
   vpc_id = "${aws_vpc.this.id}"
+  tags   = "${var.aws_tags}"
 }
 
 # Grant the VPC internet access on its main route table
@@ -26,4 +24,5 @@ resource "aws_subnet" "this" {
   vpc_id                  = "${aws_vpc.this.id}"
   cidr_block              = "10.0.1.0/24"
   map_public_ip_on_launch = true
+  tags                    = "${var.aws_tags}"
 }
