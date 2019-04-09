@@ -13,8 +13,8 @@ Assuming you have the [AWS provider](https://www.terraform.io/docs/providers/aws
 ```tf
 module "my_host" {
   # Available inputs: https://github.com/futurice/terraform-utils/tree/master/docker_compose_host#inputs
-  # Check for updates: https://github.com/futurice/terraform-utils/compare/v9.2...master
-  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_ec2_ebs_docker_host?ref=v9.2"
+  # Check for updates: https://github.com/futurice/terraform-utils/compare/v9.3...master
+  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_ec2_ebs_docker_host?ref=v9.3"
 
   hostname             = "my-docker-host"
   ssh_private_key_path = "~/.ssh/id_rsa"
@@ -25,8 +25,8 @@ module "my_host" {
 
 module "my_docker_compose" {
   # Available inputs: https://github.com/futurice/terraform-utils/tree/master/docker_compose_host#inputs
-  # Check for updates: https://github.com/futurice/terraform-utils/compare/v9.2...master
-  source = "git::ssh://git@github.com/futurice/terraform-utils.git//docker_compose_host?ref=v9.2"
+  # Check for updates: https://github.com/futurice/terraform-utils/compare/v9.3...master
+  source = "git::ssh://git@github.com/futurice/terraform-utils.git//docker_compose_host?ref=v9.3"
 
   public_ip          = "${module.my_host.public_ip}"
   ssh_username       = "${module.my_host.ssh_username}"

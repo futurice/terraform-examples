@@ -26,8 +26,8 @@ data "archive_file" "lambda_zip" {
 
 module "my_cronjob" {
   # Available inputs: https://github.com/futurice/terraform-utils/tree/master/aws_lambda_cronjob#inputs
-  # Check for updates: https://github.com/futurice/terraform-utils/compare/v9.2...master
-  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_lambda_cronjob?ref=v9.2"
+  # Check for updates: https://github.com/futurice/terraform-utils/compare/v9.3...master
+  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_lambda_cronjob?ref=v9.3"
 
   cronjob_name           = "my-cronjob"
   schedule_expression    = "rate(5 minutes)" # note: full cron expressions are also supported
@@ -51,6 +51,7 @@ As this module is a close relative of [`aws_lambda_api`](../aws_lambda_api), the
 
 | Name | Description | Type | Default | Required |
 |------|-------------|:----:|:-----:|:-----:|
+| aws_tags | AWS Tags to add to all resources created (where possible); see https://aws.amazon.com/answers/account-management/aws-tagging-strategies/ | map | `<map>` | no |
 | comment_prefix | This will be included in comments for resources that are created | string | `"Lambda Cronjob: "` | no |
 | cronjob_name | Name which will be used to create your Lambda function (e.g. `"my-important-cronjob"`) | string | n/a | yes |
 | function_env_vars | Which env vars (if any) to invoke the Lambda with | map | `<map>` | no |

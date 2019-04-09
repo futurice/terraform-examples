@@ -11,8 +11,8 @@ Assuming you have the [AWS provider](https://www.terraform.io/docs/providers/aws
 ```tf
 module "my_host" {
   # Available inputs: https://github.com/futurice/terraform-utils/tree/master/aws_ec2_ebs_docker_host#inputs
-  # Check for updates: https://github.com/futurice/terraform-utils/compare/v9.2...master
-  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_ec2_ebs_docker_host?ref=v9.2"
+  # Check for updates: https://github.com/futurice/terraform-utils/compare/v9.3...master
+  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_ec2_ebs_docker_host?ref=v9.3"
 
   hostname             = "my-docker-host"
   ssh_private_key_path = "~/.ssh/id_rsa"     # if you use shared Terraform state, consider changing this to something that doesn't depend on "~"
@@ -47,8 +47,8 @@ resource "aws_ebs_volume" "my_data" {
 
 module "my_host" {
   # Available inputs: https://github.com/futurice/terraform-utils/tree/master/aws_ec2_ebs_docker_host#inputs
-  # Check for updates: https://github.com/futurice/terraform-utils/compare/v9.2...master
-  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_ec2_ebs_docker_host?ref=v9.2"
+  # Check for updates: https://github.com/futurice/terraform-utils/compare/v9.3...master
+  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_ec2_ebs_docker_host?ref=v9.3"
 
   hostname             = "my-host"
   ssh_private_key_path = "~/.ssh/id_rsa"                # note that with a shared Terraform state, paths with "~" will become problematic
@@ -97,8 +97,8 @@ Assuming you have the [AWS provider](https://www.terraform.io/docs/providers/aws
 ```tf
 module "my_host" {
   # Available inputs: https://github.com/futurice/terraform-utils/tree/master/aws_ec2_ebs_docker_host#inputs
-  # Check for updates: https://github.com/futurice/terraform-utils/compare/v9.2...master
-  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_ec2_ebs_docker_host?ref=v9.2"
+  # Check for updates: https://github.com/futurice/terraform-utils/compare/v9.3...master
+  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_ec2_ebs_docker_host?ref=v9.3"
 
   hostname             = "my-docker-host"
   ssh_private_key_path = "~/.ssh/id_rsa"
@@ -130,8 +130,8 @@ Assuming you have the [AWS provider](https://www.terraform.io/docs/providers/aws
 ```tf
 module "my_host" {
   # Available inputs: https://github.com/futurice/terraform-utils/tree/master/aws_ec2_ebs_docker_host#inputs
-  # Check for updates: https://github.com/futurice/terraform-utils/compare/v9.2...master
-  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_ec2_ebs_docker_host?ref=v9.2"
+  # Check for updates: https://github.com/futurice/terraform-utils/compare/v9.3...master
+  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_ec2_ebs_docker_host?ref=v9.3"
 
   hostname             = "my-docker-host"
   ssh_private_key_path = "~/.ssh/id_rsa"
@@ -185,6 +185,7 @@ This should finish by giving you the `docker_tunnel_command` output. Run that in
 | allow_incoming_dns | Whether to allow incoming DNS traffic on the host security group | string | `"false"` | no |
 | allow_incoming_http | Whether to allow incoming HTTP traffic on the host security group | string | `"false"` | no |
 | allow_incoming_https | Whether to allow incoming HTTPS traffic on the host security group | string | `"false"` | no |
+| aws_tags | AWS Tags to add to all resources created (where possible); see https://aws.amazon.com/answers/account-management/aws-tagging-strategies/ | map | `<map>` | no |
 | data_volume_id | The ID of the EBS volume to mount as `/data` | string | `""` | no |
 | hostname | Hostname by which this service is identified in metrics, logs etc | string | `"aws-ec2-ebs-docker-host"` | no |
 | instance_ami | See https://cloud-images.ubuntu.com/locator/ec2/ for options | string | `"ami-0bdf93799014acdc4"` | no |
