@@ -41,7 +41,12 @@ resource "aws_s3_bucket_policy" "this" {
       "Effect": "Allow",
       "Principal": "*",
       "Action": "s3:GetObject",
-      "Resource": "arn:aws:s3:::${local.bucket_name}/*"
+      "Resource": "arn:aws:s3:::${local.bucket_name}/*",
+      "Condition": {
+        "StringEquals": {
+          "aws:UserAgent": "${random_string.s3_read_password.result}"
+        }
+      }
     }
   ]
 }
