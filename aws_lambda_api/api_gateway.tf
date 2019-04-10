@@ -1,7 +1,8 @@
 # Configure an API Gateway instance:
 
 resource "aws_api_gateway_rest_api" "this" {
-  name = "${local.prefix_with_domain}"
+  name        = "${local.prefix_with_domain}"
+  description = "${var.comment_prefix}${var.api_domain}"
 }
 
 # Add root resource to the API (it it needs to be included separately from the "proxy" resource defined below), which forwards to our Lambda:
