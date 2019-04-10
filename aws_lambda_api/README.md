@@ -193,6 +193,63 @@ aws lambda update-function-code --function-name my-prod-function-name --s3-bucke
 
 ...or some variation thereof. You get the idea.
 
+## Debugging API Gateway
+
+If something isn't working right with your API Gateway, set `api_gateway_logging_level = "INFO"`. Additionally, you need to add the following **global configuration** for your API Gateway:
+
+```tf
+resource "aws_api_gateway_account" "this" {
+  cloudwatch_role_arn = "${aws_iam_role.apigateway_cloudwatch_logging.arn}"
+}
+
+resource "aws_iam_role" "apigateway_cloudwatch_logging" {
+  name = "apigateway-cloudwatch-logging"
+
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "apigateway.amazonaws.com"
+      },
+      "Action": "sts:AssumeRole"
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_iam_role_policy" "apigateway_cloudwatch_logging" {
+  name = "apigateway-cloudwatch-logging"
+  role = "${aws_iam_role.apigateway_cloudwatch_logging.id}"
+
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "logs:CreateLogGroup",
+        "logs:CreateLogStream",
+        "logs:DescribeLogGroups",
+        "logs:DescribeLogStreams",
+        "logs:PutLogEvents",
+        "logs:GetLogEvents",
+        "logs:FilterLogEvents"
+      ],
+      "Resource": "*"
+    }
+  ]
+}
+EOF
+}
+```
+
+Otherwise API Gateway won't have permission to write logs to CloudWatch.
+
 <!-- terraform-docs:begin -->
 ## Inputs
 
