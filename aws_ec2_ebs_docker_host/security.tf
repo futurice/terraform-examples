@@ -6,7 +6,7 @@ resource "aws_key_pair" "this" {
 # Create our default security group to access the instance, over specific protocols
 resource "aws_security_group" "this" {
   vpc_id = "${data.aws_vpc.this.id}"
-  tags   = "${merge(var.aws_tags, map("Name", "${var.hostname}"))}"
+  tags   = "${merge(var.tags, map("Name", "${var.hostname}"))}"
 }
 
 # Incoming SSH & outgoing ANY needs to be allowed for provisioning to work

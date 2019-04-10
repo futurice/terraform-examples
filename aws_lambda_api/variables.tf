@@ -82,7 +82,7 @@ variable "api_gateway_cloudwatch_metrics" {
   default     = false
 }
 
-variable "aws_tags" {
+variable "tags" {
   description = "AWS Tags to add to all resources created (where possible); see https://aws.amazon.com/answers/account-management/aws-tagging-strategies/"
   type        = "map"
   default     = {}

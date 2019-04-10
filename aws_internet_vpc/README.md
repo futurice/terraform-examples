@@ -20,7 +20,7 @@ module "my_vpc" {
 
 | Name | Description | Type | Default | Required |
 |------|-------------|:----:|:-----:|:-----:|
-| aws_tags | AWS Tags to add to all resources created (where possible); see https://aws.amazon.com/answers/account-management/aws-tagging-strategies/ | map | `<map>` | no |
+| tags | AWS Tags to add to all resources created (where possible); see https://aws.amazon.com/answers/account-management/aws-tagging-strategies/ | map | `<map>` | no |
 | vpc_name | Name given to the VPC; in addition to human-readability, can be used to fetch this VPC using a `aws_vpc` data block | string | `"terraform-default-vpc"` | no |
 
 ## Outputs

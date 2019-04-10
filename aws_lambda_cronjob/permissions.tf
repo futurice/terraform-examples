@@ -2,7 +2,7 @@
 
 resource "aws_iam_role" "this" {
   name = "${local.prefix_with_name}"
-  tags = "${var.aws_tags}"
+  tags = "${var.tags}"
 
   assume_role_policy = <<EOF
 {
@@ -57,7 +57,7 @@ resource "aws_iam_role_policy_attachment" "this" {
 resource "aws_cloudwatch_event_rule" "this" {
   name                = "${local.prefix_with_name}---scheduled-invocation"
   schedule_expression = "${var.schedule_expression}"
-  tags                = "${var.aws_tags}"
+  tags                = "${var.tags}"
 }
 
 resource "aws_cloudwatch_event_target" "this" {

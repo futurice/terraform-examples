@@ -185,7 +185,7 @@ This should finish by giving you the `docker_tunnel_command` output. Run that in
 | allow_incoming_dns | Whether to allow incoming DNS traffic on the host security group | string | `"false"` | no |
 | allow_incoming_http | Whether to allow incoming HTTP traffic on the host security group | string | `"false"` | no |
 | allow_incoming_https | Whether to allow incoming HTTPS traffic on the host security group | string | `"false"` | no |
-| aws_tags | AWS Tags to add to all resources created (where possible); see https://aws.amazon.com/answers/account-management/aws-tagging-strategies/ | map | `<map>` | no |
+| tags | AWS Tags to add to all resources created (where possible); see https://aws.amazon.com/answers/account-management/aws-tagging-strategies/ | map | `<map>` | no |
 | data_volume_id | The ID of the EBS volume to mount as `/data` | string | `""` | no |
 | hostname | Hostname by which this service is identified in metrics, logs etc | string | `"aws-ec2-ebs-docker-host"` | no |
 | instance_ami | See https://cloud-images.ubuntu.com/locator/ec2/ for options | string | `"ami-0bdf93799014acdc4"` | no |

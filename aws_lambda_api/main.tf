@@ -18,7 +18,7 @@ resource "aws_lambda_function" "local_zipfile" {
   timeout       = "${var.function_timeout}"
   memory_size   = "${var.memory_size}"
   role          = "${aws_iam_role.this.arn}"
-  tags          = "${var.aws_tags}"
+  tags          = "${var.tags}"
 
   environment {
     variables = "${var.function_env_vars}"
@@ -41,7 +41,7 @@ resource "aws_lambda_function" "s3_zipfile" {
   timeout       = "${var.function_timeout}"
   memory_size   = "${var.memory_size}"
   role          = "${aws_iam_role.this.arn}"
-  tags          = "${var.aws_tags}"
+  tags          = "${var.tags}"
 
   environment {
     variables = "${var.function_env_vars}"

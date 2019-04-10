@@ -1,10 +1,10 @@
 # Generate a certificate for the domain automatically using ACM
 # https://www.terraform.io/docs/providers/aws/r/acm_certificate.html
 resource "aws_acm_certificate" "this" {
-  provider          = "aws.us_east_1"                                                                 # because ACM is only available in the "us-east-1" region
+  provider          = "aws.us_east_1"                                                             # because ACM is only available in the "us-east-1" region
   domain_name       = "${var.api_domain}"
-  validation_method = "DNS"                                                                           # the required records are created below
-  tags              = "${merge(var.aws_tags, map("Name", "${var.comment_prefix}${var.api_domain}"))}"
+  validation_method = "DNS"                                                                       # the required records are created below
+  tags              = "${merge(var.tags, map("Name", "${var.comment_prefix}${var.api_domain}"))}"
 }
 
 # Add the DNS records needed by the ACM validation process

@@ -1,7 +1,7 @@
 # Allow Lambda to invoke our functions:
 resource "aws_iam_role" "this" {
   name = "${local.prefix_with_domain}"
-  tags = "${var.aws_tags}"
+  tags = "${var.tags}"
 
   assume_role_policy = <<EOF
 {

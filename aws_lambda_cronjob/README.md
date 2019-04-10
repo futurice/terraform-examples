@@ -51,7 +51,7 @@ As this module is a close relative of [`aws_lambda_api`](../aws_lambda_api), the
 
 | Name | Description | Type | Default | Required |
 |------|-------------|:----:|:-----:|:-----:|
-| aws_tags | AWS Tags to add to all resources created (where possible); see https://aws.amazon.com/answers/account-management/aws-tagging-strategies/ | map | `<map>` | no |
+| tags | AWS Tags to add to all resources created (where possible); see https://aws.amazon.com/answers/account-management/aws-tagging-strategies/ | map | `<map>` | no |
 | comment_prefix | This will be included in comments for resources that are created | string | `"Lambda Cronjob: "` | no |
 | cronjob_name | Name which will be used to create your Lambda function (e.g. `"my-important-cronjob"`) | string | n/a | yes |
 | function_env_vars | Which env vars (if any) to invoke the Lambda with | map | `<map>` | no |

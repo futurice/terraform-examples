@@ -193,7 +193,7 @@ Conversely, if you specify `cache_ttl_override = 300`, every object will stay in
 | Name | Description | Type | Default | Required |
 |------|-------------|:----:|:-----:|:-----:|
 | add_response_headers | Map of HTTP headers (if any) to add to outgoing responses before sending them to clients | map | `<map>` | no |
-| aws_tags | AWS Tags to add to all resources created (where possible); see https://aws.amazon.com/answers/account-management/aws-tagging-strategies/ | map | `<map>` | no |
+| tags | AWS Tags to add to all resources created (where possible); see https://aws.amazon.com/answers/account-management/aws-tagging-strategies/ | map | `<map>` | no |
 | basic_auth_body | When using HTTP Basic Auth, and authentication has failed, this will be displayed by the browser as the page content | string | `"Unauthorized"` | no |
 | basic_auth_password | When non-empty, require this password with HTTP Basic Auth | string | `""` | no |
 | basic_auth_realm | When using HTTP Basic Auth, this will be displayed by the browser in the auth prompt | string | `"Authentication Required"` | no |

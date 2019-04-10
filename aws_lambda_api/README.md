@@ -256,7 +256,7 @@ Otherwise API Gateway won't have permission to write logs to CloudWatch.
 | Name | Description | Type | Default | Required |
 |------|-------------|:----:|:-----:|:-----:|
 | api_domain | Domain on which the Lambda will be made available (e.g. `"api.example.com"`) | string | n/a | yes |
-| aws_tags | AWS Tags to add to all resources created (where possible); see https://aws.amazon.com/answers/account-management/aws-tagging-strategies/ | map | `<map>` | no |
+| tags | AWS Tags to add to all resources created (where possible); see https://aws.amazon.com/answers/account-management/aws-tagging-strategies/ | map | `<map>` | no |
 | comment_prefix | This will be included in comments for resources that are created | string | `"Lambda API: "` | no |
 | function_env_vars | Which env vars (if any) to invoke the Lambda with | map | `<map>` | no |
 | function_handler | Instructs Lambda on which function to invoke within the ZIP file | string | `"index.handler"` | no |
