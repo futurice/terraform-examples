@@ -21,6 +21,14 @@ resource "aws_cloudfront_distribution" "this" {
       origin_protocol_policy = "http-only"
       origin_ssl_protocols   = ["TLSv1", "TLSv1.1", "TLSv1.2"]
     }
+
+    # Our S3 bucket will only allow requests containing this custom header.
+    # Somewhat perplexingly, this is the "correct" way to ensure users can't bypass CloudFront on their way to S3 resources.
+    # https://abridge2devnull.com/posts/2018/01/restricting-access-to-a-cloudfront-s3-website-origin/
+    custom_header {
+      name  = "User-Agent"
+      value = "${random_string.s3_read_password.result}"
+    }
   }
 
   # Define how to serve the content to clients
