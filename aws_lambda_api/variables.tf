@@ -72,6 +72,16 @@ variable "lambda_logging_enabled" {
   default     = false
 }
 
+variable "api_gateway_logging_level" {
+  description = "Either `\"OFF\"`, `\"INFO\"` or `\"ERROR\"`; note that this requires having a CloudWatch log role ARN globally in API Gateway Settings"
+  default     = "OFF"
+}
+
+variable "api_gateway_cloudwatch_metrics" {
+  description = "When true, sends metrics to CloudWatch"
+  default     = false
+}
+
 variable "aws_tags" {
   description = "AWS Tags to add to all resources created (where possible); see https://aws.amazon.com/answers/account-management/aws-tagging-strategies/"
   type        = "map"
