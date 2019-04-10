@@ -1,4 +1,4 @@
-# Allow Lambda@Edge to invoke our functions:
+# Allow Lambda to invoke our functions:
 resource "aws_iam_role" "this" {
   name = "${local.prefix_with_domain}"
   tags = "${var.aws_tags}"
@@ -28,7 +28,7 @@ resource "aws_lambda_permission" "this" {
   action        = "lambda:InvokeFunction"
   function_name = "${local.function_arn}"
   principal     = "apigateway.amazonaws.com"
-  source_arn    = "${aws_api_gateway_deployment.this.execution_arn}/*/*" # the /*/* portion grants access from any method on any resource within the API Gateway "REST API"
+  source_arn    = "${aws_api_gateway_stage.this.execution_arn}/*/*" # the /*/* portion grants access from any method on any resource within the API Gateway "REST API"
 }
 
 # Allow writing logs to CloudWatch from our functions:

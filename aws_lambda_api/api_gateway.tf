@@ -126,11 +126,18 @@ resource "aws_api_gateway_method_response" "proxy_cors" {
 
 resource "aws_api_gateway_deployment" "this" {
   rest_api_id = "${aws_api_gateway_rest_api.this.id}"
-  stage_name  = "${var.stage_name}"
 
   depends_on = [
     "aws_api_gateway_integration.proxy_root",
     "aws_api_gateway_integration.proxy_other",
     "aws_api_gateway_integration.proxy_cors",
   ]
+}
+
+resource "aws_api_gateway_stage" "this" {
+  stage_name    = "${var.stage_name}"
+  description   = "${var.comment_prefix}${var.api_domain}"
+  rest_api_id   = "${aws_api_gateway_rest_api.this.id}"
+  deployment_id = "${aws_api_gateway_deployment.this.id}"
+  tags          = "${var.aws_tags}"
 }
