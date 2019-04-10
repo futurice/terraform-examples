@@ -49,8 +49,8 @@ data "archive_file" "lambda_zip" {
 
 module "my_api" {
   # Available inputs: https://github.com/futurice/terraform-utils/tree/master/aws_lambda_api#inputs
-  # Check for updates: https://github.com/futurice/terraform-utils/compare/v9.3...master
-  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_lambda_api?ref=v9.3"
+  # Check for updates: https://github.com/futurice/terraform-utils/compare/v9.4...master
+  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_lambda_api?ref=v9.4"
 
   api_domain             = "api.example.com"
   lambda_logging_enabled = true
@@ -94,8 +94,8 @@ provider "aws" {
 
 module "my_api" {
   # Available inputs: https://github.com/futurice/terraform-utils/tree/master/aws_lambda_api#inputs
-  # Check for updates: https://github.com/futurice/terraform-utils/compare/v9.3...master
-  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_lambda_api?ref=v9.3"
+  # Check for updates: https://github.com/futurice/terraform-utils/compare/v9.4...master
+  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_lambda_api?ref=v9.4"
 
   api_domain             = "api.example.com"
   lambda_logging_enabled = true
@@ -145,8 +145,8 @@ resource "aws_s3_bucket" "my_builds" {
 
 module "my_api_stage" {
   # Available inputs: https://github.com/futurice/terraform-utils/tree/master/aws_lambda_api#inputs
-  # Check for updates: https://github.com/futurice/terraform-utils/compare/v9.3...master
-  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_lambda_api?ref=v9.3"
+  # Check for updates: https://github.com/futurice/terraform-utils/compare/v9.4...master
+  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_lambda_api?ref=v9.4"
 
   api_domain         = "api-stage.example.com"
   function_s3_bucket = "${aws_s3_bucket.my_builds.id}"
@@ -159,8 +159,8 @@ module "my_api_stage" {
 
 module "my_api_prod" {
   # Available inputs: https://github.com/futurice/terraform-utils/tree/master/aws_lambda_api#inputs
-  # Check for updates: https://github.com/futurice/terraform-utils/compare/v9.3...master
-  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_lambda_api?ref=v9.3"
+  # Check for updates: https://github.com/futurice/terraform-utils/compare/v9.4...master
+  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_lambda_api?ref=v9.4"
 
   api_domain         = "api-prod.example.com"
   function_s3_bucket = "${aws_s3_bucket.my_builds.id}"
@@ -256,7 +256,8 @@ Otherwise API Gateway won't have permission to write logs to CloudWatch.
 | Name | Description | Type | Default | Required |
 |------|-------------|:----:|:-----:|:-----:|
 | api_domain | Domain on which the Lambda will be made available (e.g. `"api.example.com"`) | string | n/a | yes |
-| tags | AWS Tags to add to all resources created (where possible); see https://aws.amazon.com/answers/account-management/aws-tagging-strategies/ | map | `<map>` | no |
+| api_gateway_cloudwatch_metrics | When true, sends metrics to CloudWatch | string | `"false"` | no |
+| api_gateway_logging_level | Either `"OFF"`, `"INFO"` or `"ERROR"`; note that this requires having a CloudWatch log role ARN globally in API Gateway Settings | string | `"OFF"` | no |
 | comment_prefix | This will be included in comments for resources that are created | string | `"Lambda API: "` | no |
 | function_env_vars | Which env vars (if any) to invoke the Lambda with | map | `<map>` | no |
 | function_handler | Instructs Lambda on which function to invoke within the ZIP file | string | `"index.handler"` | no |
@@ -270,6 +271,7 @@ Otherwise API Gateway won't have permission to write logs to CloudWatch.
 | name_prefix | Name prefix to use for objects that need to be created (only lowercase alphanumeric characters and hyphens allowed, for S3 bucket name compatibility) | string | `"aws-lambda-api---"` | no |
 | price_class | CloudFront price class to use (`100`, `200` or `"All"`, see https://aws.amazon.com/cloudfront/pricing/) | string | `"100"` | no |
 | stage_name | Name of the single stage created for the API on API Gateway | string | `"default"` | no |
+| tags | AWS Tags to add to all resources created (where possible); see https://aws.amazon.com/answers/account-management/aws-tagging-strategies/ | map | `<map>` | no |
 
 ## Outputs
 

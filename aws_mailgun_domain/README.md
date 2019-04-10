@@ -24,8 +24,8 @@ provider "mailgun" {
 
 module "my_mailgun_domain" {
   # Available inputs: https://github.com/futurice/terraform-utils/tree/master/aws_mailgun_domain#inputs
-  # Check for updates: https://github.com/futurice/terraform-utils/compare/v9.3...master
-  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_mailgun_domain?ref=v9.3"
+  # Check for updates: https://github.com/futurice/terraform-utils/compare/v9.4...master
+  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_mailgun_domain?ref=v9.4"
 
   mail_domain   = "example.com"
   smtp_password = "SECRET SECRET SECRET"
@@ -69,10 +69,10 @@ After Mailgun is happy with your DNS records, however, you should get something 
 
 | Name | Description | Type | Default | Required |
 |------|-------------|:----:|:-----:|:-----:|
-| tags | AWS Tags to add to all resources created (where possible); see https://aws.amazon.com/answers/account-management/aws-tagging-strategies/ | map | `<map>` | no |
 | mail_domain | Domain which you want to use for sending/receiving email (e.g. `"example.com"`) | string | n/a | yes |
 | smtp_password | Password that Mailgun will require for sending out SMPT mail via this domain | string | n/a | yes |
 | spam_action | See https://www.terraform.io/docs/providers/mailgun/r/domain.html#spam_action | string | `"disabled"` | no |
+| tags | AWS Tags to add to all resources created (where possible); see https://aws.amazon.com/answers/account-management/aws-tagging-strategies/ | map | `<map>` | no |
 | wildcard | See https://www.terraform.io/docs/providers/mailgun/r/domain.html#wildcard | string | `"false"` | no |
 
 ## Outputs
