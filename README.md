@@ -2,14 +2,20 @@
 
 This repository contains reusable [Terraform](https://www.terraform.io/) utility modules, which are liberally licensed, and can be shared between projects.
 
-## Resources
+## Design decisions
+
+1. Each module should be thoroughly documented with a README - no source code dumps
+1. Each module should have easy to use examples - for delicious copy-pasta
+1. Modules need not offer infinite flexibility, but do one thing well - users can always make their own module using ours as a baseline
+
+## Additional resources
 
 In addition to the modules here, there's a lot of useful ones in the wild. For example:
 
 - https://registry.terraform.io/ - lots of solutions to common problems, some verified by Hashicorp themselves
 - https://github.com/cloudposse - look for repos starting with `terraform-` for lots of good building blocks
 
-## Releasing
+## Release process
 
 Please use the included release script. For example:
 
