@@ -9,7 +9,6 @@ resource "aws_api_gateway_deployment" "this" {
   depends_on = [
     "aws_api_gateway_integration.proxy_root",
     "aws_api_gateway_integration.proxy_other",
-    "aws_api_gateway_integration.proxy_cors",
   ]
 }
 
