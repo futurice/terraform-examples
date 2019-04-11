@@ -3,14 +3,11 @@
 This module creates a Lambda function, and makes it available via a custom domain, complete with SSL termination: e.g. `https://api.example.com/`. This includes:
 
 - DNS records on [Route 53](https://aws.amazon.com/route53/)
-- A [CloudFront](https://aws.amazon.com/cloudfront/) distribution for SSL termination
-- An SSL certificate for the distribution from [ACM](https://aws.amazon.com/certificate-manager/)
-- A [Lambda](https://aws.amazon.com/lambda/) function built from your JavaScript code
+- An SSL certificate for the domain from [ACM](https://aws.amazon.com/certificate-manager/)
 - [API Gateway](https://aws.amazon.com/api-gateway/) configuration for invoking the function over HTTP
+- A [Lambda](https://aws.amazon.com/lambda/) function built from your JavaScript code
 
 ## Example 1: Simple API
-
-**Important:** CloudFront operations are generally very slow. Your `terraform apply` may take anywhere **from 10 minutes up to 45 minutes** to complete.
 
 First, write down some simple code to deploy in a file called `index.js`:
 
@@ -31,15 +28,6 @@ exports.handler = function(event, context, callback) {
 Assuming you have the [AWS provider](https://www.terraform.io/docs/providers/aws/index.html) set up, and a DNS zone for `example.com` configured on Route 53:
 
 ```tf
-# Several AWS services (such as ACM & Lambda@Edge) are presently only available in the US East region.
-# To be able to use them, we need a separate AWS provider for that region, which can be used with an alias.
-# Make sure you customize this block to match your regular AWS provider configuration.
-# https://www.terraform.io/docs/configuration/providers.html#multiple-provider-instances
-provider "aws" {
-  alias  = "us_east_1"
-  region = "us-east-1"
-}
-
 # Lambda functions can only be uploaded as ZIP files, so we need to package our JS file into one
 data "archive_file" "lambda_zip" {
   type        = "zip"
@@ -62,7 +50,7 @@ module "my_api" {
 }
 ```
 
-After `terraform apply` (which may take a **very** long time), you should be able to visit `https://api.example.com/`, and be greeted by the above `Hello World!` message.
+After `terraform apply`, you should be able to visit `https://api.example.com/`, and be greeted by the above `Hello World!` message.
 
 Because we included the `lambda_logging_enabled` option, you can also log into CloudWatch and check out the properties Lambda makes available in the `event` and `context` properties.
 
@@ -83,15 +71,6 @@ Importantly, the most recent compiled version of the Lambda function should alwa
 Assuming you have the [AWS provider](https://www.terraform.io/docs/providers/aws/index.html) set up, and a DNS zone for `example.com` configured on Route 53:
 
 ```tf
-# Several AWS services (such as ACM & Lambda@Edge) are presently only available in the US East region.
-# To be able to use them, we need a separate AWS provider for that region, which can be used with an alias.
-# Make sure you customize this block to match your regular AWS provider configuration.
-# https://www.terraform.io/docs/configuration/providers.html#multiple-provider-instances
-provider "aws" {
-  alias  = "us_east_1"
-  region = "us-east-1"
-}
-
 module "my_api" {
   # Available inputs: https://github.com/futurice/terraform-utils/tree/master/aws_lambda_api#inputs
   # Check for updates: https://github.com/futurice/terraform-utils/compare/v9.4...master
@@ -103,7 +82,7 @@ module "my_api" {
 }
 ```
 
-After `terraform apply` (which may take a **very** long time), you should be able to receive a random joke with:
+After `terraform apply`, you should be able to receive a random joke with:
 
 ```bash
 $ curl https://api.example.com
@@ -130,15 +109,6 @@ Bundling the code and build artifacts for your Lambda function is all well and g
 This also makes it easy to support multiple environments, and release promotions between them. For example:
 
 ```tf
-# Several AWS services (such as ACM & Lambda@Edge) are presently only available in the US East region.
-# To be able to use them, we need a separate AWS provider for that region, which can be used with an alias.
-# Make sure you customize this block to match your regular AWS provider configuration.
-# https://www.terraform.io/docs/configuration/providers.html#multiple-provider-instances
-provider "aws" {
-  alias  = "us_east_1"
-  region = "us-east-1"
-}
-
 resource "aws_s3_bucket" "my_builds" {
   bucket = "my-builds"
 }
