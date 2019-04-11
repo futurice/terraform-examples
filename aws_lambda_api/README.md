@@ -37,8 +37,8 @@ data "archive_file" "lambda_zip" {
 
 module "my_api" {
   # Available inputs: https://github.com/futurice/terraform-utils/tree/master/aws_lambda_api#inputs
-  # Check for updates: https://github.com/futurice/terraform-utils/compare/v9.4...master
-  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_lambda_api?ref=v9.4"
+  # Check for updates: https://github.com/futurice/terraform-utils/compare/v10.0...master
+  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_lambda_api?ref=v10.0"
 
   api_domain             = "api.example.com"
   lambda_logging_enabled = true
@@ -73,8 +73,8 @@ Assuming you have the [AWS provider](https://www.terraform.io/docs/providers/aws
 ```tf
 module "my_api" {
   # Available inputs: https://github.com/futurice/terraform-utils/tree/master/aws_lambda_api#inputs
-  # Check for updates: https://github.com/futurice/terraform-utils/compare/v9.4...master
-  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_lambda_api?ref=v9.4"
+  # Check for updates: https://github.com/futurice/terraform-utils/compare/v10.0...master
+  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_lambda_api?ref=v10.0"
 
   api_domain             = "api.example.com"
   lambda_logging_enabled = true
@@ -115,8 +115,8 @@ resource "aws_s3_bucket" "my_builds" {
 
 module "my_api_stage" {
   # Available inputs: https://github.com/futurice/terraform-utils/tree/master/aws_lambda_api#inputs
-  # Check for updates: https://github.com/futurice/terraform-utils/compare/v9.4...master
-  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_lambda_api?ref=v9.4"
+  # Check for updates: https://github.com/futurice/terraform-utils/compare/v10.0...master
+  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_lambda_api?ref=v10.0"
 
   api_domain         = "api-stage.example.com"
   function_s3_bucket = "${aws_s3_bucket.my_builds.id}"
@@ -129,8 +129,8 @@ module "my_api_stage" {
 
 module "my_api_prod" {
   # Available inputs: https://github.com/futurice/terraform-utils/tree/master/aws_lambda_api#inputs
-  # Check for updates: https://github.com/futurice/terraform-utils/compare/v9.4...master
-  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_lambda_api?ref=v9.4"
+  # Check for updates: https://github.com/futurice/terraform-utils/compare/v10.0...master
+  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_lambda_api?ref=v10.0"
 
   api_domain         = "api-prod.example.com"
   function_s3_bucket = "${aws_s3_bucket.my_builds.id}"
@@ -269,13 +269,13 @@ exports.handler = function(event, context, callback) {
 | function_s3_bucket | When provided, the zipfile is retrieved from an S3 bucket by this name instead (filename is still provided via `function_zipfile`) | string | `""` | no |
 | function_timeout | The amount of time your Lambda Function has to run in seconds | string | `"3"` | no |
 | function_zipfile | Path to a ZIP file that will be installed as the Lambda function (e.g. `"my-api.zip"`) | string | n/a | yes |
-| https_only | Set this to `false` if you want to support insecure HTTP access, in addition to HTTPS | string | `"true"` | no |
 | lambda_logging_enabled | When true, writes any console output to the Lambda function's CloudWatch group | string | `"false"` | no |
 | memory_size | Amount of memory in MB your Lambda Function can use at runtime | string | `"128"` | no |
 | name_prefix | Name prefix to use for objects that need to be created (only lowercase alphanumeric characters and hyphens allowed, for S3 bucket name compatibility) | string | `"aws-lambda-api---"` | no |
-| price_class | CloudFront price class to use (`100`, `200` or `"All"`, see https://aws.amazon.com/cloudfront/pricing/) | string | `"100"` | no |
 | stage_name | Name of the single stage created for the API on API Gateway | string | `"default"` | no |
 | tags | AWS Tags to add to all resources created (where possible); see https://aws.amazon.com/answers/account-management/aws-tagging-strategies/ | map | `<map>` | no |
+| throttling_burst_limit | How many burst requests should the API process at most; see https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-request-throttling.html | string | `"5000"` | no |
+| throttling_rate_limit | How many sustained requests per second should the API process at most; see https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-request-throttling.html | string | `"10000"` | no |
 
 ## Outputs
 
