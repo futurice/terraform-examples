@@ -8,6 +8,12 @@ This repository contains reusable [Terraform](https://www.terraform.io/) utility
 1. Each module should have easy to use examples - for delicious copy-pasta
 1. Modules need not offer infinite flexibility, but do one thing well - users can always make their own module using ours as a baseline
 
+## Versioning policy
+
+1. New versions are released often, so users can pin their modules (using `master` as a `source` for Terraform modules is a terrible idea)
+1. Bump major version when either new modules are released, or existing modules get backwards-incompatible changes
+1. Bump minor version otherwise
+
 ## Additional resources
 
 In addition to the modules here, there's a lot of useful ones in the wild. For example:
