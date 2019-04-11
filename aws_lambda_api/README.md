@@ -220,6 +220,40 @@ EOF
 
 Otherwise API Gateway won't have permission to write logs to CloudWatch.
 
+## Supporting CORS
+
+Your API can easily support CORS, if needed. For example:
+
+```js
+// https://enable-cors.org/server_nginx.html
+const CORS_HEADERS = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "POST,OPTIONS,GET,PUT,PATCH,DELETE",
+  "Access-Control-Allow-Headers": "DNT,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range",
+  "Access-Control-Expose-Headers": "Content-Length,Content-Range",
+};
+
+exports.handler = function(event, context, callback) {
+  console.log("Lambda function event:", event);
+  console.log("Lambda function context:", context);
+  if (event.httpMethod === "OPTIONS") { // this is (probably) a CORS preflight request
+    callback(null, {
+      statusCode: 200,
+      headers: CORS_HEADERS,
+    });
+  } else { // this is a regular request
+    callback(null, {
+      statusCode: 200,
+      headers: {
+        ...CORS_HEADERS,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ Hello: "World!" }),
+    });
+  }
+};
+```
+
 <!-- terraform-docs:begin -->
 ## Inputs
 
