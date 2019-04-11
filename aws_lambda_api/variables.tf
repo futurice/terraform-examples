@@ -12,16 +12,6 @@ variable "comment_prefix" {
   default     = "Lambda API: "
 }
 
-variable "price_class" {
-  description = "CloudFront price class to use (`100`, `200` or `\"All\"`, see https://aws.amazon.com/cloudfront/pricing/)"
-  default     = 100
-}
-
-variable "https_only" {
-  description = "Set this to `false` if you want to support insecure HTTP access, in addition to HTTPS"
-  default     = true
-}
-
 variable "function_zipfile" {
   description = "Path to a ZIP file that will be installed as the Lambda function (e.g. `\"my-api.zip\"`)"
 }
