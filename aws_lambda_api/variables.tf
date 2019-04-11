@@ -12,16 +12,6 @@ variable "comment_prefix" {
   default     = "Lambda API: "
 }
 
-variable "price_class" {
-  description = "CloudFront price class to use (`100`, `200` or `\"All\"`, see https://aws.amazon.com/cloudfront/pricing/)"
-  default     = 100
-}
-
-variable "https_only" {
-  description = "Set this to `false` if you want to support insecure HTTP access, in addition to HTTPS"
-  default     = true
-}
-
 variable "function_zipfile" {
   description = "Path to a ZIP file that will be installed as the Lambda function (e.g. `\"my-api.zip\"`)"
 }
@@ -88,8 +78,15 @@ variable "tags" {
   default     = {}
 }
 
-# IMPORTANT! Due to the way API Gateway works, if the related config is ever is changed, you probably need to:
-# $ terraform taint aws_api_gateway_deployment.this
+variable "throttling_rate_limit" {
+  description = "How many sustained requests per second should the API process at most; see https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-request-throttling.html"
+  default     = 10000
+}
+
+variable "throttling_burst_limit" {
+  description = "How many burst requests should the API process at most; see https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-request-throttling.html"
+  default     = 5000
+}
 
 locals {
   prefix_with_domain = "${var.name_prefix}${replace("${var.api_domain}", "/[^a-z0-9-]+/", "-")}" # only lowercase alphanumeric characters and hyphens are allowed in e.g. S3 bucket names
