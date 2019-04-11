@@ -78,8 +78,15 @@ variable "tags" {
   default     = {}
 }
 
-# IMPORTANT! Due to the way API Gateway works, if the related config is ever is changed, you probably need to:
-# $ terraform taint aws_api_gateway_deployment.this
+variable "throttling_rate_limit" {
+  description = "How many sustained requests per second should the API process at most; see https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-request-throttling.html"
+  default     = 10000
+}
+
+variable "throttling_burst_limit" {
+  description = "How many burst requests should the API process at most; see https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-request-throttling.html"
+  default     = 5000
+}
 
 locals {
   prefix_with_domain = "${var.name_prefix}${replace("${var.api_domain}", "/[^a-z0-9-]+/", "-")}" # only lowercase alphanumeric characters and hyphens are allowed in e.g. S3 bucket names
