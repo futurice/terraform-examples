@@ -1,13 +1,14 @@
-module "aws_static_site" {
-  # Available inputs: https://github.com/futurice/terraform-utils/tree/master/aws_static_site#inputs
-  # Check for updates: https://github.com/futurice/terraform-utils/compare/v9.4...master
-  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_static_site?ref=v9.4"
+module "aws_reverse_proxy" {
+  # Available inputs: https://github.com/futurice/terraform-utils/tree/master/aws_reverse_proxy#inputs
+  # Check for updates: https://github.com/futurice/terraform-utils/compare/v11.0...master
+  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_reverse_proxy?ref=v11.0"
 
+  origin_url             = "http://example.com/"           # note that this is just a dummy value to satisfy CloudFront, it won't ever be used with the override_* variables in place
   site_domain            = "${var.redirect_domain}"
   name_prefix            = "${var.name_prefix}"
   comment_prefix         = "${var.comment_prefix}"
-  bucket_override_name   = "-"                             # providing this ensures an S3 bucket isn't unnecessarily created, even if this isn't a valid bucket name
-  price_class            = "${var.redirect_price_class}"
+  cloudfront_price_class = "${var.cloudfront_price_class}"
+  viewer_https_only      = "${var.viewer_https_only}"
   lambda_logging_enabled = "${var.lambda_logging_enabled}"
   tags                   = "${var.tags}"
 
