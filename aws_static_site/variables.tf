@@ -17,13 +17,13 @@ variable "bucket_override_name" {
   default     = ""
 }
 
-variable "price_class" {
+variable "cloudfront_price_class" {
   description = "CloudFront price class to use (`100`, `200` or `\"All\"`, see https://aws.amazon.com/cloudfront/pricing/)"
   default     = 100
 }
 
-variable "https_only" {
-  description = "Set this to `false` if you want to support insecure HTTP access, in addition to HTTPS"
+variable "viewer_https_only" {
+  description = "Set this to `false` if you need to support insecure HTTP access for clients, in addition to HTTPS"
   default     = true
 }
 
