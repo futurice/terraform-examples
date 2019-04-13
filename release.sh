@@ -51,7 +51,7 @@ echo OK
 
 echo -n "Fetching previous tags from GitHub... "
 git fetch --tags --quiet
-tag_prev="$(git tag | tail -n 1)" # figure out the latest tag
+tag_prev="$(git log --tags --simplify-by-decoration --pretty="%D" | grep tag: | cut -d ' ' -f 2 | head -n 1)" # figure out the latest tag (https://stackoverflow.com/a/6900369)
 echo OK
 
 echo
