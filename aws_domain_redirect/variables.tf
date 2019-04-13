@@ -16,9 +16,14 @@ variable "comment_prefix" {
   default     = "Domain redirect: "
 }
 
-variable "redirect_price_class" {
+variable "cloudfront_price_class" {
   description = "Price class to use (`100`, `200` or `\"All\"`, see https://aws.amazon.com/cloudfront/pricing/)"
   default     = 100
+}
+
+variable "viewer_https_only" {
+  description = "Set this to `false` if you need to support insecure HTTP access for clients, in addition to HTTPS"
+  default     = true
 }
 
 variable "redirect_permanently" {

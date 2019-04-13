@@ -17,13 +17,13 @@ variable "bucket_override_name" {
   default     = ""
 }
 
-variable "price_class" {
+variable "cloudfront_price_class" {
   description = "CloudFront price class to use (`100`, `200` or `\"All\"`, see https://aws.amazon.com/cloudfront/pricing/)"
   default     = 100
 }
 
-variable "https_only" {
-  description = "Set this to `false` if you want to support insecure HTTP access, in addition to HTTPS"
+variable "viewer_https_only" {
+  description = "Set this to `false` if you need to support insecure HTTP access for clients, in addition to HTTPS"
   default     = true
 }
 
@@ -44,21 +44,6 @@ variable "add_response_headers" {
   default = {
     "Strict-Transport-Security" = "max-age=31557600; preload" # i.e. 1 year (in seconds)
   }
-}
-
-variable "override_response_status" {
-  description = "When this and the other `override_response_*` variables are non-empty, skip sending the request to the origin altogether, and instead respond as instructed here"
-  default     = ""
-}
-
-variable "override_response_status_description" {
-  description = "Same as `override_response_status`"
-  default     = ""
-}
-
-variable "override_response_body" {
-  description = "Same as `override_response_status`"
-  default     = ""
 }
 
 variable "basic_auth_username" {

@@ -9,7 +9,7 @@ output "bucket_name" {
 
 output "cloudfront_id" {
   description = "The ID of the CloudFront distribution that's used for hosting the content"
-  value       = "${aws_cloudfront_distribution.this.id}"
+  value       = "${module.aws_reverse_proxy.cloudfront_id}"
 }
 
 output "site_domain" {

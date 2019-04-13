@@ -1,25 +1,39 @@
 # aws_domain_redirect
 
-Creates the necessary resources on AWS to implement an HTTP redirect from a domain (e.g. `redir.example.com`) to a given URL (e.g. `https://www.futurice.com/careers/women-who-code-helsinki`). Useful for creating human-friendly shortcuts for deeper links into a site, or for dynamic links (e.g. `download.example.com` always pointing to your latest release).
+This module implements a domain that redirects clients to another URL. Useful for creating human-friendly shortcuts for deeper links into a site, or for dynamic links (e.g. `download.example.com` always pointing to your latest release).
 
-Implementing this on AWS actually requires quite a few resources:
+Main features:
 
-- DNS records on [Route 53](https://aws.amazon.com/route53/)
-- A [CloudFront](https://aws.amazon.com/cloudfront/) distribution for SSL termination
-- An SSL certificate for the distribution from [ACM](https://aws.amazon.com/certificate-manager/)
-- A [Lambda@Edge](https://docs.aws.amazon.com/lambda/latest/dg/lambda-edge.html) function that implements the redirect itself
+- DNS entries are created automatically
+- HTTPS enabled by default
+- HTTP Strict Transport Security supported
 
-Luckily, this module encapsulates this configuration quite neatly.
+Optional features:
 
-The Lambda function also adds [HSTS](https://en.wikipedia.org/wiki/HTTP_Strict_Transport_Security) headers to prevent [man-in-the-middle attacks](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security#An_example_scenario).
+- Plain HTTP instead of HTTPS
+- Sending a permanent redirect (`301 Moved Permanently`) instead of default (`302 Found`)
+
+Resources used:
+
+- Route53 for DNS entries
+- ACM for SSL certificates
+- CloudFront for proxying requests
+- Lambda@Edge for transforming requests
+- IAM for permissions
+
+## About CloudFront operations
+
+This module manages CloudFront distributions, and these operations are generally very slow. Your `terraform apply` may take anywhere **from 10 minutes up to 45 minutes** to complete. Be patient: if they start successfully, they almost always finish successfully, it just takes a while.
+
+Additionally, this module uses Lambda@Edge functions with CloudFront. Because Lambda@Edge functions are replicated, [they can't be deleted immediately](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/lambda-edge-delete-replicas.html). This means a `terraform destroy` won't successfully remove all resources on its first run. It should complete successfully when running it again after a few hours, however.
 
 ## Example
 
 Assuming you have the [AWS provider](https://www.terraform.io/docs/providers/aws/index.html) set up, and a DNS zone for `example.com` configured on Route 53:
 
 ```tf
-# Several AWS services (such as ACM & Lambda@Edge) are presently only available in the US East region.
-# To be able to use them, we need a separate AWS provider for that region, which can be used with an alias.
+# Lambda@Edge and ACM, when used with CloudFront, need to be used in the US East region.
+# Thus, we need a separate AWS provider for that region, which can be used with an alias.
 # Make sure you customize this block to match your regular AWS provider configuration.
 # https://www.terraform.io/docs/configuration/providers.html#multiple-provider-instances
 provider "aws" {
