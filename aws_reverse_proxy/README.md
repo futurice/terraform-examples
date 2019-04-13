@@ -83,26 +83,27 @@ Conversely, if you specify `cache_ttl_override = 300`, every object will stay in
 | basic_auth_password | When non-empty, require this password with HTTP Basic Auth | string | `""` | no |
 | basic_auth_realm | When using HTTP Basic Auth, this will be displayed by the browser in the auth prompt | string | `"Authentication Required"` | no |
 | basic_auth_username | When non-empty, require this username with HTTP Basic Auth | string | `""` | no |
-| bucket_override_name | When provided, assume a bucket with this name already exists for the site content, instead of creating the bucket automatically (e.g. `"my-bucket"`) | string | `""` | no |
-| cache_ttl_override | When >= 0, override the cache behaviour for ALL objects in S3, so that they stay in the CloudFront cache for this amount of seconds | string | `"-1"` | no |
-| comment_prefix | This will be included in comments for resources that are created | string | `"Static site: "` | no |
-| default_root_object | The object to return when the root URL is requested | string | `"index.html"` | no |
-| https_only | Set this to `false` if you want to support insecure HTTP access, in addition to HTTPS | string | `"true"` | no |
+| cache_ttl_override | When >= 0, override the cache behaviour for ALL objects in the origin, so that they stay in the CloudFront cache for this amount of seconds | string | `"-1"` | no |
+| cloudfront_price_class | CloudFront price class to use (`100`, `200` or `"All"`, see https://aws.amazon.com/cloudfront/pricing/) | string | `"100"` | no |
+| comment_prefix | This will be included in comments for resources that are created | string | `"Reverse proxy: "` | no |
+| default_root_object | The object to return when the root URL is requested | string | `""` | no |
 | lambda_logging_enabled | When true, writes information about incoming requests to the Lambda function's CloudWatch group | string | `"false"` | no |
-| name_prefix | Name prefix to use for objects that need to be created (only lowercase alphanumeric characters and hyphens allowed, for S3 bucket name compatibility) | string | `"aws-static-site---"` | no |
+| name_prefix | Name prefix to use for objects that need to be created (only lowercase alphanumeric characters and hyphens allowed, for S3 bucket name compatibility) | string | `"aws-reverse-proxy---"` | no |
+| origin_custom_header_name | Name of a custom header to send to the origin; this can be used to convey an authentication header to the origin, for example | string | `"X-Custom-Origin-Header"` | no |
+| origin_custom_header_value | Value of a custom header to send to the origin; see `origin_custom_header_name` | string | `""` | no |
+| origin_custom_port | When > 0, use this port for communication with the origin server, instead of relevant standard port | string | `"0"` | no |
+| origin_url | Base URL for proxy upstream site (e.g. `"https://example.com/"`) | string | n/a | yes |
 | override_response_body | Same as `override_response_status` | string | `""` | no |
 | override_response_status | When this and the other `override_response_*` variables are non-empty, skip sending the request to the origin altogether, and instead respond as instructed here | string | `""` | no |
 | override_response_status_description | Same as `override_response_status` | string | `""` | no |
-| price_class | CloudFront price class to use (`100`, `200` or `"All"`, see https://aws.amazon.com/cloudfront/pricing/) | string | `"100"` | no |
-| site_domain | Domain on which the static site will be made available (e.g. `"www.example.com"`) | string | n/a | yes |
+| site_domain | Domain on which the reverse proxy will be made available (e.g. `"www.example.com"`) | string | n/a | yes |
 | tags | AWS Tags to add to all resources created (where possible); see https://aws.amazon.com/answers/account-management/aws-tagging-strategies/ | map | `<map>` | no |
+| viewer_https_only | Set this to `false` if you need to support insecure HTTP access for clients, in addition to HTTPS | string | `"true"` | no |
 
 ## Outputs
 
 | Name | Description |
 |------|-------------|
-| bucket_domain_name | Full S3 domain name for the bucket used for hosting the content (e.g. `"aws-static-site---hello-example-com.s3-website.eu-central-1.amazonaws.com"`) |
-| bucket_name | The name of the S3 bucket that's used for hosting the content (either auto-generated or externally provided) |
 | cloudfront_id | The ID of the CloudFront distribution that's used for hosting the content |
-| site_domain | Domain on which the static site will be made available |
+| site_domain | Domain on which the site will be made available |
 <!-- terraform-docs:end -->

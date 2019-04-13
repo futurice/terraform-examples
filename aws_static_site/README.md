@@ -48,8 +48,8 @@ provider "aws" {
 
 module "my_site" {
   # Available inputs: https://github.com/futurice/terraform-utils/tree/master/aws_static_site#inputs
-  # Check for updates: https://github.com/futurice/terraform-utils/compare/v10.0...master
-  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_static_site?ref=v10.0"
+  # Check for updates: https://github.com/futurice/terraform-utils/compare/v11.0...master
+  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_static_site?ref=v11.0"
 
   site_domain = "hello.example.com"
 }
@@ -86,8 +86,8 @@ Update the `my_site` module in Example 1 as follows:
 ```tf
 module "my_site" {
   # Available inputs: https://github.com/futurice/terraform-utils/tree/master/aws_static_site#inputs
-  # Check for updates: https://github.com/futurice/terraform-utils/compare/v10.0...master
-  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_static_site?ref=v10.0"
+  # Check for updates: https://github.com/futurice/terraform-utils/compare/v11.0...master
+  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_static_site?ref=v11.0"
 
   site_domain = "hello.example.com"
 
@@ -109,8 +109,8 @@ For [additional security hardening of your static site](https://aws.amazon.com/b
 ```tf
 module "my_site" {
   # Available inputs: https://github.com/futurice/terraform-utils/tree/master/aws_static_site#inputs
-  # Check for updates: https://github.com/futurice/terraform-utils/compare/v10.0...master
-  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_static_site?ref=v10.0"
+  # Check for updates: https://github.com/futurice/terraform-utils/compare/v11.0...master
+  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_static_site?ref=v11.0"
 
   site_domain = "hello.example.com"
 
@@ -132,8 +132,8 @@ It's also possible to override existing headers. For example:
 ```tf
 module "my_site" {
   # Available inputs: https://github.com/futurice/terraform-utils/tree/master/aws_static_site#inputs
-  # Check for updates: https://github.com/futurice/terraform-utils/compare/v10.0...master
-  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_static_site?ref=v10.0"
+  # Check for updates: https://github.com/futurice/terraform-utils/compare/v11.0...master
+  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_static_site?ref=v11.0"
 
   site_domain = "hello.example.com"
 
@@ -185,17 +185,14 @@ Learn more about [effective caching strategies on CloudFront](../aws_reverse_pro
 | basic_auth_username | When non-empty, require this username with HTTP Basic Auth | string | `""` | no |
 | bucket_override_name | When provided, assume a bucket with this name already exists for the site content, instead of creating the bucket automatically (e.g. `"my-bucket"`) | string | `""` | no |
 | cache_ttl_override | When >= 0, override the cache behaviour for ALL objects in S3, so that they stay in the CloudFront cache for this amount of seconds | string | `"-1"` | no |
+| cloudfront_price_class | CloudFront price class to use (`100`, `200` or `"All"`, see https://aws.amazon.com/cloudfront/pricing/) | string | `"100"` | no |
 | comment_prefix | This will be included in comments for resources that are created | string | `"Static site: "` | no |
 | default_root_object | The object to return when the root URL is requested | string | `"index.html"` | no |
-| https_only | Set this to `false` if you want to support insecure HTTP access, in addition to HTTPS | string | `"true"` | no |
 | lambda_logging_enabled | When true, writes information about incoming requests to the Lambda function's CloudWatch group | string | `"false"` | no |
 | name_prefix | Name prefix to use for objects that need to be created (only lowercase alphanumeric characters and hyphens allowed, for S3 bucket name compatibility) | string | `"aws-static-site---"` | no |
-| override_response_body | Same as `override_response_status` | string | `""` | no |
-| override_response_status | When this and the other `override_response_*` variables are non-empty, skip sending the request to the origin altogether, and instead respond as instructed here | string | `""` | no |
-| override_response_status_description | Same as `override_response_status` | string | `""` | no |
-| price_class | CloudFront price class to use (`100`, `200` or `"All"`, see https://aws.amazon.com/cloudfront/pricing/) | string | `"100"` | no |
 | site_domain | Domain on which the static site will be made available (e.g. `"www.example.com"`) | string | n/a | yes |
 | tags | AWS Tags to add to all resources created (where possible); see https://aws.amazon.com/answers/account-management/aws-tagging-strategies/ | map | `<map>` | no |
+| viewer_https_only | Set this to `false` if you need to support insecure HTTP access for clients, in addition to HTTPS | string | `"true"` | no |
 
 ## Outputs
 
