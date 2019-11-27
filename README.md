@@ -1,3 +1,3 @@
-# aws_terraform_samples
+# terraform_examples
 
-Repository containing terraform samples for various use cases
+Repository containing terraform examples for various use cases.
