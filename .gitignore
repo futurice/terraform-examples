@@ -3,6 +3,3 @@
 # .tfstate files
 *.tfstate
 *.tfstate.*
-
-
-example.tfvars
