@@ -5,9 +5,9 @@
 set -e
 
 #terraform apply "$@" -target null_resource.service_principal_layer
+terraform apply "$@" -target null_resource.resource_group_layer
 terraform apply "$@"  -target null_resource.network_layer
 terraform apply "$@" -target null_resource.subnet_layer
-terraform apply "$@" -target null_resource.resource_group_layer
 terraform apply "$@" -target null_resource.monitoring_layer
 terraform apply "$@" -target null_resource.storage_layer
 terraform apply "$@"
