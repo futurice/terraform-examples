@@ -1,0 +1,8 @@
+{
+  "name": "materialize",
+  "version": "0.0.1",
+  "dependencies": {
+    "@google-cloud/bigquery": "^3.0.0",
+    "@google-cloud/storage": "^3.0.2"
+  }
+}

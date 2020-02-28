@@ -1,0 +1,3 @@
+variable "config" {
+  type = any
+}

@@ -1,0 +1,13 @@
+[
+  {
+    "mode": "NULLABLE", 
+    "name": "timestamp", 
+    "type": "TIMESTAMP"
+  },
+  {
+    "mode": "NULLABLE", 
+    "name": "payload", 
+    "type": "STRING"
+  }
+]
+  
