@@ -1,6 +1,10 @@
 **/.terraform
-
 # .tfstate files
 *.tfstate
 *.tfstate.*
 *.plan
+.DS_Store
+.history
+.vscode/
+.env
+.ssh
