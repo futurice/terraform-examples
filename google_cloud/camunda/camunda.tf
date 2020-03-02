@@ -17,6 +17,24 @@ resource "null_resource" "camunda_cloudsql" {
   }
 }
 
+# Turn off auth
+data "google_iam_policy" "noauth" {
+  binding {
+    role = "roles/run.invoker"
+    members = [
+      "allUsers"
+    ]
+  }
+}
+
+resource "google_cloud_run_service_iam_policy" "noauth" {
+  location    = google_cloud_run_service.camunda.location
+  project     = google_cloud_run_service.camunda.project
+  service     = google_cloud_run_service.camunda.name
+
+  policy_data = data.google_iam_policy.noauth.policy_data
+}
+
 # Cloud Run Camunda service
 resource "google_cloud_run_service" "camunda" {
   name     = "camunda"
@@ -51,11 +69,24 @@ resource "google_cloud_run_service" "camunda" {
           name  = "DB_PASSWORD"
           value = "futurice"
         }
+        env {
+          name  = "DB_CONN_MAXACTIVE"
+          value = "5"
+        }
+        env {
+          name  = "DB_CONN_MAXIDLE"
+          value = "5"
+        }
+        env {
+          name  = "DB_CONN_MINIDLE"
+          value = "1"
+        }
       }
     }
 
     metadata {
       annotations = {
+        "autoscaling.knative.dev/maxScale"      = "1" # no clusting
         "run.googleapis.com/cloudsql-instances" = google_sql_database_instance.camunda-db.connection_name
       }
     }

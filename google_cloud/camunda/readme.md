@@ -11,8 +11,8 @@ Also needed to setup GCR creds in docker
 
     gcloud auth configure-docker
 
-Editor role was not enough to provision network, add Service Network Admin Role as well
 
 
-// Note sure of the following
-Editor role was not enough on default compute service account, added Cloud SQL Client
+Terraform service account, Editor role was not enough
+  - to provision network, add Service Network Admin Role as well
+  - to set cloud run service to noauth, had to add Security Admin on camunda cloud run resource
