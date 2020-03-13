@@ -1,3 +1,8 @@
+Getting started
+
+    export GOOGLE_CREDENTIALS=<PATH TO SERVICE ACCOUNT JSON CREDS>
+    gcloud auth activate-service-account --key-file $GOOGLE_CREDENTIALS
+    terraform init
 
 For mac I needed to expose the docker deamon on a tcp port:-
 
@@ -10,8 +15,6 @@ Then in bash_profile:
 Also needed to setup GCR creds in docker
 
     gcloud auth configure-docker
-
-
 
 Terraform service account, Editor role was not enough
   - to provision network, add Service Network Admin Role as well

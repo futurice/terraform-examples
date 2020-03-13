@@ -35,6 +35,16 @@ resource "google_cloud_run_service_iam_policy" "noauth" {
   policy_data = data.google_iam_policy.noauth.policy_data
 }
 
+resource "google_service_account" "camunda" {
+  account_id   = "camunda-worker"
+  display_name = "Camunda Worker"
+}
+
+resource "google_project_iam_member" "project" {
+  role    = "roles/cloudsql.client"
+  member  = "serviceAccount:${google_service_account.camunda.email}"
+}
+
 # Cloud Run Camunda service
 resource "google_cloud_run_service" "camunda" {
   name     = "camunda"
@@ -42,6 +52,8 @@ resource "google_cloud_run_service" "camunda" {
   depends_on = [null_resource.camunda_cloudsql]
   template {
     spec {
+      # Lock down privileges
+      service_account_name = google_service_account.camunda.email
       containers {
         image = "eu.gcr.io/${local.project}/camunda_cloudsql:3" # TODO pass tags through
         resources {
