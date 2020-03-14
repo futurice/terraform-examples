@@ -7,7 +7,6 @@ resource "google_sql_database_instance" "camunda-db" {
     # Second-generation instance tiers are based on the machine
     # type. See argument reference below.
     tier = "db-f1-micro"
-
     ip_configuration {
         ipv4_enabled = true # Private IP not possible with Cloud Run
     }

@@ -10,8 +10,8 @@ module "docker-mirror-camunda-bpm-platform" {
 resource "local_file" "dockerfile" {
   content = templatefile("${path.module}/Dockerfile.template", {
     project = local.project
-    image = local.config.base_image_name
-    tag = local.config.base_image_tag
+    image   = local.config.base_image_name
+    tag     = local.config.base_image_tag
   })
   filename = "${path.module}/.build/Dockerfile"
 }
