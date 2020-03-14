@@ -17,5 +17,4 @@ Also needed to setup GCR creds in docker
     gcloud auth configure-docker
 
 Terraform service account, Editor role was not enough
-  - to provision network, add Service Network Admin Role as well
   - to set cloud run service to noauth, had to add Security Admin on camunda cloud run resource

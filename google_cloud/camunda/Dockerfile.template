@@ -1,4 +1,4 @@
-FROM eu.gcr.io/larkworthy-tester/camunda/camunda-bpm-platform:7.12.0
+FROM eu.gcr.io/${project}/${image}:${tag}
 # https://forum.camunda.org/t/apt-get-is-missing-on-camunda-bpm-platform-7-9-0-image/7789
 USER root 
 RUN apk add --no-cache wget
