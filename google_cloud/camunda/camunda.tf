@@ -74,7 +74,7 @@ resource "google_cloud_run_service" "camunda" {
         }
         env {
           name  = "DB_CONN_MINIDLE"
-          value = "1"
+          value = "0"
         }
       }
     }
