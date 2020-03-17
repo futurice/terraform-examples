@@ -44,6 +44,12 @@ resource "google_storage_bucket" "code" {
   location = "EU"
 }
 
+resource "google_storage_bucket_object" "config_file" {
+  name   = "config.json"
+  content = jsonencode(local.config)
+  bucket = google_storage_bucket.code.name
+}
+
 module "bigquery" {
   source = "./bigquery"
   config = local.config

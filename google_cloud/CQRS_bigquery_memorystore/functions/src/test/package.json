@@ -4,7 +4,7 @@
   "dependencies": {
     "@google-cloud/bigquery": "^3.0.0",
     "@google-cloud/storage": "^3.0.2",
-    "moment-timezone":"^0.5.26",
-    "redis":"^2.8.0"
+    "moment-timezone": "^0.5.26",
+    "redis": "^2.8.0"
   }
 }

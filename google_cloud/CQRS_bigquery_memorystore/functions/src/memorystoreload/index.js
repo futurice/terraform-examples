@@ -33,7 +33,7 @@ exports.memorystoreload = (info, context) => new Promise((resolve, reject) => {
     })
     .on('end', () => {
       console.log(`Keys written: ${keysWritten}`);
-      resolve();
+      redis.wait(1, resolve);
     })
     .on('error', reject);
 });
