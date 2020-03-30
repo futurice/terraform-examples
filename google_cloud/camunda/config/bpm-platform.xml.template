@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpm-platform xmlns="http://www.camunda.org/schema/1.0/BpmPlatform" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.camunda.org/schema/1.0/BpmPlatform http://www.camunda.org/schema/1.0/BpmPlatform ">
+
+  <job-executor>
+    <job-acquisition name="default">
+      <properties>
+        <property name="maxJobsPerAcquisition">${maxJobsPerAcquisition != null ? maxJobsPerAcquisition : "3"}</property> 
+        <property name="lockTimeInMillis">${lockTimeInMillis != null ? lockTimeInMillis : "300000"}</property> 
+        <property name="waitTimeInMillis">${waitTimeInMillis != null ? waitTimeInMillis : "5000"}</property>
+        <property name="maxWait">${maxWait != null ? maxWait : "60000"}</property>
+      </properties>
+    </job-acquisition>
+  </job-executor>
+
+  <process-engine name="default">
+    <job-acquisition>default</job-acquisition>
+    <configuration>org.camunda.bpm.engine.impl.cfg.StandaloneProcessEngineConfiguration</configuration>
+    <datasource>java:jdbc/ProcessEngine</datasource>
+
+    <properties>
+      <property name="jobExecutorActivate">true</property>
+      <property name="history">${history != null ? history : "full"}</property>
+      <property name="databaseSchemaUpdate">${databaseSchemaUpdate != null ? databaseSchemaUpdate : "true"}</property>
+      <property name="authorizationEnabled">${authorizationEnabled != null ? authorizationEnabled : "true"}</property>
+      <property name="jobExecutorDeploymentAware">${jobExecutorDeploymentAware != null ? jobExecutorDeploymentAware : "true"}</property>
+      <property name="historyCleanupBatchWindowStartTime">${historyCleanupBatchWindowStartTime != null ? historyCleanupBatchWindowStartTime : "00:01"}</property>
+    </properties>
+
+    <plugins>
+      <!-- plugin enabling Process Application event listener support -->
+      <plugin>
+        <class>org.camunda.bpm.application.impl.event.ProcessApplicationEventListenerPlugin</class>
+      </plugin>
+
+      <!-- plugin enabling integration of camunda Spin -->
+      <plugin>
+        <class>org.camunda.spin.plugin.impl.SpinProcessEnginePlugin</class>
+      </plugin>
+
+      <!-- plugin enabling connect support -->
+      <plugin>
+        <class>org.camunda.connect.plugin.impl.ConnectProcessEnginePlugin</class>
+      </plugin>
+
+    <!-- LDAP CONFIGURATION -->
+    <!-- Uncomment this section in order to enable LDAP support for this process engine -->
+    <!-- Adjust configuration, see ( http://docs.camunda.org/latest/guides/user-guide/#process-engine-identity-service-the-ldap-identity-service ) -->
+    <!--
+      <plugin>
+        <class>org.camunda.bpm.identity.impl.ldap.plugin.LdapIdentityProviderPlugin</class>
+        <properties>
+
+          <property name="serverUrl">ldaps://localhost:4334/</property>
+          <property name="acceptUntrustedCertificates">false</property>
+          <property name="managerDn">uid=jonny,ou=office-berlin,o=camunda,c=org</property>
+          <property name="managerPassword">s3cr3t</property>
+
+          <property name="baseDn">o=camunda,c=org</property>
+
+          <property name="userSearchBase"></property>
+          <property name="userSearchFilter">(objectclass=person)</property>
+
+          <property name="userIdAttribute">uid</property>
+          <property name="userFirstnameAttribute">cn</property>
+          <property name="userLastnameAttribute">sn</property>
+          <property name="userEmailAttribute">mail</property>
+          <property name="userPasswordAttribute">userpassword</property>
+
+          <property name="groupSearchBase"></property>
+          <property name="groupSearchFilter">(objectclass=groupOfNames)</property>
+          <property name="groupIdAttribute">cn</property>
+          <property name="groupNameAttribute">cn</property>
+
+          <property name="groupMemberAttribute">member</property>
+          <property name="sortControlSupported">false</property>
+
+        </properties>
+      </plugin>
+      -->
+
+      <!-- LDAP CONFIGURATION -->
+      <!-- The following plugin allows you to grant administrator authorizations to an existing LDAP user -->
+      <!--
+      <plugin>
+        <class>org.camunda.bpm.engine.impl.plugin.AdministratorAuthorizationPlugin</class>
+        <properties>
+          <property name="administratorUserName">admin</property>
+        </properties>
+      </plugin>
+      -->
+
+    </plugins>
+  </process-engine>
+</bpm-platform>
