@@ -1,4 +1,8 @@
-Getting started
+## CQRS Bigquery Memorystore Timeseries Analytics with Self Testing Example
+
+Read [https://www.futurice.com/blog/bigquery-to-memorystore](Exporting Bigquery results to memorystore)
+
+### Getting started
 
     export GOOGLE_CREDENTIALS=<PATH TO SERVICE ACCOUNT JSON CREDS>
     gcloud auth activate-service-account --key-file $GOOGLE_CREDENTIALS

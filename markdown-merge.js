@@ -68,9 +68,9 @@ class ConvertLinksToAnchors extends Transform {
     callback();
   }
 }
-glob('**/*.md', (err, inPaths) => {
-    const outPath = "./test.md";
-
+glob('*/**/*.md', (err, inPaths) => {
+    const outPath = "./README.md";
+    inPaths.map(x => console.log(x));
     const inputs = inPaths.map(x => fs.createReadStream(x));
     const output = fs.createWriteStream(outPath);
     
