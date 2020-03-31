@@ -1,11 +1,15 @@
-# Provisioning Camunda on Cloud Run + Cloud SQL, using Terraform and Cloud Build
+## Provisioning Camunda on Cloud Run + Cloud SQL, using Terraform and Cloud Build
 
 Terraform receipe for running Camunda BPMN workflow engine serverlessly on Cloud Run, using Cloud SQL as the backing store. Custom image building offloaded to Cloud Build. Private container image hosting in Google Container Engine.
 
 Customize the base image in the main.tf locals.
 
+[https://www.futurice.com/blog/serverless-camunda-terraform-recipe-using-cloud-run-and-cloud-sql] (Provisioning Serverless Camunda on Cloud Run) 
 
-# Terraform setup
+[https://www.futurice.com/blog/at-least-once-delivery-for-serverless-camunda-workflow-automation] (Call external services with at-least-once delevery)
+
+
+### Terraform setup
 
 Create service account credentials for running terraform locally. Then
 
@@ -17,7 +21,7 @@ Create service account credentials for running terraform locally. Then
 Terraform service account, Editor role was not enough
   - to set cloud run service to noauth, had to add Security Admin on camunda cloud run resource (NOT PROJECT level)
 
-# Docker / gcloud Setup
+### Docker / gcloud Setup
 
 For mac I needed to expose the docker deamon on a tcp port:-
 
