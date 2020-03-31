@@ -2,9 +2,9 @@
 
 Note: Some examples were taken from https://github.com/futurice/terraform-utils which has formal release process and intended for library building. This repo is designed for looser copy and pasting
 
-- [AWS Examples](# AWS Examples)
-- [Azure Examples](# Azure Examples)
-- [Google Cloud Platform Examples Examples](# Google Cloud Platform Examples)
+- [AWS Examples](#aws-examples)
+- [Azure Examples](#azure-examples)
+- [Google Cloud Platform Examples Examples](#google-cloud-platform-examples)
 
 
 
@@ -299,6 +299,278 @@ This should finish by giving you the `docker_tunnel_command` output. Run that in
 <!-- terraform-docs:end -->
 
 
+# aws_lambda_cronjob
+
+This module creates a Lambda function, and configures it to be invoked on a schedule.
+
+## Example 1: Simple cronjob
+
+First, write down some simple code to deploy in a file called `index.js`:
+
+```js
+exports.handler = function(event, context, callback) {
+  console.log("Lambda function event:", event);
+  console.log("Lambda function context:", context);
+  callback(null);
+};
+```
+
+Assuming you have the [AWS provider](https://www.terraform.io/docs/providers/aws/index.html) set up:
+
+```tf
+# Lambda functions can only be uploaded as ZIP files, so we need to package our JS file into one
+data "archive_file" "lambda_zip" {
+  type        = "zip"
+  source_file = "${path.module}/index.js"
+  output_path = "${path.module}/lambda.zip"
+}
+
+module "my_cronjob" {
+  # Available inputs: https://github.com/futurice/terraform-utils/tree/master/aws_lambda_cronjob#inputs
+  # Check for updates: https://github.com/futurice/terraform-utils/compare/v11.0...master
+  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_lambda_cronjob?ref=v11.0"
+
+  cronjob_name           = "my-cronjob"
+  schedule_expression    = "rate(5 minutes)" # note: full cron expressions are also supported
+  lambda_logging_enabled = true
+
+  # lambda_zip.output_path will be absolute, i.e. different on different machines.
+  # This can cause Terraform to notice differences that aren't actually there, so let's convert it to a relative one.
+  # https://github.com/hashicorp/terraform/issues/7613#issuecomment-332238441
+  function_zipfile = "${substr(data.archive_file.lambda_zip.output_path, length(path.cwd) + 1, -1)}"
+}
+```
+
+After `terraform apply`, because we included the `lambda_logging_enabled` option, you can log into CloudWatch and check out the properties Lambda makes available in the `event` and `context` properties.
+
+## Example 2: Other options for deploying code
+
+As this module is a close relative of [`aws_lambda_api`](../aws_lambda_api), the other options for deploying code are equally applicable here.
+
+<!-- terraform-docs:begin -->
+## Inputs
+
+| Name | Description | Type | Default | Required |
+|------|-------------|:----:|:-----:|:-----:|
+| comment_prefix | This will be included in comments for resources that are created | string | `"Lambda Cronjob: "` | no |
+| cronjob_name | Name which will be used to create your Lambda function (e.g. `"my-important-cronjob"`) | string | n/a | yes |
+| function_env_vars | Which env vars (if any) to invoke the Lambda with | map | `<map>` | no |
+| function_handler | Instructs Lambda on which function to invoke within the ZIP file | string | `"index.handler"` | no |
+| function_runtime | Which node.js version should Lambda use for this function | string | `"nodejs8.10"` | no |
+| function_s3_bucket | When provided, the zipfile is retrieved from an S3 bucket by this name instead (filename is still provided via `function_zipfile`) | string | `""` | no |
+| function_timeout | The amount of time your Lambda Function has to run in seconds | string | `"3"` | no |
+| function_zipfile | Path to a ZIP file that will be installed as the Lambda function (e.g. `"my-cronjob.zip"`) | string | n/a | yes |
+| lambda_logging_enabled | When true, writes any console output to the Lambda function's CloudWatch group | string | `"false"` | no |
+| memory_size | Amount of memory in MB your Lambda Function can use at runtime | string | `"128"` | no |
+| name_prefix | Name prefix to use for objects that need to be created (only lowercase alphanumeric characters and hyphens allowed, for S3 bucket name compatibility) | string | `"aws-lambda-cronjob---"` | no |
+| schedule_expression | How often to run the Lambda (see https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/ScheduledEvents.html); e.g. `"rate(15 minutes)"` or `"cron(0 12 * * ? *)"` | string | `"rate(60 minutes)"` | no |
+| tags | AWS Tags to add to all resources created (where possible); see https://aws.amazon.com/answers/account-management/aws-tagging-strategies/ | map | `<map>` | no |
+
+## Outputs
+
+| Name | Description |
+|------|-------------|
+| function_name | This is the unique name of the Lambda function that was created |
+<!-- terraform-docs:end -->
+
+
+# aws_reverse_proxy
+
+This module implements a website that proxies content from another server.
+
+Main features:
+
+- DNS entries are created automatically
+- HTTPS enabled by default
+- HTTP Strict Transport Security supported
+
+Optional features:
+
+- HTTP Basic Auth
+- Plain HTTP instead of HTTPS
+- Cache TTL overrides
+- Custom response headers sent to clients
+- Custom request headers sent to origin server
+- Static response status/body override
+
+Resources used:
+
+- Route53 for DNS entries
+- ACM for SSL certificates
+- CloudFront for proxying requests
+- Lambda@Edge for transforming requests
+- IAM for permissions
+
+## About CloudFront operations
+
+This module manages CloudFront distributions, and these operations are generally very slow. Your `terraform apply` may take anywhere **from 10 minutes up to 45 minutes** to complete. Be patient: if they start successfully, they almost always finish successfully, it just takes a while.
+
+Additionally, this module uses Lambda@Edge functions with CloudFront. Because Lambda@Edge functions are replicated, [they can't be deleted immediately](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/lambda-edge-delete-replicas.html). This means a `terraform destroy` won't successfully remove all resources on its first run. It should complete successfully when running it again after a few hours, however.
+
+## Examples
+
+Some common use cases for this module are:
+
+- [Static website hosting with S3](../aws_static_site)
+- [Redirecting clients from a domain to another URL](../aws_domain_redirect)
+- SSL termination in front of a server/load balancer elsewhere on AWS
+
+## How CloudFront caching works
+
+It's important to understand that CloudFront, by default, **respects cache headers given by the origin**, that is, the server it's proxying requests to.
+
+### Default cache behaviour
+
+Consider an origin server that doesn't give any `Cache-Control` headers. Any changes you make to its responses **will be reflected immediately** on the CloudFront distribution. That's is because this module will **by default** not cache such objects at all. This is a sensible default, because the AWS default TTL for CloudFront is 24 hours, and for an origin that doesn't explicitly send `Cache-Control` headers, it's rarely the desired behaviour: your site will be serving stale content for up to 24 hours. Users will be sad, and engineers will be yelled at.
+
+Having immediate updates on CloudFront is convenient, but the downside is that every request for every file will be forwarded to your origin, to make sure the CloudFront cache still has the latest version. This can increase request latency for users, and infrastructure costs for you.
+
+### Specifying cache lifetimes on the origin
+
+Let's say we're serving static files from an S3 bucket. Using the official [AWS CLI](https://aws.amazon.com/cli/), you can specify cache lifetimes as your objects are uploaded:
+
+```bash
+aws s3 cp --cache-control=no-store,must-revalidate index.html "s3://my-bucket/"
+aws s3 cp --cache-control=max-age=31536000 static/image-v123.jpg "s3://my-bucket/"
+```
+
+This will upload `index.html` so that CloudFront will **never** serve its content to a user, without first checking that it's not been updated on S3. However, `image-v123.jpg` will be uploaded with cache headers that allow CloudFront to keep its copy for that object **forever** (well, technically 1 year, which is the maximum recommended value for `max-age`; in practice CloudFront will probably evict it before that for other reasons).
+
+The above is a good middle ground caching strategy, for when you want immediate updates for your HTML documents (e.g. `index.html`), but static assets (e.g. `image-v123.jpg`) can be cached for much longer. This means that for the HTML document itself, you won't get any boost from CloudFront, but as the browser starts downloading the various linked static assets, they can be served directly from the CloudFront edge location, which should be much closer to the user, geographically. When you need to update the linked image, instead of updating `image-v123.jpg`, you should instead upload `image-v124.jpg`, and update any links in `index.html` to point to the new version. This ensures that:
+
+1. Users will see the new document (including its updated images) immediately
+1. Users won't see an inconsistent version of the document, where the document content is updated, but it's still showing the old images
+
+### Overriding cache lifetimes on CloudFront
+
+If your origin server doesn't give out sensible cache control headers, or you're just feeling lazy, this module supports overriding cache behaviour on CloudFront, effectively ignoring anything your origin says about caching objects.
+
+That is, if you specify `cache_ttl_override = 0` for your site, every object will always be fetched from the origin, for every request. Importantly, though, this won't invalidate objects that *are already* in the CloudFront cache with a longer TTL. If you have an object that's "stuck" in your cache and you can't shake it, the CloudFront feature you're looking for is [file invalidation](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Invalidation.html).
+
+Conversely, if you specify `cache_ttl_override = 300`, every object will stay in CloudFront for 5 minutes, regardless of its cache headers. This can be a good performance boost for your site, since only 1 request per file per 5 minutes will need to go all the way to the origin, and all the others can be served immediately from the CloudFront edge location. Keep in mind the aforementioned warning about "inconsistent versions", however: each object has their own TTL counter, so `index.html` and `image.jpg` may update at different times in the cache, even if you update content at your origin at the same time.
+
+<!-- terraform-docs:begin -->
+## Inputs
+
+| Name | Description | Type | Default | Required |
+|------|-------------|:----:|:-----:|:-----:|
+| add_response_headers | Map of HTTP headers (if any) to add to outgoing responses before sending them to clients | map | `<map>` | no |
+| basic_auth_body | When using HTTP Basic Auth, and authentication has failed, this will be displayed by the browser as the page content | string | `"Unauthorized"` | no |
+| basic_auth_password | When non-empty, require this password with HTTP Basic Auth | string | `""` | no |
+| basic_auth_realm | When using HTTP Basic Auth, this will be displayed by the browser in the auth prompt | string | `"Authentication Required"` | no |
+| basic_auth_username | When non-empty, require this username with HTTP Basic Auth | string | `""` | no |
+| cache_ttl_override | When >= 0, override the cache behaviour for ALL objects in the origin, so that they stay in the CloudFront cache for this amount of seconds | string | `"-1"` | no |
+| cloudfront_price_class | CloudFront price class to use (`100`, `200` or `"All"`, see https://aws.amazon.com/cloudfront/pricing/) | string | `"100"` | no |
+| comment_prefix | This will be included in comments for resources that are created | string | `"Reverse proxy: "` | no |
+| default_root_object | The object to return when the root URL is requested | string | `""` | no |
+| lambda_logging_enabled | When true, writes information about incoming requests to the Lambda function's CloudWatch group | string | `"false"` | no |
+| name_prefix | Name prefix to use for objects that need to be created (only lowercase alphanumeric characters and hyphens allowed, for S3 bucket name compatibility) | string | `"aws-reverse-proxy---"` | no |
+| origin_custom_header_name | Name of a custom header to send to the origin; this can be used to convey an authentication header to the origin, for example | string | `"X-Custom-Origin-Header"` | no |
+| origin_custom_header_value | Value of a custom header to send to the origin; see `origin_custom_header_name` | string | `""` | no |
+| origin_custom_port | When > 0, use this port for communication with the origin server, instead of relevant standard port | string | `"0"` | no |
+| origin_url | Base URL for proxy upstream site (e.g. `"https://example.com/"`) | string | n/a | yes |
+| override_response_body | Same as `override_response_status` | string | `""` | no |
+| override_response_status | When this and the other `override_response_*` variables are non-empty, skip sending the request to the origin altogether, and instead respond as instructed here | string | `""` | no |
+| override_response_status_description | Same as `override_response_status` | string | `""` | no |
+| site_domain | Domain on which the reverse proxy will be made available (e.g. `"www.example.com"`) | string | n/a | yes |
+| tags | AWS Tags to add to all resources created (where possible); see https://aws.amazon.com/answers/account-management/aws-tagging-strategies/ | map | `<map>` | no |
+| viewer_https_only | Set this to `false` if you need to support insecure HTTP access for clients, in addition to HTTPS | string | `"true"` | no |
+
+## Outputs
+
+| Name | Description |
+|------|-------------|
+| cloudfront_id | The ID of the CloudFront distribution that's used for hosting the content |
+| site_domain | Domain on which the site will be made available |
+<!-- terraform-docs:end -->
+
+
+# aws_mailgun_domain
+
+Uses the [Terraform Mailgun provider](https://www.terraform.io/docs/providers/mailgun/index.html) to set up and verify a domain, so you can use [Mailgun](https://www.mailgun.com/) for sending email from it.
+
+## Example
+
+Assuming you have the [AWS provider](https://www.terraform.io/docs/providers/aws/index.html) set up, and a DNS zone for `example.com` configured on Route 53:
+
+```tf
+variable "mailgun_api_key" {
+  description = "Your Mailgun API key"
+}
+
+variable "demo_email_address" {
+  description = "Enter your email (e.g. me@gmail.com), so you'll get a copy-pasteable curl command for testing the API immediately"
+}
+
+# Configure the Mailgun provider
+# https://www.terraform.io/docs/providers/mailgun/index.html
+provider "mailgun" {
+  version = "~> 0.1"
+  api_key = "${var.mailgun_api_key}"
+}
+
+module "my_mailgun_domain" {
+  # Available inputs: https://github.com/futurice/terraform-utils/tree/master/aws_mailgun_domain#inputs
+  # Check for updates: https://github.com/futurice/terraform-utils/compare/v11.0...master
+  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_mailgun_domain?ref=v11.0"
+
+  mail_domain   = "example.com"
+  smtp_password = "SECRET SECRET SECRET"
+}
+
+output "demo_curl_command" {
+  value = "curl -s --user 'api:${var.mailgun_api_key}' ${module.my_mailgun_domain.api_base_url}messages -F from='Demo <demo@${module.my_mailgun_domain.mail_domain}>' -F to='${var.demo_email_address}' -F subject='Hello' -F text='Testing, testing...'"
+}
+```
+
+Note that due to [a bug in Terraform](https://github.com/hashicorp/terraform/issues/12570), at the time of writing, you need to apply in two parts:
+
+```bash
+$ terraform apply -target module.my_mailgun_domain.mailgun_domain.this
+...
+$ terraform apply
+...
+```
+
+After the `terraform apply`, you either need to wait a bit, or if you're impatient, log into your Mailgun control panel and manually trigger the DNS verification. If you're too quick, running the command given by `demo_curl_command` will give you something like:
+
+```json
+{
+  "message": "The domain is unverified and requires DNS configuration. Log in to your control panel to view required DNS records."
+}
+```
+
+After Mailgun is happy with your DNS records, however, you should get something like:
+
+```json
+{
+  "id": "<20190401125249.1.XXXYYYZZZ@example.com>",
+  "message": "Queued. Thank you."
+}
+```
+
+...and you should receive the test email shortly.
+
+<!-- terraform-docs:begin -->
+## Inputs
+
+| Name | Description | Type | Default | Required |
+|------|-------------|:----:|:-----:|:-----:|
+| mail_domain | Domain which you want to use for sending/receiving email (e.g. `"example.com"`) | string | n/a | yes |
+| smtp_password | Password that Mailgun will require for sending out SMPT mail via this domain | string | n/a | yes |
+| spam_action | See https://www.terraform.io/docs/providers/mailgun/r/domain.html#spam_action | string | `"disabled"` | no |
+| tags | AWS Tags to add to all resources created (where possible); see https://aws.amazon.com/answers/account-management/aws-tagging-strategies/ | map | `<map>` | no |
+| wildcard | See https://www.terraform.io/docs/providers/mailgun/r/domain.html#wildcard | string | `"false"` | no |
+
+## Outputs
+
+| Name | Description |
+|------|-------------|
+| api_base_url | Base URL of the Mailgun API for your domain |
+| mail_domain | Domain which you want to use for sending/receiving email (e.g. `"example.com"`) |
+<!-- terraform-docs:end -->
+
+
 # aws_lambda_api
 
 This module creates a Lambda function, and makes it available via a custom domain, complete with SSL termination: e.g. `https://api.example.com/`. This includes:
@@ -587,287 +859,6 @@ exports.handler = function(event, context, callback) {
 <!-- terraform-docs:end -->
 
 
-# aws_lambda_cronjob
-
-This module creates a Lambda function, and configures it to be invoked on a schedule.
-
-## Example 1: Simple cronjob
-
-First, write down some simple code to deploy in a file called `index.js`:
-
-```js
-exports.handler = function(event, context, callback) {
-  console.log("Lambda function event:", event);
-  console.log("Lambda function context:", context);
-  callback(null);
-};
-```
-
-Assuming you have the [AWS provider](https://www.terraform.io/docs/providers/aws/index.html) set up:
-
-```tf
-# Lambda functions can only be uploaded as ZIP files, so we need to package our JS file into one
-data "archive_file" "lambda_zip" {
-  type        = "zip"
-  source_file = "${path.module}/index.js"
-  output_path = "${path.module}/lambda.zip"
-}
-
-module "my_cronjob" {
-  # Available inputs: https://github.com/futurice/terraform-utils/tree/master/aws_lambda_cronjob#inputs
-  # Check for updates: https://github.com/futurice/terraform-utils/compare/v11.0...master
-  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_lambda_cronjob?ref=v11.0"
-
-  cronjob_name           = "my-cronjob"
-  schedule_expression    = "rate(5 minutes)" # note: full cron expressions are also supported
-  lambda_logging_enabled = true
-
-  # lambda_zip.output_path will be absolute, i.e. different on different machines.
-  # This can cause Terraform to notice differences that aren't actually there, so let's convert it to a relative one.
-  # https://github.com/hashicorp/terraform/issues/7613#issuecomment-332238441
-  function_zipfile = "${substr(data.archive_file.lambda_zip.output_path, length(path.cwd) + 1, -1)}"
-}
-```
-
-After `terraform apply`, because we included the `lambda_logging_enabled` option, you can log into CloudWatch and check out the properties Lambda makes available in the `event` and `context` properties.
-
-## Example 2: Other options for deploying code
-
-As this module is a close relative of [`aws_lambda_api`](../aws_lambda_api), the other options for deploying code are equally applicable here.
-
-<!-- terraform-docs:begin -->
-## Inputs
-
-| Name | Description | Type | Default | Required |
-|------|-------------|:----:|:-----:|:-----:|
-| comment_prefix | This will be included in comments for resources that are created | string | `"Lambda Cronjob: "` | no |
-| cronjob_name | Name which will be used to create your Lambda function (e.g. `"my-important-cronjob"`) | string | n/a | yes |
-| function_env_vars | Which env vars (if any) to invoke the Lambda with | map | `<map>` | no |
-| function_handler | Instructs Lambda on which function to invoke within the ZIP file | string | `"index.handler"` | no |
-| function_runtime | Which node.js version should Lambda use for this function | string | `"nodejs8.10"` | no |
-| function_s3_bucket | When provided, the zipfile is retrieved from an S3 bucket by this name instead (filename is still provided via `function_zipfile`) | string | `""` | no |
-| function_timeout | The amount of time your Lambda Function has to run in seconds | string | `"3"` | no |
-| function_zipfile | Path to a ZIP file that will be installed as the Lambda function (e.g. `"my-cronjob.zip"`) | string | n/a | yes |
-| lambda_logging_enabled | When true, writes any console output to the Lambda function's CloudWatch group | string | `"false"` | no |
-| memory_size | Amount of memory in MB your Lambda Function can use at runtime | string | `"128"` | no |
-| name_prefix | Name prefix to use for objects that need to be created (only lowercase alphanumeric characters and hyphens allowed, for S3 bucket name compatibility) | string | `"aws-lambda-cronjob---"` | no |
-| schedule_expression | How often to run the Lambda (see https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/ScheduledEvents.html); e.g. `"rate(15 minutes)"` or `"cron(0 12 * * ? *)"` | string | `"rate(60 minutes)"` | no |
-| tags | AWS Tags to add to all resources created (where possible); see https://aws.amazon.com/answers/account-management/aws-tagging-strategies/ | map | `<map>` | no |
-
-## Outputs
-
-| Name | Description |
-|------|-------------|
-| function_name | This is the unique name of the Lambda function that was created |
-<!-- terraform-docs:end -->
-
-
-# aws_mailgun_domain
-
-Uses the [Terraform Mailgun provider](https://www.terraform.io/docs/providers/mailgun/index.html) to set up and verify a domain, so you can use [Mailgun](https://www.mailgun.com/) for sending email from it.
-
-## Example
-
-Assuming you have the [AWS provider](https://www.terraform.io/docs/providers/aws/index.html) set up, and a DNS zone for `example.com` configured on Route 53:
-
-```tf
-variable "mailgun_api_key" {
-  description = "Your Mailgun API key"
-}
-
-variable "demo_email_address" {
-  description = "Enter your email (e.g. me@gmail.com), so you'll get a copy-pasteable curl command for testing the API immediately"
-}
-
-# Configure the Mailgun provider
-# https://www.terraform.io/docs/providers/mailgun/index.html
-provider "mailgun" {
-  version = "~> 0.1"
-  api_key = "${var.mailgun_api_key}"
-}
-
-module "my_mailgun_domain" {
-  # Available inputs: https://github.com/futurice/terraform-utils/tree/master/aws_mailgun_domain#inputs
-  # Check for updates: https://github.com/futurice/terraform-utils/compare/v11.0...master
-  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_mailgun_domain?ref=v11.0"
-
-  mail_domain   = "example.com"
-  smtp_password = "SECRET SECRET SECRET"
-}
-
-output "demo_curl_command" {
-  value = "curl -s --user 'api:${var.mailgun_api_key}' ${module.my_mailgun_domain.api_base_url}messages -F from='Demo <demo@${module.my_mailgun_domain.mail_domain}>' -F to='${var.demo_email_address}' -F subject='Hello' -F text='Testing, testing...'"
-}
-```
-
-Note that due to [a bug in Terraform](https://github.com/hashicorp/terraform/issues/12570), at the time of writing, you need to apply in two parts:
-
-```bash
-$ terraform apply -target module.my_mailgun_domain.mailgun_domain.this
-...
-$ terraform apply
-...
-```
-
-After the `terraform apply`, you either need to wait a bit, or if you're impatient, log into your Mailgun control panel and manually trigger the DNS verification. If you're too quick, running the command given by `demo_curl_command` will give you something like:
-
-```json
-{
-  "message": "The domain is unverified and requires DNS configuration. Log in to your control panel to view required DNS records."
-}
-```
-
-After Mailgun is happy with your DNS records, however, you should get something like:
-
-```json
-{
-  "id": "<20190401125249.1.XXXYYYZZZ@example.com>",
-  "message": "Queued. Thank you."
-}
-```
-
-...and you should receive the test email shortly.
-
-<!-- terraform-docs:begin -->
-## Inputs
-
-| Name | Description | Type | Default | Required |
-|------|-------------|:----:|:-----:|:-----:|
-| mail_domain | Domain which you want to use for sending/receiving email (e.g. `"example.com"`) | string | n/a | yes |
-| smtp_password | Password that Mailgun will require for sending out SMPT mail via this domain | string | n/a | yes |
-| spam_action | See https://www.terraform.io/docs/providers/mailgun/r/domain.html#spam_action | string | `"disabled"` | no |
-| tags | AWS Tags to add to all resources created (where possible); see https://aws.amazon.com/answers/account-management/aws-tagging-strategies/ | map | `<map>` | no |
-| wildcard | See https://www.terraform.io/docs/providers/mailgun/r/domain.html#wildcard | string | `"false"` | no |
-
-## Outputs
-
-| Name | Description |
-|------|-------------|
-| api_base_url | Base URL of the Mailgun API for your domain |
-| mail_domain | Domain which you want to use for sending/receiving email (e.g. `"example.com"`) |
-<!-- terraform-docs:end -->
-
-
-# aws_reverse_proxy
-
-This module implements a website that proxies content from another server.
-
-Main features:
-
-- DNS entries are created automatically
-- HTTPS enabled by default
-- HTTP Strict Transport Security supported
-
-Optional features:
-
-- HTTP Basic Auth
-- Plain HTTP instead of HTTPS
-- Cache TTL overrides
-- Custom response headers sent to clients
-- Custom request headers sent to origin server
-- Static response status/body override
-
-Resources used:
-
-- Route53 for DNS entries
-- ACM for SSL certificates
-- CloudFront for proxying requests
-- Lambda@Edge for transforming requests
-- IAM for permissions
-
-## About CloudFront operations
-
-This module manages CloudFront distributions, and these operations are generally very slow. Your `terraform apply` may take anywhere **from 10 minutes up to 45 minutes** to complete. Be patient: if they start successfully, they almost always finish successfully, it just takes a while.
-
-Additionally, this module uses Lambda@Edge functions with CloudFront. Because Lambda@Edge functions are replicated, [they can't be deleted immediately](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/lambda-edge-delete-replicas.html). This means a `terraform destroy` won't successfully remove all resources on its first run. It should complete successfully when running it again after a few hours, however.
-
-## Examples
-
-Some common use cases for this module are:
-
-- [Static website hosting with S3](../aws_static_site)
-- [Redirecting clients from a domain to another URL](../aws_domain_redirect)
-- SSL termination in front of a server/load balancer elsewhere on AWS
-
-## How CloudFront caching works
-
-It's important to understand that CloudFront, by default, **respects cache headers given by the origin**, that is, the server it's proxying requests to.
-
-### Default cache behaviour
-
-Consider an origin server that doesn't give any `Cache-Control` headers. Any changes you make to its responses **will be reflected immediately** on the CloudFront distribution. That's is because this module will **by default** not cache such objects at all. This is a sensible default, because the AWS default TTL for CloudFront is 24 hours, and for an origin that doesn't explicitly send `Cache-Control` headers, it's rarely the desired behaviour: your site will be serving stale content for up to 24 hours. Users will be sad, and engineers will be yelled at.
-
-Having immediate updates on CloudFront is convenient, but the downside is that every request for every file will be forwarded to your origin, to make sure the CloudFront cache still has the latest version. This can increase request latency for users, and infrastructure costs for you.
-
-### Specifying cache lifetimes on the origin
-
-Let's say we're serving static files from an S3 bucket. Using the official [AWS CLI](https://aws.amazon.com/cli/), you can specify cache lifetimes as your objects are uploaded:
-
-```bash
-aws s3 cp --cache-control=no-store,must-revalidate index.html "s3://my-bucket/"
-aws s3 cp --cache-control=max-age=31536000 static/image-v123.jpg "s3://my-bucket/"
-```
-
-This will upload `index.html` so that CloudFront will **never** serve its content to a user, without first checking that it's not been updated on S3. However, `image-v123.jpg` will be uploaded with cache headers that allow CloudFront to keep its copy for that object **forever** (well, technically 1 year, which is the maximum recommended value for `max-age`; in practice CloudFront will probably evict it before that for other reasons).
-
-The above is a good middle ground caching strategy, for when you want immediate updates for your HTML documents (e.g. `index.html`), but static assets (e.g. `image-v123.jpg`) can be cached for much longer. This means that for the HTML document itself, you won't get any boost from CloudFront, but as the browser starts downloading the various linked static assets, they can be served directly from the CloudFront edge location, which should be much closer to the user, geographically. When you need to update the linked image, instead of updating `image-v123.jpg`, you should instead upload `image-v124.jpg`, and update any links in `index.html` to point to the new version. This ensures that:
-
-1. Users will see the new document (including its updated images) immediately
-1. Users won't see an inconsistent version of the document, where the document content is updated, but it's still showing the old images
-
-### Overriding cache lifetimes on CloudFront
-
-If your origin server doesn't give out sensible cache control headers, or you're just feeling lazy, this module supports overriding cache behaviour on CloudFront, effectively ignoring anything your origin says about caching objects.
-
-That is, if you specify `cache_ttl_override = 0` for your site, every object will always be fetched from the origin, for every request. Importantly, though, this won't invalidate objects that *are already* in the CloudFront cache with a longer TTL. If you have an object that's "stuck" in your cache and you can't shake it, the CloudFront feature you're looking for is [file invalidation](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Invalidation.html).
-
-Conversely, if you specify `cache_ttl_override = 300`, every object will stay in CloudFront for 5 minutes, regardless of its cache headers. This can be a good performance boost for your site, since only 1 request per file per 5 minutes will need to go all the way to the origin, and all the others can be served immediately from the CloudFront edge location. Keep in mind the aforementioned warning about "inconsistent versions", however: each object has their own TTL counter, so `index.html` and `image.jpg` may update at different times in the cache, even if you update content at your origin at the same time.
-
-<!-- terraform-docs:begin -->
-## Inputs
-
-| Name | Description | Type | Default | Required |
-|------|-------------|:----:|:-----:|:-----:|
-| add_response_headers | Map of HTTP headers (if any) to add to outgoing responses before sending them to clients | map | `<map>` | no |
-| basic_auth_body | When using HTTP Basic Auth, and authentication has failed, this will be displayed by the browser as the page content | string | `"Unauthorized"` | no |
-| basic_auth_password | When non-empty, require this password with HTTP Basic Auth | string | `""` | no |
-| basic_auth_realm | When using HTTP Basic Auth, this will be displayed by the browser in the auth prompt | string | `"Authentication Required"` | no |
-| basic_auth_username | When non-empty, require this username with HTTP Basic Auth | string | `""` | no |
-| cache_ttl_override | When >= 0, override the cache behaviour for ALL objects in the origin, so that they stay in the CloudFront cache for this amount of seconds | string | `"-1"` | no |
-| cloudfront_price_class | CloudFront price class to use (`100`, `200` or `"All"`, see https://aws.amazon.com/cloudfront/pricing/) | string | `"100"` | no |
-| comment_prefix | This will be included in comments for resources that are created | string | `"Reverse proxy: "` | no |
-| default_root_object | The object to return when the root URL is requested | string | `""` | no |
-| lambda_logging_enabled | When true, writes information about incoming requests to the Lambda function's CloudWatch group | string | `"false"` | no |
-| name_prefix | Name prefix to use for objects that need to be created (only lowercase alphanumeric characters and hyphens allowed, for S3 bucket name compatibility) | string | `"aws-reverse-proxy---"` | no |
-| origin_custom_header_name | Name of a custom header to send to the origin; this can be used to convey an authentication header to the origin, for example | string | `"X-Custom-Origin-Header"` | no |
-| origin_custom_header_value | Value of a custom header to send to the origin; see `origin_custom_header_name` | string | `""` | no |
-| origin_custom_port | When > 0, use this port for communication with the origin server, instead of relevant standard port | string | `"0"` | no |
-| origin_url | Base URL for proxy upstream site (e.g. `"https://example.com/"`) | string | n/a | yes |
-| override_response_body | Same as `override_response_status` | string | `""` | no |
-| override_response_status | When this and the other `override_response_*` variables are non-empty, skip sending the request to the origin altogether, and instead respond as instructed here | string | `""` | no |
-| override_response_status_description | Same as `override_response_status` | string | `""` | no |
-| site_domain | Domain on which the reverse proxy will be made available (e.g. `"www.example.com"`) | string | n/a | yes |
-| tags | AWS Tags to add to all resources created (where possible); see https://aws.amazon.com/answers/account-management/aws-tagging-strategies/ | map | `<map>` | no |
-| viewer_https_only | Set this to `false` if you need to support insecure HTTP access for clients, in addition to HTTPS | string | `"true"` | no |
-
-## Outputs
-
-| Name | Description |
-|------|-------------|
-| cloudfront_id | The ID of the CloudFront distribution that's used for hosting the content |
-| site_domain | Domain on which the site will be made available |
-<!-- terraform-docs:end -->
-
-
-# Static website hosted using S3 and cloudfront with SSL support
-
-Hosting static website using S3 is a very cost effective approach. Since, S3 website does not support SSL certificate, we use cloudfront for the same. In this example, we host the contents in a private S3 bucket which is used as the origin for cloudfront. We use cloudfront Origin-Access-Identity to access the private content from S3.
-
-## Architecture
-
-![Architecture](images/s3-static-website.png)
-
-
 # aws_static_site
 
 This module implements a website for hosting static content.
@@ -1075,34 +1066,16 @@ Learn more about [effective caching strategies on CloudFront](../aws_reverse_pro
 <!-- terraform-docs:end -->
 
 
+# Static website hosted using S3 and cloudfront with SSL support
+
+Hosting static website using S3 is a very cost effective approach. Since, S3 website does not support SSL certificate, we use cloudfront for the same. In this example, we host the contents in a private S3 bucket which is used as the origin for cloudfront. We use cloudfront Origin-Access-Identity to access the private content from S3.
+
+## Architecture
+
+![Architecture](images/s3-static-website.png)
+
+
 # Azure Examples
-
-# Terraform Azure Layers example
-
-Azure resources may take a long time to create. Sometimes Terraform fails to spot that some resource actually requires another resource that has not been fully created yet. Layers help to ensure that all prerequisite resources for later ones are created before them.
-
-## Try it out
-
-```sh
-az login
-terraform init
-sh create.sh -auto-approve -var resource_name_prefix=${USER}trylayers
-```
-
-## Clean up
-
-```sh
-sh destroy.sh ${USER}trylayers
-```
-
-## Files
-
-- `create.sh` presents a simple hard-coded deployment run that ensures each layer is completed separately.
-- `destroy.sh` takes a quick, resource-group based approach to wiping out the whole deployment.
-- `layers.tf` lists each layer with associated dependencies.
-- `main.tf` contains sample resources used on different layers.
-- `variables.sh` declares associated variables with sane defaults.
-
 
 # docker_compose_host
 
@@ -1197,8 +1170,6 @@ version: "3"
 <!-- terraform-docs:end -->
 
 
-# Google Cloud Platform Examples
-
 ## Provisioning Camunda on Cloud Run + Cloud SQL, using Terraform and Cloud Build
 
 Terraform receipe for running Camunda BPMN workflow engine serverlessly on Cloud Run, using Cloud SQL as the backing store. Custom image building offloaded to Cloud Build. Private container image hosting in Google Container Engine.
@@ -1237,6 +1208,35 @@ Then in bash_profile:
 Also needed to setup GCR creds in docker
 
     gcloud auth configure-docker
+
+
+# Google Cloud Platform Examples
+
+# Terraform Azure Layers example
+
+Azure resources may take a long time to create. Sometimes Terraform fails to spot that some resource actually requires another resource that has not been fully created yet. Layers help to ensure that all prerequisite resources for later ones are created before them.
+
+## Try it out
+
+```sh
+az login
+terraform init
+sh create.sh -auto-approve -var resource_name_prefix=${USER}trylayers
+```
+
+## Clean up
+
+```sh
+sh destroy.sh ${USER}trylayers
+```
+
+## Files
+
+- `create.sh` presents a simple hard-coded deployment run that ensures each layer is completed separately.
+- `destroy.sh` takes a quick, resource-group based approach to wiping out the whole deployment.
+- `layers.tf` lists each layer with associated dependencies.
+- `main.tf` contains sample resources used on different layers.
+- `variables.sh` declares associated variables with sane defaults.
 
 
 ## CQRS Bigquery Memorystore Timeseries Analytics with Self Testing Example
