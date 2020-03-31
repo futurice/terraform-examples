@@ -1,6 +1,8 @@
 ## CQRS Bigquery Memorystore Timeseries Analytics with Self Testing Example
 
-Read [https://www.futurice.com/blog/bigquery-to-memorystore](Exporting Bigquery results to memorystore)
+Read [Exporting Bigquery results to memorystore](https://www.futurice.com/blog/bigquery-to-memorystore)
+
+    # Bigquery #Memorystore #Cloud Functions #Cloud Scheduler #Pubsub #Cloud Storage
 
 ### Getting started
 
@@ -9,6 +11,9 @@ Read [https://www.futurice.com/blog/bigquery-to-memorystore](Exporting Bigquery 
     terraform init
 
 Note you need to switch on the App Engine API (dependancy of Cloud Scheduler), choose wisely, this is irreversable. The region CANNOT be changed.
+
+
+### Tips
 
 Shut down memorystore
 
