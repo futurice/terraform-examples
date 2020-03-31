@@ -2,16 +2,6 @@ const fs = require("fs");
 const { Transform, PassThrough } = require('stream');
 const glob = require('glob');
 
-function concatStreams(streams) {
-  let pass = new PassThrough();
-  let waiting = streams.length;
-  for (let stream of streams) {
-      pass = stream.pipe(pass, {end: false});
-      stream.once('end', () => waiting-- === 0 && pass.emit('end'));
-  }
-  return pass;
-}
-
 class AddEndOfLine extends Transform {
   constructor(options) {
     super(options);
@@ -68,18 +58,20 @@ class ConvertLinksToAnchors extends Transform {
     callback();
   }
 }
-glob('*/**/*.md', (err, inPaths) => {
+glob('*/**/*.md', (err, files) => {
     const outPath = "./README.md";
-    inPaths.map(x => console.log(x));
-    const inputs = inPaths.map(x => fs.createReadStream(x));
     const output = fs.createWriteStream(outPath);
-    
-    concatStreams(inputs)
-      .pipe(new AddEndOfLine())
-      .pipe(new RebaseImages())
-      .pipe(new ConvertLinksToAnchors())
-      .pipe(output)
-      .on("finish", function () {
-        console.log("Done merging!");
-      });
+
+    var work = Promise.resolve();
+    files.map(file => {
+        work = work.then(() => new Promise( (resolve) => {
+            console.log(file);
+            fs.createReadStream(file)
+                .pipe(new AddEndOfLine())
+                .pipe(new RebaseImages())
+                .pipe(new ConvertLinksToAnchors())
+                .on("finish", (err) => resolve())
+                .pipe(output, {end: false})
+        }));
+    });
 });
