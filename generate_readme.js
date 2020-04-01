@@ -81,7 +81,6 @@ glob('*/**/*.md', (err, files) => {
     const output = fs.createWriteStream(outPath);
 
     var work = Promise.resolve();
-
     // Add each section
     files.map(file => {
         work = work.then(() => new Promise( (resolve) => {
