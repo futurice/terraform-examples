@@ -2,15 +2,27 @@ const fs = require("fs");
 const { Transform, PassThrough } = require('stream');
 const glob = require('glob');
 
+
+class AddRepoLink extends Transform {
+    constructor(options) {
+      super(options);
+      this.link = options.link;
+    }
+    _transform(data, encoding, callback) {
+      if (this.link)
+        this.push(`\n# [${this.link}](${this.link}) source`);
+      this.push(data);
+      callback();
+    }
+  }
+
 class AddEndOfLine extends Transform {
   constructor(options) {
     super(options);
   }
   _transform(data, encoding, callback) {
     this.push(data);
-
     this.push("\n\n");
-
     callback();
   }
 }
@@ -58,15 +70,26 @@ class ConvertLinksToAnchors extends Transform {
     callback();
   }
 }
+
+function directory(path) {
+    try {return path.match(/^(.*)_header_\/.*$/)[1]} catch {};
+    return path.match(/(?<dir>.*)\/[^/]*/)[1];
+}
+
 glob('*/**/*.md', (err, files) => {
     const outPath = "./README.md";
     const output = fs.createWriteStream(outPath);
 
     var work = Promise.resolve();
+    // Add each section
     files.map(file => {
+        if (file.indexOf("node_modules") >= 0) return;
         work = work.then(() => new Promise( (resolve) => {
             console.log(file);
             fs.createReadStream(file)
+                .pipe(new AddRepoLink({
+                    link: directory(file)
+                }))
                 .pipe(new AddEndOfLine())
                 .pipe(new RebaseImages())
                 .pipe(new ConvertLinksToAnchors())

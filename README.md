@@ -1,14 +1,19 @@
 # Repository containing various terraform code
 
-Note: Some examples were taken from https://github.com/futurice/terraform-utils which has formal release process and intended for library building. This repo is designed for looser copy and pasting
+Lots of Terraform recipes for doing things, aimed for copy and pasting into projects.
 
 - [AWS Examples](#aws-examples)
 - [Azure Examples](#azure-examples)
-- [Google Cloud Platform Examples Examples](#google-cloud-platform-examples)
+- [Google Cloud Platform Examples](#google-cloud-platform-examples)
 
 
+
+# [aws/](aws/) source
 
 # AWS Examples
+
+
+# [aws/aws_domain_redirect](aws/aws_domain_redirect) source
 
 # aws_domain_redirect
 
@@ -82,6 +87,9 @@ Applying this **will take a very long time**, because both ACM and especially Cl
 | viewer_https_only | Set this to `false` if you need to support insecure HTTP access for clients, in addition to HTTPS | string | `"true"` | no |
 <!-- terraform-docs:end -->
 
+
+
+# [aws/aws_ec2_ebs_docker_host](aws/aws_ec2_ebs_docker_host) source
 
 # aws_ec2_ebs_docker_host
 
@@ -298,6 +306,9 @@ This should finish by giving you the `docker_tunnel_command` output. Run that in
 | ssh_username | Username that can be used to access the EC2 instance over SSH |
 <!-- terraform-docs:end -->
 
+
+
+# [aws/aws_lambda_api](aws/aws_lambda_api) source
 
 # aws_lambda_api
 
@@ -587,6 +598,9 @@ exports.handler = function(event, context, callback) {
 <!-- terraform-docs:end -->
 
 
+
+# [aws/aws_lambda_cronjob](aws/aws_lambda_cronjob) source
+
 # aws_lambda_cronjob
 
 This module creates a Lambda function, and configures it to be invoked on a schedule.
@@ -661,6 +675,9 @@ As this module is a close relative of [`aws_lambda_api`](../aws_lambda_api), the
 | function_name | This is the unique name of the Lambda function that was created |
 <!-- terraform-docs:end -->
 
+
+
+# [aws/aws_mailgun_domain](aws/aws_mailgun_domain) source
 
 # aws_mailgun_domain
 
@@ -747,6 +764,9 @@ After Mailgun is happy with your DNS records, however, you should get something 
 | mail_domain | Domain which you want to use for sending/receiving email (e.g. `"example.com"`) |
 <!-- terraform-docs:end -->
 
+
+
+# [aws/aws_reverse_proxy](aws/aws_reverse_proxy) source
 
 # aws_reverse_proxy
 
@@ -858,6 +878,9 @@ Conversely, if you specify `cache_ttl_override = 300`, every object will stay in
 | site_domain | Domain on which the site will be made available |
 <!-- terraform-docs:end -->
 
+
+
+# [aws/aws_static_site](aws/aws_static_site) source
 
 # aws_static_site
 
@@ -1066,6 +1089,9 @@ Learn more about [effective caching strategies on CloudFront](../aws_reverse_pro
 <!-- terraform-docs:end -->
 
 
+
+# [aws/websites/static_website_ssl_cloudfront_private_s3](aws/websites/static_website_ssl_cloudfront_private_s3) source
+
 # Static website hosted using S3 and cloudfront with SSL support
 
 Hosting static website using S3 is a very cost effective approach. Since, S3 website does not support SSL certificate, we use cloudfront for the same. In this example, we host the contents in a private S3 bucket which is used as the origin for cloudfront. We use cloudfront Origin-Access-Identity to access the private content from S3.
@@ -1075,7 +1101,13 @@ Hosting static website using S3 is a very cost effective approach. Since, S3 web
 ![Architecture](images/s3-static-website.png)
 
 
+
+# [azure/](azure/) source
+
 # Azure Examples
+
+
+# [azure/layers](azure/layers) source
 
 # Terraform Azure Layers example
 
@@ -1103,6 +1135,9 @@ sh destroy.sh ${USER}trylayers
 - `main.tf` contains sample resources used on different layers.
 - `variables.sh` declares associated variables with sane defaults.
 
+
+
+# [generic/docker_compose_host](generic/docker_compose_host) source
 
 # docker_compose_host
 
@@ -1197,7 +1232,13 @@ version: "3"
 <!-- terraform-docs:end -->
 
 
+
+# [google_cloud/](google_cloud/) source
+
 # Google Cloud Platform Examples
+
+
+# [google_cloud/camunda](google_cloud/camunda) source
 
 ## Provisioning Camunda on Cloud Run + Cloud SQL, using Terraform and Cloud Build
 
@@ -1205,9 +1246,9 @@ Terraform receipe for running Camunda BPMN workflow engine serverlessly on Cloud
 
 Customize the base image in the main.tf locals.
 
-[Provisioning Serverless Camunda on Cloud Run] (https://www.futurice.com/blog/serverless-camunda-terraform-recipe-using-cloud-run-and-cloud-sql) 
-
-[Call external services with at-least-once delevery] (https://www.futurice.com/blog/at-least-once-delivery-for-serverless-camunda-workflow-automation)
+Read more on the blog
+- [Provisioning Serverless Camunda on Cloud Run](https://www.futurice.com/blog/serverless-camunda-terraform-recipe-using-cloud-run-and-cloud-sql) 
+- [Call external services with at-least-once delevery](https://www.futurice.com/blog/at-least-once-delivery-for-serverless-camunda-workflow-automation)
 
 
     #Camunda # Cloud Run #Cloud SQL #Cloud Build #Container Registry #Docker
@@ -1239,9 +1280,12 @@ Also needed to setup GCR creds in docker
     gcloud auth configure-docker
 
 
+
+# [google_cloud/CQRS_bigquery_memorystore](google_cloud/CQRS_bigquery_memorystore) source
+
 ## CQRS Bigquery Memorystore Timeseries Analytics with Self Testing Example
 
-Read [Exporting Bigquery results to memorystore](https://www.futurice.com/blog/bigquery-to-memorystore)
+Read the blog [Exporting Bigquery results to memorystore](https://www.futurice.com/blog/bigquery-to-memorystore)
 
     # Bigquery #Memorystore #Cloud Functions #Cloud Scheduler #Pubsub #Cloud Storage
 
