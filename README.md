@@ -1246,9 +1246,9 @@ Terraform receipe for running Camunda BPMN workflow engine serverlessly on Cloud
 
 Customize the base image in the main.tf locals.
 
-[Provisioning Serverless Camunda on Cloud Run](https://www.futurice.com/blog/serverless-camunda-terraform-recipe-using-cloud-run-and-cloud-sql) 
-
-[Call external services with at-least-once delevery](https://www.futurice.com/blog/at-least-once-delivery-for-serverless-camunda-workflow-automation)
+Read more on the blog
+- [Provisioning Serverless Camunda on Cloud Run](https://www.futurice.com/blog/serverless-camunda-terraform-recipe-using-cloud-run-and-cloud-sql) 
+- [Call external services with at-least-once delevery](https://www.futurice.com/blog/at-least-once-delivery-for-serverless-camunda-workflow-automation)
 
 
     #Camunda # Cloud Run #Cloud SQL #Cloud Build #Container Registry #Docker
@@ -1285,7 +1285,7 @@ Also needed to setup GCR creds in docker
 
 ## CQRS Bigquery Memorystore Timeseries Analytics with Self Testing Example
 
-Read [Exporting Bigquery results to memorystore](https://www.futurice.com/blog/bigquery-to-memorystore)
+Read the blog [Exporting Bigquery results to memorystore](https://www.futurice.com/blog/bigquery-to-memorystore)
 
     # Bigquery #Memorystore #Cloud Functions #Cloud Scheduler #Pubsub #Cloud Storage
 

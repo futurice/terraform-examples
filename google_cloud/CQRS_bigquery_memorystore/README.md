@@ -1,6 +1,6 @@
 ## CQRS Bigquery Memorystore Timeseries Analytics with Self Testing Example
 
-Read [Exporting Bigquery results to memorystore](https://www.futurice.com/blog/bigquery-to-memorystore)
+Read the blog [Exporting Bigquery results to memorystore](https://www.futurice.com/blog/bigquery-to-memorystore)
 
     # Bigquery #Memorystore #Cloud Functions #Cloud Scheduler #Pubsub #Cloud Storage
 
