@@ -1,10 +1,19 @@
 # Repository containing various terraform code
 
+<<<<<<< HEAD
 Lots of Terraform recipes for doing things, aimed for copy and pasting into projects.
 
 - [AWS Examples](#aws-examples)
 - [Azure Examples](#azure-examples)
 - [Google Cloud Platform Examples](#google-cloud-platform-examples)
+=======
+Note: Some examples were taken from https://github.com/futurice/terraform-utils which has formal release process and intended for library building. This repo is designed for looser copy and pasting
+
+- [AWS Examples](#aws-examples)
+- [Azure Examples](#azure-examples)
+- [Google Cloud Platform Examples Examples](#google-cloud-platform-examples)
+
+>>>>>>> master
 
 
 
@@ -1246,10 +1255,17 @@ Terraform receipe for running Camunda BPMN workflow engine serverlessly on Cloud
 
 Customize the base image in the main.tf locals.
 
+<<<<<<< HEAD
 Read more on the blog
 - [Provisioning Serverless Camunda on Cloud Run](https://www.futurice.com/blog/serverless-camunda-terraform-recipe-using-cloud-run-and-cloud-sql) 
 - [Call external services with at-least-once delevery](https://www.futurice.com/blog/at-least-once-delivery-for-serverless-camunda-workflow-automation)
 
+=======
+[Provisioning Serverless Camunda on Cloud Run] (https://www.futurice.com/blog/serverless-camunda-terraform-recipe-using-cloud-run-and-cloud-sql) 
+
+[Call external services with at-least-once delevery] (https://www.futurice.com/blog/at-least-once-delivery-for-serverless-camunda-workflow-automation)
+
+>>>>>>> master
 
     #Camunda # Cloud Run #Cloud SQL #Cloud Build #Container Registry #Docker
 
@@ -1285,7 +1301,11 @@ Also needed to setup GCR creds in docker
 
 ## CQRS Bigquery Memorystore Timeseries Analytics with Self Testing Example
 
+<<<<<<< HEAD
 Read the blog [Exporting Bigquery results to memorystore](https://www.futurice.com/blog/bigquery-to-memorystore)
+=======
+Read [Exporting Bigquery results to memorystore](https://www.futurice.com/blog/bigquery-to-memorystore)
+>>>>>>> master
 
     # Bigquery #Memorystore #Cloud Functions #Cloud Scheduler #Pubsub #Cloud Storage
 
