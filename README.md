@@ -9,12 +9,12 @@ Note: Some examples were taken from https://github.com/futurice/terraform-utils 
 
 
 
-# [aws/](aws/)
+# [Jump to aws/](aws/)
 
 # AWS Examples
 
 
-# [aws/aws_domain_redirect](aws/aws_domain_redirect)
+# [Jump to aws/aws_domain_redirect](aws/aws_domain_redirect)
 
 # aws_domain_redirect
 
@@ -90,7 +90,7 @@ Applying this **will take a very long time**, because both ACM and especially Cl
 
 
 
-# [aws/aws_ec2_ebs_docker_host](aws/aws_ec2_ebs_docker_host)
+# [Jump to aws/aws_ec2_ebs_docker_host](aws/aws_ec2_ebs_docker_host)
 
 # aws_ec2_ebs_docker_host
 
@@ -309,7 +309,7 @@ This should finish by giving you the `docker_tunnel_command` output. Run that in
 
 
 
-# [aws/aws_lambda_api](aws/aws_lambda_api)
+# [Jump to aws/aws_lambda_api](aws/aws_lambda_api)
 
 # aws_lambda_api
 
@@ -600,7 +600,7 @@ exports.handler = function(event, context, callback) {
 
 
 
-# [aws/aws_lambda_cronjob](aws/aws_lambda_cronjob)
+# [Jump to aws/aws_lambda_cronjob](aws/aws_lambda_cronjob)
 
 # aws_lambda_cronjob
 
@@ -678,7 +678,7 @@ As this module is a close relative of [`aws_lambda_api`](../aws_lambda_api), the
 
 
 
-# [aws/aws_mailgun_domain](aws/aws_mailgun_domain)
+# [Jump to aws/aws_mailgun_domain](aws/aws_mailgun_domain)
 
 # aws_mailgun_domain
 
@@ -767,7 +767,7 @@ After Mailgun is happy with your DNS records, however, you should get something 
 
 
 
-# [aws/aws_reverse_proxy](aws/aws_reverse_proxy)
+# [Jump to aws/aws_reverse_proxy](aws/aws_reverse_proxy)
 
 # aws_reverse_proxy
 
@@ -881,7 +881,7 @@ Conversely, if you specify `cache_ttl_override = 300`, every object will stay in
 
 
 
-# [aws/aws_static_site](aws/aws_static_site)
+# [Jump to aws/aws_static_site](aws/aws_static_site)
 
 # aws_static_site
 
@@ -1091,7 +1091,7 @@ Learn more about [effective caching strategies on CloudFront](../aws_reverse_pro
 
 
 
-# [aws/websites/static_website_ssl_cloudfront_private_s3](aws/websites/static_website_ssl_cloudfront_private_s3)
+# [Jump to aws/websites/static_website_ssl_cloudfront_private_s3](aws/websites/static_website_ssl_cloudfront_private_s3)
 
 # Static website hosted using S3 and cloudfront with SSL support
 
@@ -1103,12 +1103,12 @@ Hosting static website using S3 is a very cost effective approach. Since, S3 web
 
 
 
-# [azure/](azure/)
+# [Jump to azure/](azure/)
 
 # Azure Examples
 
 
-# [azure/layers](azure/layers)
+# [Jump to azure/layers](azure/layers)
 
 # Terraform Azure Layers example
 
@@ -1138,7 +1138,7 @@ sh destroy.sh ${USER}trylayers
 
 
 
-# [generic/docker_compose_host](generic/docker_compose_host)
+# [Jump to generic/docker_compose_host](generic/docker_compose_host)
 
 # docker_compose_host
 
@@ -1234,12 +1234,12 @@ version: "3"
 
 
 
-# [google_cloud/](google_cloud/)
+# [Jump to google_cloud/](google_cloud/)
 
 # Google Cloud Platform Examples
 
 
-# [google_cloud/camunda](google_cloud/camunda)
+# [Jump to google_cloud/camunda](google_cloud/camunda)
 
 ## Provisioning Camunda on Cloud Run + Cloud SQL, using Terraform and Cloud Build
 
@@ -1282,7 +1282,7 @@ Also needed to setup GCR creds in docker
 
 
 
-# [google_cloud/CQRS_bigquery_memorystore](google_cloud/CQRS_bigquery_memorystore)
+# [Jump to google_cloud/CQRS_bigquery_memorystore](google_cloud/CQRS_bigquery_memorystore)
 
 ## CQRS Bigquery Memorystore Timeseries Analytics with Self Testing Example
 
