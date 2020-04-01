@@ -7,10 +7,10 @@ class AddRepoLink extends Transform {
     constructor(options) {
       super(options);
       this.link = options.link;
-      console.log("link", this.link)
     }
     _transform(data, encoding, callback) {
-      this.push(`\nDirectory [${this.link}](${this.link})`);
+      if (this.link)
+        this.push(`\n# [${this.link}](${this.link})`);
       this.push(data);
       callback();
     }

@@ -1,6 +1,3 @@
-
-Directory []()
-
 # Repository containing various terraform code
 
 Note: Some examples were taken from https://github.com/futurice/terraform-utils which has formal release process and intended for library building. This repo is designed for looser copy and pasting
@@ -12,12 +9,12 @@ Note: Some examples were taken from https://github.com/futurice/terraform-utils 
 
 
 
-Directory [aws/](aws/)
+# [aws/](aws/)
 
 # AWS Examples
 
 
-Directory [aws/aws_domain_redirect](aws/aws_domain_redirect)
+# [aws/aws_domain_redirect](aws/aws_domain_redirect)
 
 # aws_domain_redirect
 
@@ -93,7 +90,7 @@ Applying this **will take a very long time**, because both ACM and especially Cl
 
 
 
-Directory [aws/aws_ec2_ebs_docker_host](aws/aws_ec2_ebs_docker_host)
+# [aws/aws_ec2_ebs_docker_host](aws/aws_ec2_ebs_docker_host)
 
 # aws_ec2_ebs_docker_host
 
@@ -312,7 +309,7 @@ This should finish by giving you the `docker_tunnel_command` output. Run that in
 
 
 
-Directory [aws/aws_lambda_api](aws/aws_lambda_api)
+# [aws/aws_lambda_api](aws/aws_lambda_api)
 
 # aws_lambda_api
 
@@ -603,7 +600,7 @@ exports.handler = function(event, context, callback) {
 
 
 
-Directory [aws/aws_lambda_cronjob](aws/aws_lambda_cronjob)
+# [aws/aws_lambda_cronjob](aws/aws_lambda_cronjob)
 
 # aws_lambda_cronjob
 
@@ -681,7 +678,7 @@ As this module is a close relative of [`aws_lambda_api`](../aws_lambda_api), the
 
 
 
-Directory [aws/aws_mailgun_domain](aws/aws_mailgun_domain)
+# [aws/aws_mailgun_domain](aws/aws_mailgun_domain)
 
 # aws_mailgun_domain
 
@@ -770,7 +767,7 @@ After Mailgun is happy with your DNS records, however, you should get something 
 
 
 
-Directory [aws/aws_reverse_proxy](aws/aws_reverse_proxy)
+# [aws/aws_reverse_proxy](aws/aws_reverse_proxy)
 
 # aws_reverse_proxy
 
@@ -884,7 +881,7 @@ Conversely, if you specify `cache_ttl_override = 300`, every object will stay in
 
 
 
-Directory [aws/aws_static_site](aws/aws_static_site)
+# [aws/aws_static_site](aws/aws_static_site)
 
 # aws_static_site
 
@@ -1094,7 +1091,7 @@ Learn more about [effective caching strategies on CloudFront](../aws_reverse_pro
 
 
 
-Directory [aws/websites/static_website_ssl_cloudfront_private_s3](aws/websites/static_website_ssl_cloudfront_private_s3)
+# [aws/websites/static_website_ssl_cloudfront_private_s3](aws/websites/static_website_ssl_cloudfront_private_s3)
 
 # Static website hosted using S3 and cloudfront with SSL support
 
@@ -1106,12 +1103,12 @@ Hosting static website using S3 is a very cost effective approach. Since, S3 web
 
 
 
-Directory [azure/](azure/)
+# [azure/](azure/)
 
 # Azure Examples
 
 
-Directory [azure/layers](azure/layers)
+# [azure/layers](azure/layers)
 
 # Terraform Azure Layers example
 
@@ -1141,7 +1138,7 @@ sh destroy.sh ${USER}trylayers
 
 
 
-Directory [generic/docker_compose_host](generic/docker_compose_host)
+# [generic/docker_compose_host](generic/docker_compose_host)
 
 # docker_compose_host
 
@@ -1237,12 +1234,12 @@ version: "3"
 
 
 
-Directory [google_cloud/](google_cloud/)
+# [google_cloud/](google_cloud/)
 
 # Google Cloud Platform Examples
 
 
-Directory [google_cloud/camunda](google_cloud/camunda)
+# [google_cloud/camunda](google_cloud/camunda)
 
 ## Provisioning Camunda on Cloud Run + Cloud SQL, using Terraform and Cloud Build
 
@@ -1285,7 +1282,7 @@ Also needed to setup GCR creds in docker
 
 
 
-Directory [google_cloud/CQRS_bigquery_memorystore](google_cloud/CQRS_bigquery_memorystore)
+# [google_cloud/CQRS_bigquery_memorystore](google_cloud/CQRS_bigquery_memorystore)
 
 ## CQRS Bigquery Memorystore Timeseries Analytics with Self Testing Example
 
