@@ -8,12 +8,12 @@ Lots of Terraform recipes for doing things, aimed for copy and pasting into proj
 
 
 
-# Jump to Terraform source [aws/](aws/)
+# [aws/](aws/) source
 
 # AWS Examples
 
 
-# Jump to Terraform source [aws/aws_domain_redirect](aws/aws_domain_redirect)
+# [aws/aws_domain_redirect](aws/aws_domain_redirect) source
 
 # aws_domain_redirect
 
@@ -89,7 +89,7 @@ Applying this **will take a very long time**, because both ACM and especially Cl
 
 
 
-# Jump to Terraform source [aws/aws_ec2_ebs_docker_host](aws/aws_ec2_ebs_docker_host)
+# [aws/aws_ec2_ebs_docker_host](aws/aws_ec2_ebs_docker_host) source
 
 # aws_ec2_ebs_docker_host
 
@@ -308,7 +308,7 @@ This should finish by giving you the `docker_tunnel_command` output. Run that in
 
 
 
-# Jump to Terraform source [aws/aws_lambda_api](aws/aws_lambda_api)
+# [aws/aws_lambda_api](aws/aws_lambda_api) source
 
 # aws_lambda_api
 
@@ -599,7 +599,7 @@ exports.handler = function(event, context, callback) {
 
 
 
-# Jump to Terraform source [aws/aws_lambda_cronjob](aws/aws_lambda_cronjob)
+# [aws/aws_lambda_cronjob](aws/aws_lambda_cronjob) source
 
 # aws_lambda_cronjob
 
@@ -677,7 +677,7 @@ As this module is a close relative of [`aws_lambda_api`](../aws_lambda_api), the
 
 
 
-# Jump to Terraform source [aws/aws_mailgun_domain](aws/aws_mailgun_domain)
+# [aws/aws_mailgun_domain](aws/aws_mailgun_domain) source
 
 # aws_mailgun_domain
 
@@ -766,7 +766,7 @@ After Mailgun is happy with your DNS records, however, you should get something 
 
 
 
-# Jump to Terraform source [aws/aws_reverse_proxy](aws/aws_reverse_proxy)
+# [aws/aws_reverse_proxy](aws/aws_reverse_proxy) source
 
 # aws_reverse_proxy
 
@@ -880,7 +880,7 @@ Conversely, if you specify `cache_ttl_override = 300`, every object will stay in
 
 
 
-# Jump to Terraform source [aws/aws_static_site](aws/aws_static_site)
+# [aws/aws_static_site](aws/aws_static_site) source
 
 # aws_static_site
 
@@ -1090,7 +1090,7 @@ Learn more about [effective caching strategies on CloudFront](../aws_reverse_pro
 
 
 
-# Jump to Terraform source [aws/websites/static_website_ssl_cloudfront_private_s3](aws/websites/static_website_ssl_cloudfront_private_s3)
+# [aws/websites/static_website_ssl_cloudfront_private_s3](aws/websites/static_website_ssl_cloudfront_private_s3) source
 
 # Static website hosted using S3 and cloudfront with SSL support
 
@@ -1102,12 +1102,12 @@ Hosting static website using S3 is a very cost effective approach. Since, S3 web
 
 
 
-# Jump to Terraform source [azure/](azure/)
+# [azure/](azure/) source
 
 # Azure Examples
 
 
-# Jump to Terraform source [azure/layers](azure/layers)
+# [azure/layers](azure/layers) source
 
 # Terraform Azure Layers example
 
@@ -1137,7 +1137,7 @@ sh destroy.sh ${USER}trylayers
 
 
 
-# Jump to Terraform source [generic/docker_compose_host](generic/docker_compose_host)
+# [generic/docker_compose_host](generic/docker_compose_host) source
 
 # docker_compose_host
 
@@ -1233,12 +1233,12 @@ version: "3"
 
 
 
-# Jump to Terraform source [google_cloud/](google_cloud/)
+# [google_cloud/](google_cloud/) source
 
 # Google Cloud Platform Examples
 
 
-# Jump to Terraform source [google_cloud/camunda](google_cloud/camunda)
+# [google_cloud/camunda](google_cloud/camunda) source
 
 ## Provisioning Camunda on Cloud Run + Cloud SQL, using Terraform and Cloud Build
 
@@ -1281,7 +1281,7 @@ Also needed to setup GCR creds in docker
 
 
 
-# Jump to Terraform source [google_cloud/CQRS_bigquery_memorystore](google_cloud/CQRS_bigquery_memorystore)
+# [google_cloud/CQRS_bigquery_memorystore](google_cloud/CQRS_bigquery_memorystore) source
 
 ## CQRS Bigquery Memorystore Timeseries Analytics with Self Testing Example
 

@@ -10,7 +10,7 @@ class AddRepoLink extends Transform {
     }
     _transform(data, encoding, callback) {
       if (this.link)
-        this.push(`\n# Jump to Terraform source [${this.link}](${this.link})`);
+        this.push(`\n# [${this.link}](${this.link}) source`);
       this.push(data);
       callback();
     }
