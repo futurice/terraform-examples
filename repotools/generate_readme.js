@@ -83,6 +83,7 @@ glob('*/**/*.md', (err, files) => {
     var work = Promise.resolve();
     // Add each section
     files.map(file => {
+        if (file.indexOf("node_modules") >= 0) return;
         work = work.then(() => new Promise( (resolve) => {
             console.log(file);
             fs.createReadStream(file)
