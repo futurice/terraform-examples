@@ -1309,3 +1309,1246 @@ Shut down memorystore
 
 
 
+
+# [Jump to node_modules/balanced-match](node_modules/balanced-match)
+
+(MIT)
+
+Copyright (c) 2013 Julian Gruber &lt;julian@juliangruber.com&gt;
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+
+
+# [Jump to node_modules/balanced-match](node_modules/balanced-match)
+
+# balanced-match
+
+Match balanced string pairs, like `{` and `}` or `<b>` and `</b>`. Supports regular expressions as well!
+
+[![build status](https://secure.travis-ci.org/juliangruber/balanced-match.svg)](http://travis-ci.org/juliangruber/balanced-match)
+[![downloads](https://img.shields.io/npm/dm/balanced-match.svg)](https://www.npmjs.org/package/balanced-match)
+
+[![testling badge](https://ci.testling.com/juliangruber/balanced-match.png
+
+
+# [Jump to node_modules/balanced-match](node_modules/balanced-match)
+
+)](https://ci.testling.com/juliangruber/balanced-match)
+
+## Example
+
+Get the first matching pair of braces:
+
+```js
+var balanced = require('balanced-match');
+
+console.log(balanced('{', '}', 'pre{in{nested}}post'));
+console.log(balanced('{', '}', 'pre{first}between{second}post'));
+console.log(balanced(/\s+\{\s+/, /\s+\}\s+/, 'pre  {   in{nest}   }  post'));
+```
+
+The matches are:
+
+```bash
+$ node example.js
+{ start: 3, end: 14, pre: 'pre', body: 'in{nested}', post: 'post' }
+{ start: 3,
+  end: 9,
+  pre: 'pre',
+  body: 'first',
+  post: 'between{second}post' }
+{ start: 3, end: 17, pre: 'pre', body: 'in{nest}', post: 'post' }
+```
+
+## API
+
+### var m = balanced(a, b, str)
+
+For the first non-nested matching pair of `a` and `b` in `str`, return an
+object with those keys:
+
+* **start** the index of the first match of `a`
+* **end** the index of the matching `b`
+* **pre** the preamble, `a` and `b` not included
+* **body** the match, `a` and `b` not included
+* **post** the postscript, `a` and `b` not included
+
+If there's no match, `undefined` will be returned.
+
+If the `str` contains more `a` than `b` / there are unmatched pairs, the first match that was closed will be used. For example, `{{a}` will match `['{', 'a', '']` and `{a}}` will match `['', 'a', '}']`.
+
+### var r = balanced.range(a, b, str)
+
+For the first non-nested matching pair of `a` and `b` in `str`, return an
+array with indexes: `[ <a index>, <b index> ]`.
+
+If there's no match, `undefined` will be returned.
+
+If the `str` contains more `a` than `b` / there are unmatched pairs, the first match that was closed will be used. For example, `{{a}` will match `[ 1, 3 ]` and `{a}}` will match `[0, 2]`.
+
+## Installation
+
+With [npm](https://npmjs.org) do:
+
+```bash
+npm install balanced-match
+```
+
+## License
+
+(MIT)
+
+Copyright (c) 2013 Julian Gruber &lt;julian@juliangruber.com&gt;
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+
+
+# [Jump to node_modules/brace-expansion](node_modules/brace-expansion)
+
+# brace-expansion
+
+[Brace expansion](https://www.gnu.org/software/bash/manual/html_node/Brace-Expansion.html), 
+as known from sh/bash, in JavaScript.
+
+[![build status](https://secure.travis-ci.org/juliangruber/brace-expansion.svg)](http://travis-ci.org/juliangruber/brace-expansion)
+[![downloads](https://img.shields.io/npm/dm/brace-expansion.svg)](https://www.npmjs.org/package/brace-expansion)
+[![Greenkeeper badge](https://badges.greenkeeper.io/juliangruber/brace-expansion.svg)](https://greenkeeper.io/)
+
+[![testling badge](https://ci.testling.com/juliangruber/brace-expansion.png)](https://ci.testling.com/juliangruber/brace-expansion)
+
+## Example
+
+```js
+var expand = require('brace-expansion');
+
+expand('file-{a,b,c}.jpg')
+// => ['file-a.jpg', 'file-b.jpg', 'file-c.jpg']
+
+expand('-v{,,}')
+// => ['-v', '-v', '-v']
+
+expand('file{0..2}.jpg')
+// => ['file0.jpg', 'file1.jpg', 'file2.jpg']
+
+expand('file-{a..c}.jpg')
+// => ['file-a.jpg', 'file-b.jpg', 'file-c.jpg']
+
+expand('file{2..0}.jpg')
+// => ['file2.jpg', 'file1.jpg', 'file0.jpg']
+
+expand('file{0..4..2}.jpg')
+// => ['file0.jpg', 'file2.jpg', 'file4.jpg']
+
+expand('file-{a..e..2}.jpg')
+// => ['file-a.jpg', 'file-c.jpg', 'file-e.jpg']
+
+expand('file{00..10..5}.jpg')
+// => ['file00.jpg', 'file05.jpg', 'file10.jpg']
+
+expand('{{A..C},{a..c}}')
+// => ['A', 'B', 'C', 'a', 'b', 'c']
+
+expand('ppp{,config,oe{,conf}}')
+// => ['ppp', 'pppconfig', 'pppoe', 'pppoeconf']
+```
+
+## API
+
+```js
+var expand = require('brace-expansion');
+```
+
+### var expanded = expand(str)
+
+Return an array of all possible and valid expansions of `str`. If none are
+found, `[str]` is returned.
+
+Valid expansions are:
+
+```js
+/^(.*,)+(.+)?$/
+// {a,b,...}
+```
+
+A comma separated list of options, like `{a,b}` or `{a,{b,c}}` or `{,a,}`.
+
+```js
+/^-?\d+\.\.-?\d+(\.\.-?\d+)?$/
+// {x..y[..incr]}
+```
+
+A numeric sequence from `x` to `y` inclusive, with optional increment.
+If `x` or `y` start with a leading `0`, all the numbers will be padded
+to have equal length. Negative numbers and backwards iteration work too.
+
+```js
+/^-?\d+\.\.-?\d+(\.\.-?\d+)?$/
+// {x..y[..incr]}
+```
+
+An alphabetic sequence from `x` to `y` inclusive, with optional increment.
+`x` and `y` must be exactly one character, and if given, `incr` must be a
+number.
+
+For compatibility reasons, the string `${` is not eligible for brace expansion.
+
+## Installation
+
+With [npm](https://npmjs.org) do:
+
+```bash
+npm install brace-expansion
+```
+
+## Contributors
+
+- [Julian Gruber](https://github.com/juliangruber)
+- [Isaac Z. Schlueter](https://github.com/isaacs)
+
+## Sponsors
+
+This module is proudly supported by my [Sponsors](https://github.com/juliangruber/sponsors)!
+
+Do you want to support modules like this to improve their quality, stability and weigh in on new features? Then please consider donating to my [Patreon](https://www.patreon.com/juliangruber). Not sure how much of my modules you're using? Try [feross/thanks](https://github.com/feross/thanks)!
+
+## License
+
+(MIT)
+
+Copyright (c) 2013 Julian Gruber &lt;julian@juliangruber.com&gt;
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+
+
+# [Jump to node_modules/fs.realpath](node_modules/fs.realpath)
+
+# fs.realpath
+
+A backwards-compatible fs.realpath for Node v6 and above
+
+In Node v6, the JavaScript implementation of fs.realpath was replaced
+with a faster (but less resilient) native implementation.  That raises
+new and platform-specific errors and cannot handle long or excessively
+symlink-looping paths.
+
+This module handles those cases by detecting the new errors and
+falling back to the JavaScript implementation.  On versions of Node
+prior to v6, it has no effect.
+
+## USAGE
+
+```js
+var rp = require('fs.realpath')
+
+// async version
+rp.realpath(someLongAndLoopingPath, function (er, real) {
+  // the ELOOP was handled, but it was a bit slower
+})
+
+// sync version
+var real = rp.realpathSync(someLongAndLoopingPath)
+
+// monkeypatch at your own risk!
+// This replaces the fs.realpath/fs.realpathSync builtins
+rp.monkeypatch()
+
+// un-do the monkeypatching
+rp.unmonkeypatch()
+```
+
+
+
+# [Jump to node_modules/glob](node_modules/glob)
+
+## 7.0
+
+- Raise error if `options.cwd` is specified, and not a directory
+
+## 6.0
+
+- Remove comment and negation pattern support
+- Ignore patterns are always in `dot:true` mode
+
+## 5.0
+
+- Deprecate comment and negation patterns
+- Fix regression in `mark` and `nodir` options from making all cache
+  keys absolute path.
+- Abort if `fs.readdir` returns an error that's unexpected
+- Don't emit `match` events for ignored items
+- Treat ENOTSUP like ENOTDIR in readdir
+
+## 4.5
+
+- Add `options.follow` to always follow directory symlinks in globstar
+- Add `options.realpath` to call `fs.realpath` on all results
+- Always cache based on absolute path
+
+## 4.4
+
+- Add `options.ignore`
+- Fix handling of broken symlinks
+
+## 4.3
+
+- Bump minimatch to 2.x
+- Pass all tests on Windows
+
+## 4.2
+
+- Add `glob.hasMagic` function
+- Add `options.nodir` flag
+
+## 4.1
+
+- Refactor sync and async implementations for performance
+- Throw if callback provided to sync glob function
+- Treat symbolic links in globstar results the same as Bash 4.3
+
+## 4.0
+
+- Use `^` for dependency versions (bumped major because this breaks
+  older npm versions)
+- Ensure callbacks are only ever called once
+- switch to ISC license
+
+## 3.x
+
+- Rewrite in JavaScript
+- Add support for setting root, cwd, and windows support
+- Cache many fs calls
+- Add globstar support
+- emit match events
+
+## 2.x
+
+- Use `glob.h` and `fnmatch.h` from NetBSD
+
+## 1.x
+
+- `glob.h` static binding.
+
+
+
+# [Jump to node_modules/glob](node_modules/glob)
+
+# Glob
+
+Match files using the patterns the shell uses, like stars and stuff.
+
+[![Build Status](https://travis-ci.org/isaacs/node-glob.svg?branch=master)](https://travis-ci.org/isaacs/node-glob/) [![Build Status](https://ci.appveyor.com/api/projects/status/kd7f3yftf7unxlsx?svg=true)](https://ci.appveyor.com/project/isaacs/node-glob) [![Coverage Status](https://coveralls.io/repos/isaacs/node-glob/badge.svg?branch=master&service=github)](https://coveralls.io/github/isaacs/node-glob?branch=master)
+
+This is a glob implementation in JavaScript.  It uses the `minimatch`
+library to do its matching.
+
+![](logo/glob.png)
+
+## Usage
+
+Install with npm
+
+```
+npm i glob
+```
+
+```javascript
+var glob = require("glob")
+
+// options is optional
+glob("**/*.js", options, function (er, files) {
+  // files is an array of filenames.
+  // If the `nonull` option is set, and nothing
+  // was found, then files is ["**/*.js"]
+  // er is an error object or null.
+})
+```
+
+## Glob Primer
+
+"Globs" are the patterns you type when you do stuff like `ls *.js` on
+the command line, or put `build/*` in a `.gitignore` file.
+
+Before parsing the path part patterns, braced sections are expanded
+into a set.  Braced sections start with `{` and end with `}`, with any
+number of comma-delimited sections within.  Braced sections may contain
+slash characters, so `a{/b/c,bcd}` would expand into `a/b/c` and `abcd`.
+
+The following characters have special magic meaning when used in a
+path portion:
+
+* `*` Matches 0 or more characters in a single path portion
+* `?` Matches 1 character
+* `[...]` Matches a range of characters, similar to a RegExp range.
+  If the first character of the range is `!` or `^` then it matches
+  any character not in the range.
+* `!(pattern|pattern|pattern)` Matches anything that does not match
+  any of the patterns provided.
+* `?(pattern|pattern|pattern)` Matches zero or one occurrence of the
+  patterns provided.
+* `+(pattern|pattern|pattern)` Matches one or more occurrences of the
+  patterns provided.
+* `*(a|b|c)` Matches zero or more occurrences of the patterns provided
+* `@(pattern|pat*|pat?erN)` Matches exactly one of the patterns
+  provided
+* `**` If a "globstar" is alone in a path portion, then it matches
+  zero or more directories and subdirectories searching for matches.
+  It does not crawl symlinked directories.
+
+### Dots
+
+If a file or directory path portion has a `.` as the first character,
+then it will not match any glob pattern unless that pattern's
+corresponding path part also has a `.` as its first character.
+
+For example, the pattern `a/.*/c` would match the file at `a/.b/c`.
+However the pattern `a/*/c` would not, because `*` does not start with
+a dot character.
+
+You can make glob treat dots as normal characters by setting
+`dot:true` in the options.
+
+### Basename Matching
+
+If you set `matchBase:true` in the options, and the pattern has no
+slashes in it, then it will seek for any file anywhere in the tree
+with a matching basename.  For example, `*.js` would match
+`test/simple/basic.js`.
+
+### Empty Sets
+
+If no matching files are found, then an empty array is returned.  This
+differs from the shell, where the pattern itself is returned.  For
+example:
+
+    $ echo a*s*d*f
+    a*s*d*f
+
+To get the bash-style behavior, set the `nonull:true` in the options.
+
+### See Also:
+
+* `man sh`
+* `man bash` (Search for "Pattern Matching")
+* `man 3 fnmatch`
+* `man 5 gitignore`
+* [minimatch documentation](https://github.com/isaacs/minimatch)
+
+## glob.hasMagic(pattern, [options])
+
+Returns `true` if there are any special characters in the pattern, and
+`false` otherwise.
+
+Note that the options affect the results.  If `noext:true` is set in
+the options object, then `+(a|b)` will not be considered a magic
+pattern.  If the pattern has a brace expansion, like `a/{b/c,x/y}`
+then that is considered magical, unless `nobrace:true` is set in the
+options.
+
+## glob(pattern, [options], cb)
+
+* `pattern` `{String}` Pattern to be matched
+* `options` `{Object}`
+* `cb` `{Function}`
+  * `err` `{Error | null}`
+  * `matches` `{Array<String>}` filenames found matching the pattern
+
+Perform an asynchronous glob search.
+
+## glob.sync(pattern, [options])
+
+* `pattern` `{String}` Pattern to be matched
+* `options` `{Object}`
+* return: `{Array<String>}` filenames found matching the pattern
+
+Perform a synchronous glob search.
+
+## Class: glob.Glob
+
+Create a Glob object by instantiating the `glob.Glob` class.
+
+```javascript
+var Glob = require("glob").Glob
+var mg = new Glob(pattern, options, cb)
+```
+
+It's an EventEmitter, and starts walking the filesystem to find matches
+immediately.
+
+### new glob.Glob(pattern, [options], [cb])
+
+* `pattern` `{String}` pattern to search for
+* `options` `{Object}`
+* `cb` `{Function}` Called when an error occurs, or matches are found
+  * `err` `{Error | null}`
+  * `matches` `{Array<String>}` filenames found matching the pattern
+
+Note that if the `sync` flag is set in the options, then matches will
+be immediately available on the `g.found` member.
+
+### Properties
+
+* `minimatch` The minimatch object that the glob uses.
+* `options` The options object passed in.
+* `aborted` Boolean which is set to true when calling `abort()`.  There
+  is no way at this time to continue a glob search after aborting, but
+  you can re-use the statCache to avoid having to duplicate syscalls.
+* `cache` Convenience object.  Each field has the following possible
+  values:
+  * `false` - Path does not exist
+  * `true` - Path exists
+  * `'FILE'` - Path exists, and is not a directory
+  * `'DIR'` - Path exists, and is a directory
+  * `[file, entries, ...]` - Path exists, is a directory, and the
+    array value is the results of `fs.readdir`
+* `statCache` Cache of `fs.stat` results, to prevent statting the same
+  path multiple times.
+* `symlinks` A record of which paths are symbolic links, which is
+  relevant in resolving `**` patterns.
+* `realpathCache` An optional object which is passed to `fs.realpath`
+  to minimize unnecessary syscalls.  It is stored on the instantiated
+  Glob object, and may be re-used.
+
+### Events
+
+* `end` When the matching is finished, this is emitted with all the
+  matches found.  If the `nonull` option is set, and no match was found,
+  then the `matches` list contains the original pattern.  The matches
+  are sorted, unless the `nosort` flag is set.
+* `match` Every time a match is found, this is emitted with the specific
+  thing that matched. It is not deduplicated or resolved to a realpath.
+* `error` Emitted when an unexpected error is encountered, or whenever
+  any fs error occurs if `options.strict` is set.
+* `abort` When `abort()` is called, this event is raised.
+
+### Methods
+
+* `pause` Temporarily stop the search
+* `resume` Resume the search
+* `abort` Stop the search forever
+
+### Options
+
+All the options that can be passed to Minimatch can also be passed to
+Glob to change pattern matching behavior.  Also, some have been added,
+or have glob-specific ramifications.
+
+All options are false by default, unless otherwise noted.
+
+All options are added to the Glob object, as well.
+
+If you are running many `glob` operations, you can pass a Glob object
+as the `options` argument to a subsequent operation to shortcut some
+`stat` and `readdir` calls.  At the very least, you may pass in shared
+`symlinks`, `statCache`, `realpathCache`, and `cache` options, so that
+parallel glob operations will be sped up by sharing information about
+the filesystem.
+
+* `cwd` The current working directory in which to search.  Defaults
+  to `process.cwd()`.
+* `root` The place where patterns starting with `/` will be mounted
+  onto.  Defaults to `path.resolve(options.cwd, "/")` (`/` on Unix
+  systems, and `C:\` or some such on Windows.)
+* `dot` Include `.dot` files in normal matches and `globstar` matches.
+  Note that an explicit dot in a portion of the pattern will always
+  match dot files.
+* `nomount` By default, a pattern starting with a forward-slash will be
+  "mounted" onto the root setting, so that a valid filesystem path is
+  returned.  Set this flag to disable that behavior.
+* `mark` Add a `/` character to directory matches.  Note that this
+  requires additional stat calls.
+* `nosort` Don't sort the results.
+* `stat` Set to true to stat *all* results.  This reduces performance
+  somewhat, and is completely unnecessary, unless `readdir` is presumed
+  to be an untrustworthy indicator of file existence.
+* `silent` When an unusual error is encountered when attempting to
+  read a directory, a warning will be printed to stderr.  Set the
+  `silent` option to true to suppress these warnings.
+* `strict` When an unusual error is encountered when attempting to
+  read a directory, the process will just continue on in search of
+  other matches.  Set the `strict` option to raise an error in these
+  cases.
+* `cache` See `cache` property above.  Pass in a previously generated
+  cache object to save some fs calls.
+* `statCache` A cache of results of filesystem information, to prevent
+  unnecessary stat calls.  While it should not normally be necessary
+  to set this, you may pass the statCache from one glob() call to the
+  options object of another, if you know that the filesystem will not
+  change between calls.  (See "Race Conditions" below.)
+* `symlinks` A cache of known symbolic links.  You may pass in a
+  previously generated `symlinks` object to save `lstat` calls when
+  resolving `**` matches.
+* `sync` DEPRECATED: use `glob.sync(pattern, opts)` instead.
+* `nounique` In some cases, brace-expanded patterns can result in the
+  same file showing up multiple times in the result set.  By default,
+  this implementation prevents duplicates in the result set.  Set this
+  flag to disable that behavior.
+* `nonull` Set to never return an empty set, instead returning a set
+  containing the pattern itself.  This is the default in glob(3).
+* `debug` Set to enable debug logging in minimatch and glob.
+* `nobrace` Do not expand `{a,b}` and `{1..3}` brace sets.
+* `noglobstar` Do not match `**` against multiple filenames.  (Ie,
+  treat it as a normal `*` instead.)
+* `noext` Do not match `+(a|b)` "extglob" patterns.
+* `nocase` Perform a case-insensitive match.  Note: on
+  case-insensitive filesystems, non-magic patterns will match by
+  default, since `stat` and `readdir` will not raise errors.
+* `matchBase` Perform a basename-only match if the pattern does not
+  contain any slash characters.  That is, `*.js` would be treated as
+  equivalent to `**/*.js`, matching all js files in all directories.
+* `nodir` Do not match directories, only files.  (Note: to match
+  *only* directories, simply put a `/` at the end of the pattern.)
+* `ignore` Add a pattern or an array of glob patterns to exclude matches.
+  Note: `ignore` patterns are *always* in `dot:true` mode, regardless
+  of any other settings.
+* `follow` Follow symlinked directories when expanding `**` patterns.
+  Note that this can result in a lot of duplicate references in the
+  presence of cyclic links.
+* `realpath` Set to true to call `fs.realpath` on all of the results.
+  In the case of a symlink that cannot be resolved, the full absolute
+  path to the matched entry is returned (though it will usually be a
+  broken symlink)
+* `absolute` Set to true to always receive absolute paths for matched
+  files.  Unlike `realpath`, this also affects the values returned in
+  the `match` event.
+
+## Comparisons to other fnmatch/glob implementations
+
+While strict compliance with the existing standards is a worthwhile
+goal, some discrepancies exist between node-glob and other
+implementations, and are intentional.
+
+The double-star character `**` is supported by default, unless the
+`noglobstar` flag is set.  This is supported in the manner of bsdglob
+and bash 4.3, where `**` only has special significance if it is the only
+thing in a path part.  That is, `a/**/b` will match `a/x/y/b`, but
+`a/**b` will not.
+
+Note that symlinked directories are not crawled as part of a `**`,
+though their contents may match against subsequent portions of the
+pattern.  This prevents infinite loops and duplicates and the like.
+
+If an escaped pattern has no matches, and the `nonull` flag is set,
+then glob returns the pattern as-provided, rather than
+interpreting the character escapes.  For example,
+`glob.match([], "\\*a\\?")` will return `"\\*a\\?"` rather than
+`"*a?"`.  This is akin to setting the `nullglob` option in bash, except
+that it does not resolve escaped pattern characters.
+
+If brace expansion is not disabled, then it is performed before any
+other interpretation of the glob pattern.  Thus, a pattern like
+`+(a|{b),c)}`, which would not be valid in bash or zsh, is expanded
+**first** into the set of `+(a|b)` and `+(a|c)`, and those patterns are
+checked for validity.  Since those two are valid, matching proceeds.
+
+### Comments and Negation
+
+Previously, this module let you mark a pattern as a "comment" if it
+started with a `#` character, or a "negated" pattern if it started
+with a `!` character.
+
+These options were deprecated in version 5, and removed in version 6.
+
+To specify things that should not match, use the `ignore` option.
+
+## Windows
+
+**Please only use forward-slashes in glob expressions.**
+
+Though windows uses either `/` or `\` as its path separator, only `/`
+characters are used by this glob implementation.  You must use
+forward-slashes **only** in glob expressions.  Back-slashes will always
+be interpreted as escape characters, not path separators.
+
+Results from absolute patterns such as `/foo/*` are mounted onto the
+root setting using `path.join`.  On windows, this will by default result
+in `/foo/*` matching `C:\foo\bar.txt`.
+
+## Race Conditions
+
+Glob searching, by its very nature, is susceptible to race conditions,
+since it relies on directory walking and such.
+
+As a result, it is possible that a file that exists when glob looks for
+it may have been deleted or modified by the time it returns the result.
+
+As part of its internal implementation, this program caches all stat
+and readdir calls that it makes, in order to cut down on system
+overhead.  However, this also makes it even more susceptible to races,
+especially if the cache or statCache objects are reused between glob
+calls.
+
+Users are thus advised not to use a glob result as a guarantee of
+filesystem state in the face of rapid changes.  For the vast majority
+of operations, this is never a problem.
+
+## Glob Logo
+Glob's logo was created by [Tanya Brassie](http://tanyabrassie.com/). Logo files can be found [here](https://github.com/isaacs/node-glob/tree/master/logo).
+
+The logo is licensed under a [Creative Commons Attribution-ShareAlike 4.0 International License](https://creativecommons.org/licenses/by-sa/4.0/).
+
+## Contributing
+
+Any change to behavior (including bugfixes) must come with a test.
+
+Patches that fail tests or reduce performance will be rejected.
+
+```
+# to run tests
+npm test
+
+# to re-generate test fixtures
+npm run test-regen
+
+# to benchmark against bash/zsh
+npm run bench
+
+# to profile javascript
+npm run prof
+```
+
+![](oh-my-glob.gif)
+
+
+
+# [Jump to node_modules/inflight](node_modules/inflight)
+
+# inflight
+
+Add callbacks to requests in flight to avoid async duplication
+
+## USAGE
+
+```javascript
+var inflight = require('inflight')
+
+// some request that does some stuff
+function req(key, callback) {
+  // key is any random string.  like a url or filename or whatever.
+  //
+  // will return either a falsey value, indicating that the
+  // request for this key is already in flight, or a new callback
+  // which when called will call all callbacks passed to inflightk
+  // with the same key
+  callback = inflight(key, callback)
+
+  // If we got a falsey value back, then there's already a req going
+  if (!callback) return
+
+  // this is where you'd fetch the url or whatever
+  // callback is also once()-ified, so it can safely be assigned
+  // to multiple events etc.  First call wins.
+  setTimeout(function() {
+    callback(null, key)
+  }, 100)
+}
+
+// only assigns a single setTimeout
+// when it dings, all cbs get called
+req('foo', cb1)
+req('foo', cb2)
+req('foo', cb3)
+req('foo', cb4)
+```
+
+
+
+# [Jump to node_modules/inherits](node_modules/inherits)
+
+Browser-friendly inheritance fully compatible with standard node.js
+[inherits](http://nodejs.org/api/util.html#util_util_inherits_constructor_superconstructor).
+
+This package exports standard `inherits` from node.js `util` module in
+node environment, but also provides alternative browser-friendly
+implementation through [browser
+field](https://gist.github.com/shtylman/4339901). Alternative
+implementation is a literal copy of standard one located in standalone
+module to avoid requiring of `util`. It also has a shim for old
+browsers with no `Object.create` support.
+
+While keeping you sure you are using standard `inherits`
+implementation in node.js environment, it allows bundlers such as
+[browserify](https://github.com/substack/node-browserify) to not
+include full `util` package to your client code if all you need is
+just `inherits` function. It worth, because browser shim for `util`
+package is large and `inherits` is often the single function you need
+from it.
+
+It's recommended to use this package instead of
+`require('util').inherits` for any code that has chances to be used
+not only in node.js but in browser too.
+
+## usage
+
+```js
+var inherits = require('inherits');
+// then use exactly as the standard one
+```
+
+## note on version ~1.0
+
+Version ~1.0 had completely different motivation and is not compatible
+neither with 2.0 nor with standard node.js `inherits`.
+
+If you are using version ~1.0 and planning to switch to ~2.0, be
+careful:
+
+* new version uses `super_` instead of `super` for referencing
+  superclass
+* new version overwrites current prototype while old one preserves any
+  existing fields on it
+
+
+
+# [Jump to node_modules/minimatch](node_modules/minimatch)
+
+# minimatch
+
+A minimal matching utility.
+
+[![Build Status](https://secure.travis-ci.org/isaacs/minimatch.svg)](http://travis-ci.org/isaacs/minimatch)
+
+
+This is the matching library used internally by npm.
+
+It works by converting glob expressions into JavaScript `RegExp`
+objects.
+
+## Usage
+
+```javascript
+var minimatch = require("minimatch")
+
+minimatch("bar.foo", "*.foo") // true!
+minimatch("bar.foo", "*.bar") // false!
+minimatch("bar.foo", "*.+(bar|foo)", { debug: true }) // true, and noisy!
+```
+
+## Features
+
+Supports these glob features:
+
+* Brace Expansion
+* Extended glob matching
+* "Globstar" `**` matching
+
+See:
+
+* `man sh`
+* `man bash`
+* `man 3 fnmatch`
+* `man 5 gitignore`
+
+## Minimatch Class
+
+Create a minimatch object by instantiating the `minimatch.Minimatch` class.
+
+```javascript
+var Minimatch = require("minimatch").Minimatch
+var mm = new Minimatch(pattern, options)
+```
+
+### Properties
+
+* `pattern` The original pattern the minimatch object represents.
+* `options` The options supplied to the constructor.
+* `set` A 2-dimensional array of regexp or string expressions.
+  Each row in the
+  array corresponds to a brace-expanded pattern.  Each item in the row
+  corresponds to a single path-part.  For example, the pattern
+  `{a,b/c}/d` would expand to a set of patterns like:
+
+        [ [ a, d ]
+        , [ b, c, d ] ]
+
+    If a portion of the pattern doesn't have any "magic" in it
+    (that is, it's something like `"foo"` rather than `fo*o?`), then it
+    will be left as a string rather than converted to a regular
+    expression.
+
+* `regexp` Created by the `makeRe` method.  A single regular expression
+  expressing the entire pattern.  This is useful in cases where you wish
+  to use the pattern somewhat like `fnmatch(3)` with `FNM_PATH` enabled.
+* `negate` True if the pattern is negated.
+* `comment` True if the pattern is a comment.
+* `empty` True if the pattern is `""`.
+
+### Methods
+
+* `makeRe` Generate the `regexp` member if necessary, and return it.
+  Will return `false` if the pattern is invalid.
+* `match(fname)` Return true if the filename matches the pattern, or
+  false otherwise.
+* `matchOne(fileArray, patternArray, partial)` Take a `/`-split
+  filename, and match it against a single row in the `regExpSet`.  This
+  method is mainly for internal use, but is exposed so that it can be
+  used by a glob-walker that needs to avoid excessive filesystem calls.
+
+All other methods are internal, and will be called as necessary.
+
+### minimatch(path, pattern, options)
+
+Main export.  Tests a path against the pattern using the options.
+
+```javascript
+var isJS = minimatch(file, "*.js", { matchBase: true })
+```
+
+### minimatch.filter(pattern, options)
+
+Returns a function that tests its
+supplied argument, suitable for use with `Array.filter`.  Example:
+
+```javascript
+var javascripts = fileList.filter(minimatch.filter("*.js", {matchBase: true}))
+```
+
+### minimatch.match(list, pattern, options)
+
+Match against the list of
+files, in the style of fnmatch or glob.  If nothing is matched, and
+options.nonull is set, then return a list containing the pattern itself.
+
+```javascript
+var javascripts = minimatch.match(fileList, "*.js", {matchBase: true}))
+```
+
+### minimatch.makeRe(pattern, options)
+
+Make a regular expression object from the pattern.
+
+## Options
+
+All options are `false` by default.
+
+### debug
+
+Dump a ton of stuff to stderr.
+
+### nobrace
+
+Do not expand `{a,b}` and `{1..3}` brace sets.
+
+### noglobstar
+
+Disable `**` matching against multiple folder names.
+
+### dot
+
+Allow patterns to match filenames starting with a period, even if
+the pattern does not explicitly have a period in that spot.
+
+Note that by default, `a/**/b` will **not** match `a/.d/b`, unless `dot`
+is set.
+
+### noext
+
+Disable "extglob" style patterns like `+(a|b)`.
+
+### nocase
+
+Perform a case-insensitive match.
+
+### nonull
+
+When a match is not found by `minimatch.match`, return a list containing
+the pattern itself if this option is set.  When not set, an empty list
+is returned if there are no matches.
+
+### matchBase
+
+If set, then patterns without slashes will be matched
+against the basename of the path if it contains slashes.  For example,
+`a?b` would match the path `/xyz/123/acb`, but not `/xyz/acb/123`.
+
+### nocomment
+
+Suppress the behavior of treating `#` at the start of a pattern as a
+comment.
+
+### nonegate
+
+Suppress the behavior of treating a leading `!` character as negation.
+
+### flipNegate
+
+Returns from negate expressions the same as if they were not negated.
+(Ie, true on a hit, false on a miss.)
+
+
+## Comparisons to other fnmatch/glob implementations
+
+While strict compliance with the existing standards is a worthwhile
+goal, some discrepancies exist between minimatch and other
+implementations, and are intentional.
+
+If the pattern starts with a `!` character, then it is negated.  Set the
+`nonegate` flag to suppress this behavior, and treat leading `!`
+characters normally.  This is perhaps relevant if you wish to start the
+pattern with a negative extglob pattern like `!(a|B)`.  Multiple `!`
+characters at the start of a pattern will negate the pattern multiple
+times.
+
+If a pattern starts with `#`, then it is treated as a comment, and
+will not match anything.  Use `\#` to match a literal `#` at the
+start of a line, or set the `nocomment` flag to suppress this behavior.
+
+The double-star character `**` is supported by default, unless the
+`noglobstar` flag is set.  This is supported in the manner of bsdglob
+and bash 4.1, where `**` only has special significance if it is the only
+thing in a path part.  That is, `a/**/b` will match `a/x/y/b`, but
+`a/**b` will not.
+
+If an escaped pattern has no matches, and the `nonull` flag is set,
+then minimatch.match returns the pattern as-provided, rather than
+interpreting the character escapes.  For example,
+`minimatch.match([], "\\*a\\?")` will return `"\\*a\\?"` rather than
+`"*a?"`.  This is akin to setting the `nullglob` option in bash, except
+that it does not resolve escaped pattern characters.
+
+If brace expansion is not disabled, then it is performed before any
+other interpretation of the glob pattern.  Thus, a pattern like
+`+(a|{b),c)}`, which would not be valid in bash or zsh, is expanded
+**first** into the set of `+(a|b)` and `+(a|c)`, and those patterns are
+checked for validity.  Since those two are valid, matching proceeds.
+
+
+
+# [Jump to node_modules/once](node_modules/once)
+
+# once
+
+Only call a function once.
+
+## usage
+
+```javascript
+var once = require('once')
+
+function load (file, cb) {
+  cb = once(cb)
+  loader.load('file')
+  loader.once('load', cb)
+  loader.once('error', cb)
+}
+```
+
+Or add to the Function.prototype in a responsible way:
+
+```javascript
+// only has to be done once
+require('once').proto()
+
+function load (file, cb) {
+  cb = cb.once()
+  loader.load('file')
+  loader.once('load', cb)
+  loader.once('error', cb)
+}
+```
+
+Ironically, the prototype feature makes this module twice as
+complicated as necessary.
+
+To check whether you function has been called, use `fn.called`. Once the
+function is called for the first time the return value of the original
+function is saved in `fn.value` and subsequent calls will continue to
+return this value.
+
+```javascript
+var once = require('once')
+
+function load (cb) {
+  cb = once(cb)
+  var stream = createStream()
+  stream.once('data', cb)
+  stream.once('end', function () {
+    if (!cb.called) cb(new Error('not found'))
+  })
+}
+```
+
+## `once.strict(func)`
+
+Throw an error if the function is called twice.
+
+Some functions are expected to be called only once. Using `once` for them would
+potentially hide logical errors.
+
+In the example below, the `greet` function has to call the callback only once:
+
+```javascript
+function greet (name, cb) {
+  // return is missing from the if statement
+  // when no name is passed, the callback is called twice
+  if (!name) cb('Hello anonymous')
+  cb('Hello ' + name)
+}
+
+function log (msg) {
+  console.log(msg)
+}
+
+// this will print 'Hello anonymous' but the logical error will be missed
+greet(null, once(msg))
+
+// once.strict will print 'Hello anonymous' and throw an error when the callback will be called the second time
+greet(null, once.strict(msg))
+```
+
+
+
+# [Jump to node_modules/path-is-absolute](node_modules/path-is-absolute)
+
+# path-is-absolute [![Build Status](https://travis-ci.org/sindresorhus/path-is-absolute.svg?branch=master)](https://travis-ci.org/sindresorhus/path-is-absolute)
+
+> Node.js 0.12 [`path.isAbsolute()`](http://nodejs.org/api/path.html#path_path_isabsolute_path) [ponyfill](https://ponyfill.com)
+
+
+## Install
+
+```
+$ npm install --save path-is-absolute
+```
+
+
+## Usage
+
+```js
+const pathIsAbsolute = require('path-is-absolute');
+
+// Running on Linux
+pathIsAbsolute('/home/foo');
+//=> true
+pathIsAbsolute('C:/Users/foo');
+//=> false
+
+// Running on Windows
+pathIsAbsolute('C:/Users/foo');
+//=> true
+pathIsAbsolute('/home/foo');
+//=> false
+
+// Running on any OS
+pathIsAbsolute.posix('/home/foo');
+//=> true
+pathIsAbsolute.posix('C:/Users/foo');
+//=> false
+pathIsAbsolute.win32('C:/Users/foo');
+//=> true
+pathIsAbsolute.win32('/home/foo');
+//=> false
+```
+
+
+## API
+
+See the [`path.isAbsolute()` docs](http://nodejs.org/api/path.html#path_path_isabsolute_path).
+
+### pathIsAbsolute(path)
+
+### pathIsAbsolute.posix(path)
+
+POSIX specific version.
+
+### pathIsAbsolute.win32(path)
+
+Windows specific version.
+
+
+## License
+
+MIT © [Sindre Sorhus](https://sindresorhus.com)
+
+
+
+# [Jump to node_modules/wrappy](node_modules/wrappy)
+
+# wrappy
+
+Callback wrapping utility
+
+## USAGE
+
+```javascript
+var wrappy = require("wrappy")
+
+// var wrapper = wrappy(wrapperFunction)
+
+// make sure a cb is called only once
+// See also: http://npm.im/once for this specific use case
+var once = wrappy(function (cb) {
+  var called = false
+  return function () {
+    if (called) return
+    called = true
+    return cb.apply(this, arguments)
+  }
+})
+
+function printBoo () {
+  console.log('boo')
+}
+// has some rando property
+printBoo.iAmBooPrinter = true
+
+var onlyPrintOnce = once(printBoo)
+
+onlyPrintOnce() // prints 'boo'
+onlyPrintOnce() // does nothing
+
+// random property is retained!
+assert.equal(onlyPrintOnce.iAmBooPrinter, true)
+```
+
+

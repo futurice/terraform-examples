@@ -8,3 +8,4 @@
 .vscode/
 .env
 .ssh
+**/node_modules/
