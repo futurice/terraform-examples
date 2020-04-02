@@ -1,22 +1,22 @@
 
 ## Directory layout
 
-    - [_header_](_header_)
-        - [aws](aws)
-        - [aws/aws_domain_redirect](aws/aws_domain_redirect)
-        - [aws/aws_ec2_ebs_docker_host](aws/aws_ec2_ebs_docker_host)
-        - [aws/aws_lambda_api](aws/aws_lambda_api)
-        - [aws/aws_lambda_cronjob](aws/aws_lambda_cronjob)
-        - [aws/aws_mailgun_domain](aws/aws_mailgun_domain)
-        - [aws/aws_reverse_proxy](aws/aws_reverse_proxy)
-        - [aws/aws_static_site](aws/aws_static_site)
-            - [aws/websites/static_website_ssl_cloudfront_private_s3](aws/websites/static_website_ssl_cloudfront_private_s3)
-        - [azure](azure)
-        - [azure/layers](azure/layers)
-        - [generic/docker_compose_host](generic/docker_compose_host)
-        - [google_cloud](google_cloud)
-        - [google_cloud/camunda](google_cloud/camunda)
-        - [google_cloud/CQRS_bigquery_memorystore](google_cloud/CQRS_bigquery_memorystore)# Repository containing various terraform code
+- [_header_](_header_)
+- [aws](aws)
+- [aws/aws_domain_redirect](aws/aws_domain_redirect)
+- [aws/aws_ec2_ebs_docker_host](aws/aws_ec2_ebs_docker_host)
+- [aws/aws_lambda_api](aws/aws_lambda_api)
+- [aws/aws_lambda_cronjob](aws/aws_lambda_cronjob)
+- [aws/aws_mailgun_domain](aws/aws_mailgun_domain)
+- [aws/aws_reverse_proxy](aws/aws_reverse_proxy)
+- [aws/aws_static_site](aws/aws_static_site)
+- [aws/websites/static_website_ssl_cloudfront_private_s3](aws/websites/static_website_ssl_cloudfront_private_s3)
+- [azure](azure)
+- [azure/layers](azure/layers)
+- [generic/docker_compose_host](generic/docker_compose_host)
+- [google_cloud](google_cloud)
+- [google_cloud/camunda](google_cloud/camunda)
+- [google_cloud/CQRS_bigquery_memorystore](google_cloud/CQRS_bigquery_memorystore)# Repository containing various terraform code
 
 Lots of Terraform recipes for doing things, aimed for copy and pasting into projects.
 
