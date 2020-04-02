@@ -25,6 +25,7 @@ class AddSection extends Transform {
         if (file.indexOf("node_modules") >= 0) return;
         const link = directory(file);
         const level = (file.match(/\//g) || []).length;
+        console.log(level, link)
         const indentation = new Array(level * 2 + 1).join("")
         this.push(`\n${indentation}- [${link}](${link})`);
       })
