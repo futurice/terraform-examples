@@ -24,6 +24,7 @@ class AddSection extends Transform {
       this.files.map(file => {
         if (file.indexOf("node_modules") >= 0) return;
         const link = directory(file);
+        if (link == "_header_") return;
         const level = (file.match(/\//g) || []).length;
         console.log(level, link)
         const indentation = new Array(level * 2 + 1).join("")

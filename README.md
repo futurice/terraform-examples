@@ -1,7 +1,6 @@
 
 ## Directory layout
 
-- [_header_](_header_)
 - [aws](aws)
 - [aws/aws_domain_redirect](aws/aws_domain_redirect)
 - [aws/aws_ec2_ebs_docker_host](aws/aws_ec2_ebs_docker_host)
