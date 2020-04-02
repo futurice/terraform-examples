@@ -6,15 +6,31 @@ Lots of Terraform recipes for doing things, aimed for copy and pasting into proj
 - [Azure Examples](#azure-examples)
 - [Google Cloud Platform Examples](#google-cloud-platform-examples)
 
+## Directory layout
+
+- [aws](aws)
+  - [aws/aws_domain_redirect](aws/aws_domain_redirect)
+  - [aws/aws_ec2_ebs_docker_host](aws/aws_ec2_ebs_docker_host)
+  - [aws/aws_lambda_api](aws/aws_lambda_api)
+  - [aws/aws_lambda_cronjob](aws/aws_lambda_cronjob)
+  - [aws/aws_mailgun_domain](aws/aws_mailgun_domain)
+  - [aws/aws_reverse_proxy](aws/aws_reverse_proxy)
+  - [aws/aws_static_site](aws/aws_static_site)
+  - [aws/static_website_ssl_cloudfront_private_s3](aws/static_website_ssl_cloudfront_private_s3)
+- [azure](azure)
+  - [azure/layers](azure/layers)
+- [generic](generic)
+  - [generic/docker_compose_host](generic/docker_compose_host)
+- [google_cloud](google_cloud)
+  - [google_cloud/camunda](google_cloud/camunda)
+  - [google_cloud/CQRS_bigquery_memorystore](google_cloud/CQRS_bigquery_memorystore)
 
 
-# [aws/](aws/) source
-
+# [aws](aws)
 # AWS Examples
 
 
-# [aws/aws_domain_redirect](aws/aws_domain_redirect) source
-
+# [aws/aws_domain_redirect](aws/aws_domain_redirect)
 # aws_domain_redirect
 
 This module implements a domain that redirects clients to another URL. Useful for creating human-friendly shortcuts for deeper links into a site, or for dynamic links (e.g. `download.example.com` always pointing to your latest release).
@@ -89,8 +105,7 @@ Applying this **will take a very long time**, because both ACM and especially Cl
 
 
 
-# [aws/aws_ec2_ebs_docker_host](aws/aws_ec2_ebs_docker_host) source
-
+# [aws/aws_ec2_ebs_docker_host](aws/aws_ec2_ebs_docker_host)
 # aws_ec2_ebs_docker_host
 
 Creates a standalone Docker host on EC2, optionally attaching an external EBS volume for persistent data.
@@ -308,8 +323,7 @@ This should finish by giving you the `docker_tunnel_command` output. Run that in
 
 
 
-# [aws/aws_lambda_api](aws/aws_lambda_api) source
-
+# [aws/aws_lambda_api](aws/aws_lambda_api)
 # aws_lambda_api
 
 This module creates a Lambda function, and makes it available via a custom domain, complete with SSL termination: e.g. `https://api.example.com/`. This includes:
@@ -599,8 +613,7 @@ exports.handler = function(event, context, callback) {
 
 
 
-# [aws/aws_lambda_cronjob](aws/aws_lambda_cronjob) source
-
+# [aws/aws_lambda_cronjob](aws/aws_lambda_cronjob)
 # aws_lambda_cronjob
 
 This module creates a Lambda function, and configures it to be invoked on a schedule.
@@ -677,8 +690,7 @@ As this module is a close relative of [`aws_lambda_api`](../aws_lambda_api), the
 
 
 
-# [aws/aws_mailgun_domain](aws/aws_mailgun_domain) source
-
+# [aws/aws_mailgun_domain](aws/aws_mailgun_domain)
 # aws_mailgun_domain
 
 Uses the [Terraform Mailgun provider](https://www.terraform.io/docs/providers/mailgun/index.html) to set up and verify a domain, so you can use [Mailgun](https://www.mailgun.com/) for sending email from it.
@@ -766,8 +778,7 @@ After Mailgun is happy with your DNS records, however, you should get something 
 
 
 
-# [aws/aws_reverse_proxy](aws/aws_reverse_proxy) source
-
+# [aws/aws_reverse_proxy](aws/aws_reverse_proxy)
 # aws_reverse_proxy
 
 This module implements a website that proxies content from another server.
@@ -880,8 +891,7 @@ Conversely, if you specify `cache_ttl_override = 300`, every object will stay in
 
 
 
-# [aws/aws_static_site](aws/aws_static_site) source
-
+# [aws/aws_static_site](aws/aws_static_site)
 # aws_static_site
 
 This module implements a website for hosting static content.
@@ -1090,8 +1100,7 @@ Learn more about [effective caching strategies on CloudFront](../aws_reverse_pro
 
 
 
-# [aws/websites/static_website_ssl_cloudfront_private_s3](aws/websites/static_website_ssl_cloudfront_private_s3) source
-
+# [aws/static_website_ssl_cloudfront_private_s3](aws/static_website_ssl_cloudfront_private_s3)
 # Static website hosted using S3 and cloudfront with SSL support
 
 Hosting static website using S3 is a very cost effective approach. Since, S3 website does not support SSL certificate, we use cloudfront for the same. In this example, we host the contents in a private S3 bucket which is used as the origin for cloudfront. We use cloudfront Origin-Access-Identity to access the private content from S3.
@@ -1102,13 +1111,11 @@ Hosting static website using S3 is a very cost effective approach. Since, S3 web
 
 
 
-# [azure/](azure/) source
-
+# [azure](azure)
 # Azure Examples
 
 
-# [azure/layers](azure/layers) source
-
+# [azure/layers](azure/layers)
 # Terraform Azure Layers example
 
 Azure resources may take a long time to create. Sometimes Terraform fails to spot that some resource actually requires another resource that has not been fully created yet. Layers help to ensure that all prerequisite resources for later ones are created before them.
@@ -1137,8 +1144,11 @@ sh destroy.sh ${USER}trylayers
 
 
 
-# [generic/docker_compose_host](generic/docker_compose_host) source
+# [generic](generic)
+# Generic Examles
 
+
+# [generic/docker_compose_host](generic/docker_compose_host)
 # docker_compose_host
 
 Provisions an existing host to run services defined in a `docker-compose.yml` file.
@@ -1233,13 +1243,11 @@ version: "3"
 
 
 
-# [google_cloud/](google_cloud/) source
-
+# [google_cloud](google_cloud)
 # Google Cloud Platform Examples
 
 
-# [google_cloud/camunda](google_cloud/camunda) source
-
+# [google_cloud/camunda](google_cloud/camunda)
 ## Provisioning Camunda on Cloud Run + Cloud SQL, using Terraform and Cloud Build
 
 Terraform receipe for running Camunda BPMN workflow engine serverlessly on Cloud Run, using Cloud SQL as the backing store. Custom image building offloaded to Cloud Build. Private container image hosting in Google Container Engine.
@@ -1281,8 +1289,7 @@ Also needed to setup GCR creds in docker
 
 
 
-# [google_cloud/CQRS_bigquery_memorystore](google_cloud/CQRS_bigquery_memorystore) source
-
+# [google_cloud/CQRS_bigquery_memorystore](google_cloud/CQRS_bigquery_memorystore)
 ## CQRS Bigquery Memorystore Timeseries Analytics with Self Testing Example
 
 Read the blog [Exporting Bigquery results to memorystore](https://www.futurice.com/blog/bigquery-to-memorystore)
