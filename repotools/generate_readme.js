@@ -4,7 +4,7 @@ const glob = require('glob');
 
 
 function directory(path) {
-  try {return path.match(/^(.*)_header_\/.*$/)[1]} catch {};
+  try {return path.match(/^(.*)\/_header_\/.*$/)[1]} catch {};
   return path.match(/(?<dir>.*)\/[^/]*/)[1];
 }
 
@@ -17,7 +17,7 @@ class AddSection extends Transform {
   _transform(data, encoding, callback) {
     if (this.source != "_header_/README.md") {
       const link = directory(this.source);
-      this.push(`\n# [${link}](${link})`);
+      this.push(`\n# [${link}](${link})\n`);
     } else {
       this.push("\n## Directory layout\n")
       // ToC
