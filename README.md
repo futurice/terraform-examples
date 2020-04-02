@@ -1,3 +1,10 @@
+# Repository containing various terraform code
+
+Lots of Terraform recipes for doing things, aimed for copy and pasting into projects.
+
+- [AWS Examples](#aws-examples)
+- [Azure Examples](#azure-examples)
+- [Google Cloud Platform Examples](#google-cloud-platform-examples)
 
 ## Directory layout
 
@@ -15,14 +22,7 @@
   - [generic/docker_compose_host](generic/docker_compose_host)
 - [google_cloud](google_cloud)
   - [google_cloud/camunda](google_cloud/camunda)
-  - [google_cloud/CQRS_bigquery_memorystore](google_cloud/CQRS_bigquery_memorystore)# Repository containing various terraform code
-
-Lots of Terraform recipes for doing things, aimed for copy and pasting into projects.
-
-- [AWS Examples](#aws-examples)
-- [Azure Examples](#azure-examples)
-- [Google Cloud Platform Examples](#google-cloud-platform-examples)
-
+  - [google_cloud/CQRS_bigquery_memorystore](google_cloud/CQRS_bigquery_memorystore)
 
 
 # [aws](aws)

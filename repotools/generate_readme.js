@@ -18,7 +18,11 @@ class AddSection extends Transform {
     if (this.source != "_header_/README.md") {
       const link = directory(this.source);
       this.push(`\n# [${link}](${link})\n`);
-    } else {
+    }
+        
+    this.push(data);
+
+    if (this.source == "_header_/README.md") {
       this.push("\n## Directory layout\n")
       // ToC
       this.files.map(file => {
@@ -31,8 +35,7 @@ class AddSection extends Transform {
         this.push(`\n${indentation}- [${link}](${link})`);
       })
     }
-        
-    this.push(data);
+
     this.push("\n\n");
     callback();
   }
