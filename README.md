@@ -16,7 +16,7 @@ Lots of Terraform recipes for doing things, aimed for copy and pasting into proj
   - [aws/aws_mailgun_domain](aws/aws_mailgun_domain)
   - [aws/aws_reverse_proxy](aws/aws_reverse_proxy)
   - [aws/aws_static_site](aws/aws_static_site)
-    - [aws/websites/static_website_ssl_cloudfront_private_s3](aws/websites/static_website_ssl_cloudfront_private_s3)
+  - [aws/static_website_ssl_cloudfront_private_s3](aws/static_website_ssl_cloudfront_private_s3)
 - [azure](azure)
   - [azure/layers](azure/layers)
 - [generic](generic)
@@ -1100,7 +1100,7 @@ Learn more about [effective caching strategies on CloudFront](../aws_reverse_pro
 
 
 
-# [aws/websites/static_website_ssl_cloudfront_private_s3](aws/websites/static_website_ssl_cloudfront_private_s3)
+# [aws/static_website_ssl_cloudfront_private_s3](aws/static_website_ssl_cloudfront_private_s3)
 # Static website hosted using S3 and cloudfront with SSL support
 
 Hosting static website using S3 is a very cost effective approach. Since, S3 website does not support SSL certificate, we use cloudfront for the same. In this example, we host the contents in a private S3 bucket which is used as the origin for cloudfront. We use cloudfront Origin-Access-Identity to access the private content from S3.
