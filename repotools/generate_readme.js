@@ -27,7 +27,7 @@ class AddSection extends Transform {
         if (link == "_header_") return;
         const level = (link.match(/\//g) || []).length;
         console.log(level, link)
-        const indentation = new Array(level * 2 + 1).join("")
+        const indentation = new Array(level * 2 + 1).join(" ")
         this.push(`\n${indentation}- [${link}](${link})`);
       })
     }
