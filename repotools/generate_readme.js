@@ -32,7 +32,7 @@ class AddSection extends Transform {
         const level = (link.match(/\//g) || []).length;
         console.log(level, link)
         const indentation = new Array(level * 2 + 1).join(" ")
-        this.push(`\n${indentation}- [${link}](${link})`);
+        this.push(`\n${indentation}- [${link}](#${link})`);
       })
     }
 
