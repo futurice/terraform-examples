@@ -5,5 +5,3 @@ Lots of Terraform recipes for doing things, aimed for copy and pasting into proj
 - [AWS Examples](#aws-examples)
 - [Azure Examples](#azure-examples)
 - [Google Cloud Platform Examples](#google-cloud-platform-examples)
-
-## Directory layout

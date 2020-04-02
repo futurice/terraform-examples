@@ -11,7 +11,7 @@ function directory(path) {
 class AddSection extends Transform {
   constructor(options) {
     super(options);
-    this.files = option.files;
+    this.files = options.files;
     this.source = options.source;
   }
   _transform(data, encoding, callback) {
@@ -19,11 +19,13 @@ class AddSection extends Transform {
       const link = directory(this.source);
       this.push(`\n# [${link}](${link})`);
     } else {
+      this.push("\n## Directory layout\n")
       // ToC
       this.files.map(file => {
+        if (file.indexOf("node_modules") >= 0) return;
         const link = directory(file);
-        const level = file.match(/\\/g || []).length;
-        this.push(`\n# ${"  ".repeat(level)}- [${link}](${link})`);
+        const level = (file.match(/\//g) || []).length;
+        this.push(`\n${"  ".repeat(level*2)}- [${link}](${link})`);
       })
     }
         
