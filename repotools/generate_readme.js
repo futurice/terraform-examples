@@ -3,24 +3,30 @@ const { Transform, PassThrough } = require('stream');
 const glob = require('glob');
 
 
-class AddRepoLink extends Transform {
-    constructor(options) {
-      super(options);
-      this.link = options.link;
-    }
-    _transform(data, encoding, callback) {
-      if (this.link)
-        this.push(`\n# [${this.link}](${this.link}) source`);
-      this.push(data);
-      callback();
-    }
-  }
+function directory(path) {
+  try {return path.match(/^(.*)_header_\/.*$/)[1]} catch {};
+  return path.match(/(?<dir>.*)\/[^/]*/)[1];
+}
 
-class AddEndOfLine extends Transform {
+class AddSection extends Transform {
   constructor(options) {
     super(options);
+    this.files = option.files;
+    this.source = options.source;
   }
   _transform(data, encoding, callback) {
+    if (this.source != "_header_/README.md") {
+      const link = directory(this.source);
+      this.push(`\n# [${link}](${link})`);
+    } else {
+      // ToC
+      this.files.map(file => {
+        const link = directory(file);
+        const level = file.match(/\\/g || []).length;
+        this.push(`\n# ${"  ".repeat(level)}- [${link}](${link})`);
+      })
+    }
+        
     this.push(data);
     this.push("\n\n");
     callback();
@@ -71,10 +77,6 @@ class ConvertLinksToAnchors extends Transform {
   }
 }
 
-function directory(path) {
-    try {return path.match(/^(.*)_header_\/.*$/)[1]} catch {};
-    return path.match(/(?<dir>.*)\/[^/]*/)[1];
-}
 
 glob('*/**/*.md', (err, files) => {
     const outPath = "./README.md";
@@ -87,10 +89,10 @@ glob('*/**/*.md', (err, files) => {
         work = work.then(() => new Promise( (resolve) => {
             console.log(file);
             fs.createReadStream(file)
-                .pipe(new AddRepoLink({
-                    link: directory(file)
+                .pipe(new AddSection({
+                  source: file,
+                  files: files
                 }))
-                .pipe(new AddEndOfLine())
                 .pipe(new RebaseImages())
                 .pipe(new ConvertLinksToAnchors())
                 .on("finish", (err) => resolve())
