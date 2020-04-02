@@ -19,6 +19,7 @@ Lots of Terraform recipes for doing things, aimed for copy and pasting into proj
     - [aws/websites/static_website_ssl_cloudfront_private_s3](aws/websites/static_website_ssl_cloudfront_private_s3)
 - [azure](azure)
   - [azure/layers](azure/layers)
+- [generic](generic)
   - [generic/docker_compose_host](generic/docker_compose_host)
 - [google_cloud](google_cloud)
   - [google_cloud/camunda](google_cloud/camunda)
@@ -1141,6 +1142,10 @@ sh destroy.sh ${USER}trylayers
 - `main.tf` contains sample resources used on different layers.
 - `variables.sh` declares associated variables with sane defaults.
 
+
+
+# [generic](generic)
+# Generic Examles
 
 
 # [generic/docker_compose_host](generic/docker_compose_host)
