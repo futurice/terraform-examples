@@ -1,4 +1,4 @@
-# We require a project to be profided upfront
+# We require a project to be provided upfront
 # Create a project at https://cloud.google.com/
 # Make note of the project ID
 # We need a storage bucket created upfront too to store the terraform state
@@ -40,7 +40,7 @@ resource "google_compute_disk" "minecraft" {
   image = "cos-cloud/cos-stable"
 }
 
-# Permenant IP address, stays the same
+# Permenant IP address, stays around when VM is off
 resource "google_compute_address" "minecraft" {
   name   = "minecraft-ip"
   region = local.region
