@@ -1,8 +1,14 @@
 /*
-A safe Minecraft server that won't break the bank. Game data is preserved across sessions.
+Connect with friends via a shared digital space in Minecraft.
+
+This is a safe Minecraft server that won't break the bank. Game data is preserved across sessions.
 Server is hosted on a permenant IP address. You need to start the VM each session, but it
 will shutdown within 24 hours if you forget to turn it off.
 Process is run in a sandboxed VM, so any server exploits cannot do any serious damage.
+
+We are experimenting with providing support through a [google doc](https://docs.google.com/document/d/1TXyzHKqoKMS-jY9FSMrYNLEGathqSG8YuHdj0Z9GP34).
+Help us make this simple for others to use by asking for help.
+
 
 Features
 - Runs [itzg/minecraft-server](https://hub.docker.com/r/itzg/minecraft-server/) Docker image
