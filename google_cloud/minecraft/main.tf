@@ -92,7 +92,7 @@ resource "google_compute_instance" "minecraft" {
   }
 
   network_interface {
-    network = "default"
+    network = google_compute_network.minecraft.name
     access_config {
       nat_ip = google_compute_address.minecraft.address
     }
@@ -104,19 +104,35 @@ resource "google_compute_instance" "minecraft" {
   }
 
   scheduling {
-    preemptible = true # Closes within 24 hours (sometimes sooner)
+    preemptible       = true # Closes within 24 hours (sometimes sooner)
     automatic_restart = false
   }
 }
 
-# Open the firewall
+# Create a private network so the minecraft instance cannot access
+# any other resources.
+resource "google_compute_network" "minecraft" {
+  name = "minecraft"
+}
+
+# Open the firewall for Minecraft traffic
 resource "google_compute_firewall" "minecraft" {
   name    = "minecraft"
-  network = "default"
+  network = google_compute_network.minecraft.name
+  # Minecraft client port
   allow {
     protocol = "tcp"
     ports    = ["25565"]
   }
+  # ICMP (ping)
+  allow {
+    protocol = "icmp"
+  }
+  # SSH (for RCON-CLI access)
+  allow {
+    protocol = "tcp"
+    ports    = ["22"]
+  }
   source_ranges = ["0.0.0.0/0"]
-  target_tags = ["minecraft"]
+  target_tags   = ["minecraft"]
 }
