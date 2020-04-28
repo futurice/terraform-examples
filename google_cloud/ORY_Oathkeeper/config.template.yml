@@ -1,0 +1,7 @@
+
+serve:
+    proxy:
+      port: 4455 # run the proxy at port 4455
+    api:
+      port: 4456 # run the api at port 4456
+  
