@@ -1,0 +1,2 @@
+FROM eu.gcr.io/${project}/${image}:${tag}
+ADD config.yml /config.yaml

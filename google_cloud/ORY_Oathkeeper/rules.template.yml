@@ -1,0 +1,12 @@
+- id: camunda
+  upstream:
+    url: https://camunda-flxotk3pnq-ew.a.run.app
+    preserve_host: false
+  match: 
+    url: http://oathkeeper-flxotk3pnq-ew.a.run.app/<.*>
+    methods: ["GET", "POST"]
+  authorizer: 
+    handler: allow
+  authenticators: [{handler: noop}]
+  mutators: [{handler: noop}]
+  errors: [{handler: json}]

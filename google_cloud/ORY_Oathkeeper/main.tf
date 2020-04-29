@@ -5,6 +5,7 @@ locals {
   region          = "europe-west1"
   base_image_name = "oryd/oathkeeper"
   base_image_tag  = "v0.37.1"
+  #base_image_tag  = "v0.36.0-beta.4"
 }
 
 terraform {
@@ -41,26 +42,18 @@ resource "google_cloud_run_service_iam_policy" "noauth" {
   policy_data = data.google_iam_policy.noauth.policy_data
 }
 
-# Mirror base image from Dockerhub image into Google Container Registry
-module "docker-mirror" {
-  source      = "github.com/neomantra/terraform-docker-mirror"
-  image_name  = local.base_image_name
-  image_tag   = local.base_image_tag
-  dest_prefix = "eu.gcr.io/${local.project}"
-}
-
 # config bucket for service
 resource "google_storage_bucket" "config" {
-  name     = "${local.project}_${local.region}_oathkeeper"
-  location = local.location
+  name               = "${local.project}_${local.region}_oathkeeper"
+  location           = local.location
   bucket_policy_only = true
 }
 
-# config for service
-resource "google_storage_bucket_object" "config" {
-  name = "config.yml"
+# rules for service
+resource "google_storage_bucket_object" "rules" {
+  name = "rules_${filesha256("${path.module}/rules.template.yml")}.yml"
   content = templatefile(
-    "${path.module}/config.template.yml", {
+    "${path.module}/rules.template.yml", {
   })
   bucket = google_storage_bucket.config.name
 }
@@ -68,21 +61,36 @@ resource "google_storage_bucket_object" "config" {
 # Let oathkeeper read objects from it
 resource "google_storage_bucket_iam_member" "oathkeeper-viewer" {
   bucket = google_storage_bucket.config.name
-  role = "roles/storage.objectViewer"
-  member = "serviceAccount:${google_service_account.oathkeeper.email}"
+  role   = "roles/storage.objectViewer"
+  # member = "serviceAccount:${google_service_account.oathkeeper.email}"
+  member = "allUsers" # work around until we can use the cloud API https://github.com/ory/oathkeeper/issues/425
 }
 
 # Cloud Run ORY Oathkeeper
 resource "google_cloud_run_service" "oathkeeper" {
   name     = "oathkeeper"
   location = local.region
+  depends_on = [google_storage_bucket_object.rules]
   template {
     spec {
       # Use locked down Service Account
       service_account_name = google_service_account.oathkeeper.email
       containers {
-        args  = ["--config", "https://storage.cloud.google.com/${google_storage_bucket.config.name}/${google_storage_bucket_object.config.name}"]
-        image = module.docker-mirror.dest_full
+        image = null_resource.oathkeeper_image.triggers.image
+        args = ["--config", "/config.yaml"]
+        env { 
+          name  = "nonce"
+          value = filesha256("${path.module}/rules.template.yml") # Force refresh on rule change
+        }
+        env {
+          name  = "ACCESS_RULES_REPOSITORIES"
+          # storage.cloud.google.com domain serves content via redirects which is does not work ATM https://github.com/ory/oathkeeper/issues/425
+          value = "https://storage.googleapis.com/${google_storage_bucket.config.name}/${google_storage_bucket_object.rules.name}"
+        }
+        env {
+          name  = "LOG_LEVEL"
+          value = "debug"
+        }
       }
     }
   }
