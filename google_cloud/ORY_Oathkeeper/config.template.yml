@@ -51,3 +51,33 @@ authenticators:
       subject: guest
   noop:
     enabled: true
+
+  oauth2_client_credentials:
+    enabled: true
+    config:
+      token_url: https://oauth2.googleapis.com/token
+  #    required_scope:
+
+  oauth2_introspection:
+    enabled: true
+    config:
+      introspection_url: https://oauth2.googleapis.com/tokeninfo
+#      scope_strategy: exact
+#      required_scope:
+#        - https://www.googleapis.com/auth/userinfo.email
+
+  jwt:
+    enabled: true
+    config:
+      jwks_urls:
+        - https://www.googleapis.com/oauth2/v3/certs
+#      scope_strategy: hierarchic
+#      required_scope:
+#        - email
+      #target_audience:
+      #  - https://my-service.com/api/users
+      #  - https://my-service.com/api/devices
+      trusted_issuers:
+        - https://accounts.google.com
+      allowed_algorithms:
+        - RS256
