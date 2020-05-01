@@ -43,11 +43,12 @@ locals {
   project = "larkworthy-tester"
   region  = "europe-west1"
   zone    = "europe-west1-b"
-  # Members of this google group are able to turn on the minecraft server
-  # through the Cloud Console mobile app.
+  # Allow members of an external Google group to turn on the server
+  # through the Cloud Console mobile app or https://console.cloud.google.com
   # Create a group at https://groups.google.com/forum/#!creategroup
   # and invite members by their email address.
-  minecraft_switch_access = "REPLACE_GROUP_EM@IL_ADDRESS@googlegroups.com"
+  enable_switch_access_group = 0 # Replace with 1 to enable google group admins
+  minecraft_switch_access_group = "GROUP_EM@IL_ADDRESS@googlegroups.com"
 }
 
 
@@ -158,21 +159,24 @@ resource "google_project_iam_custom_role" "instanceLister" {
 }
 
 resource "google_compute_instance_iam_member" "switcher" {
+  count = local.enable_switch_access_group
   project = local.project
   zone = local.zone
   instance_name = google_compute_instance.minecraft.name
   role = google_project_iam_custom_role.minecraftSwitcher.id
-  member = "group:${local.minecraft_switch_access}"
+  member = "group:${local.minecraft_switch_access_group}"
 }
 
 resource "google_project_iam_member" "projectBrowsers" {
+  count = local.enable_switch_access_group
   project = local.project
   role    = "roles/browser"
-  member  = "group:${local.minecraft_switch_access}"
+  member  = "group:${local.minecraft_switch_access_group}"
 }
 
 resource "google_project_iam_member" "computeViewer" {
+  count = local.enable_switch_access_group
   project = local.project
   role    = google_project_iam_custom_role.instanceLister.id
-  member  = "group:${local.minecraft_switch_access}"
+  member  = "group:${local.minecraft_switch_access_group}"
 }
