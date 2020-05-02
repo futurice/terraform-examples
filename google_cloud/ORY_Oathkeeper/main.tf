@@ -54,6 +54,10 @@ resource "google_storage_bucket_object" "rules" {
   name = "rules_${filesha256("${path.module}/rules.template.yml")}.yml"
   content = templatefile(
     "${path.module}/rules.template.yml", {
+      // camunda_url = "https://camunda-flxotk3pnq-ew.a.run.app"
+      camunda_url = "https://camunda-secure-flxotk3pnq-ew.a.run.app"
+      # Note Cloud run terminates https so container exposed only to http
+      oathkeeper_url = "http://oathkeeper-flxotk3pnq-ew.a.run.app"
   })
   bucket = google_storage_bucket.config.name
 }
