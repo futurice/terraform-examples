@@ -52,31 +52,17 @@ authenticators:
   noop:
     enabled: true
 
-  oauth2_client_credentials:
-    enabled: true
-    config:
-      token_url: https://oauth2.googleapis.com/token
-  #    required_scope:
-
   oauth2_introspection:
-    enabled: true
-    config:
-      introspection_url: https://oauth2.googleapis.com/tokeninfo
-#      scope_strategy: exact
-#      required_scope:
-#        - https://www.googleapis.com/auth/userinfo.email
+    enabled: false # Does not work with google as they do not have an RFC 7662 endpoint 
 
   jwt:
     enabled: true
     config:
       jwks_urls:
         - https://www.googleapis.com/oauth2/v3/certs
-#      scope_strategy: hierarchic
-#      required_scope:
-#        - email
-      #target_audience:
-      #  - https://my-service.com/api/users
-      #  - https://my-service.com/api/devices
+      scope_strategy: hierarchic
+      required_scope:
+        - email
       trusted_issuers:
         - https://accounts.google.com
       allowed_algorithms:

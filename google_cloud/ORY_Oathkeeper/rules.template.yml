@@ -1,10 +1,58 @@
-- id: camunda
+# Note Cloud run terminates https so container exposed only to http
+- id: camunda-apps
   upstream:
     url: https://camunda-flxotk3pnq-ew.a.run.app
     preserve_host: false
   match: 
-    url: http://oathkeeper-flxotk3pnq-ew.a.run.app/<.*>
-    methods: ["GET", "POST"]
+    url: http://oathkeeper-flxotk3pnq-ew.a.run.app/camunda/<.*>
+    methods: ["GET", "POST", "DELETE", "PUT"]
+  authorizer: 
+    handler: allow
+  authenticators:
+      - handler: jwt
+      - handler: anonymous
+  mutators: [{handler: noop}]
+  errors: [{handler: json}]
+
+- id: camunda-welcome
+  upstream:
+    url: https://camunda-flxotk3pnq-ew.a.run.app
+    preserve_host: false
+  match: 
+    url: http://oathkeeper-flxotk3pnq-ew.a.run.app/camunda-welcome/<.*>
+    methods: ["GET", "POST", "DELETE", "PUT"]
+  authorizer: 
+    handler: allow
+  authenticators:
+      - handler: jwt
+      - handler: anonymous
+  mutators: [{handler: noop}]
+  errors: [{handler: json}]
+
+
+- id: camunda-invoice
+  upstream:
+    url: https://camunda-flxotk3pnq-ew.a.run.app
+    preserve_host: false
+  match: 
+    url: http://oathkeeper-flxotk3pnq-ew.a.run.app/camunda-invoice/<.*>
+    methods: ["GET", "POST", "DELETE", "PUT"]
+  authorizer: 
+    handler: allow
+  authenticators:
+      - handler: jwt
+      - handler: anonymous
+  mutators: [{handler: noop}]
+  errors: [{handler: json}]
+
+# Protected
+- id: camunda-rest
+  upstream:
+    url: https://camunda-flxotk3pnq-ew.a.run.app
+    preserve_host: false
+  match:
+    url: http://oathkeeper-flxotk3pnq-ew.a.run.app/engine-rest/<.*>
+    methods: ["GET", "POST", "DELETE", "PUT"]
   authorizer: 
     handler: allow
   authenticators:
