@@ -22,9 +22,12 @@ Lots of Terraform recipes for doing things, aimed for copy and pasting into proj
 - [generic](generic)
   - [generic/docker_compose_host](generic/docker_compose_host)
 - [google_cloud](google_cloud)
+  - [google_cloud/camunda-secure](google_cloud/camunda-secure)
   - [google_cloud/camunda](google_cloud/camunda)
   - [google_cloud/CQRS_bigquery_memorystore](google_cloud/CQRS_bigquery_memorystore)
   - [google_cloud/minecraft](google_cloud/minecraft)
+  - [google_cloud/oathkeeper](google_cloud/oathkeeper)
+  - [google_cloud/openresty](google_cloud/openresty)
 
 
 # [aws](aws)
@@ -1248,6 +1251,48 @@ version: "3"
 # Google Cloud Platform Examples
 
 
+# [google_cloud/camunda-secure](google_cloud/camunda-secure)
+## Provisioning Camunda on Cloud Run + Cloud SQL, using Terraform and Cloud Build
+
+Terraform receipe for running Camunda BPMN workflow engine serverlessly on Cloud Run, using Cloud SQL as the backing store. Custom image building offloaded to Cloud Build. Private container image hosting in Google Container Engine.
+
+Customize the base image in the main.tf locals.
+
+Read more on the blog
+- [Provisioning Serverless Camunda on Cloud Run](https://www.futurice.com/blog/serverless-camunda-terraform-recipe-using-cloud-run-and-cloud-sql) 
+- [Call external services with at-least-once delevery](https://www.futurice.com/blog/at-least-once-delivery-for-serverless-camunda-workflow-automation)
+
+
+    #Camunda # Cloud Run #Cloud SQL #Cloud Build #Container Registry #Docker
+
+### Terraform setup
+
+Create service account credentials for running terraform locally. Then
+
+    export GOOGLE_CREDENTIALS=<PATH TO SERVICE ACCOUNT JSON CREDS>
+    gcloud auth activate-service-account --key-file $GOOGLE_CREDENTIALS
+    terraform init
+
+
+Terraform service account, Editor role was not enough
+  - to set cloud run service to noauth, had to add Security Admin on camunda cloud run resource (NOT PROJECT level)
+
+### Docker / gcloud Setup
+
+For mac I needed to expose the docker deamon on a tcp port:-
+
+    docker run -d -v /var/run/docker.sock:/var/run/docker.sock -p 127.0.0.1:1234:1234 bobrik/socat TCP-LISTEN:1234,fork UNIX-CONNECT:/var/run/docker.sock
+
+Then in bash_profile:
+
+    export DOCKER_HOST=tcp://localhost:1234
+
+Also needed to setup GCR creds in docker
+
+    gcloud auth configure-docker
+
+
+
 # [google_cloud/camunda](google_cloud/camunda)
 ## Provisioning Camunda on Cloud Run + Cloud SQL, using Terraform and Cloud Build
 
@@ -1340,4 +1385,14 @@ Features
   - VM cost: $0.01 per hour, max session cost $0.24
 
 
+
+
+# [google_cloud/oathkeeper](google_cloud/oathkeeper)
+I was hoping to add an identity aware proxy to a Google Cloud Run endpoint using oathkeeper.
+However, as of 2020/05/02 there is not easy way to fetch a token from the metadata server
+and add it to an upstream header, required to make an authenticated call to a protected Cloud Run endpoint
+
+
+# [google_cloud/openresty](google_cloud/openresty)
+Connect to an upstream Cloud Run using a bearer token issued from the local metadata
 
