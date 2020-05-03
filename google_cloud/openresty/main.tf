@@ -4,7 +4,7 @@ locals {
   location        = "EU"
   region          = "europe-west1"
   base_image_name = "openresty/openresty"
-  base_image_tag  = "1.15.8.3-alpine-nosse42"
+  base_image_tag  = "1.15.8.3-buster-fat"
 }
 
 terraform {
@@ -19,10 +19,16 @@ provider "google" {
   region  = local.region
 }
 
-# Create service account to run service with no permissions
+# Create service account to run service
 resource "google_service_account" "openresty" {
   account_id   = "openresty"
   display_name = "openresty"
+}
+
+resource "google_project_iam_member" "openresty_invoker" {
+  project = local.project
+  role    = "roles/run.invoker"
+  member  = "serviceAccount:${google_service_account.openresty.email}"
 }
 
 # Policy to allow public access to Cloud Run endpoint
