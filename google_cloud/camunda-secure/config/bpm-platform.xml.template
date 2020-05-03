@@ -85,7 +85,7 @@
       <plugin>
         <class>org.camunda.bpm.engine.impl.plugin.AdministratorAuthorizationPlugin</class>
         <properties>
-          <property name="administratorUserName">admin</property>
+          <property name="administratorUserName">tlar</property>
         </properties>
       </plugin>
       -->

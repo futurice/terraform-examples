@@ -16,15 +16,9 @@ resource "local_file" "dockerfile" {
   filename = "${path.module}/.build/Dockerfile"
 }
 
-# Hydrate config into .build directory
-resource "local_file" "config" {
-  content = templatefile("${path.module}/default.template.conf", {
-  })
-  filename = "${path.module}/.build/default.conf"
-}
-
 # Build a customized image
 resource "null_resource" "openresty_image" {
+  depends_on = [module.docker-mirror]
   triggers = {
     # Rebuild if we change the base image, dockerfile, or bpm-platform config
     image = "eu.gcr.io/${local.project}/openresty:${local.base_image_tag}_${

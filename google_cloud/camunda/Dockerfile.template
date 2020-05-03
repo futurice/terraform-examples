@@ -3,7 +3,7 @@ FROM eu.gcr.io/${project}/${image}:${tag}
 USER root 
 RUN apk add --no-cache wget
 USER camunda
-RUN rm /camunda/lib/postgresql-9.3-1102-jdbc4.jar 
+RUN rm /camunda/lib/postgresql-*.jar 
 RUN wget --directory-prefix=/camunda/lib https://github.com/GoogleCloudPlatform/cloud-sql-jdbc-socket-factory/releases/download/v1.0.15/postgres-socket-factory-1.0.15-jar-with-driver-and-dependencies.jar
 
 # json-path and deps

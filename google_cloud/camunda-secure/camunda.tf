@@ -1,4 +1,3 @@
-
 # Create service account to run service
 resource "google_service_account" "camunda" {
   account_id   = "camunda-secure-worker"
@@ -25,6 +24,7 @@ resource "google_cloud_run_service" "camunda" {
           limits = {
             # Default of 256Mb is not enough to start Camunda 
             memory = "2Gi"
+            cpu    = "1000m"
           }
         }
         env {
@@ -33,7 +33,6 @@ resource "google_cloud_run_service" "camunda" {
           # See https://github.com/GoogleCloudPlatform/cloud-sql-jdbc-socket-factory
           value = "jdbc:postgresql:///${google_sql_database.database.name}?cloudSqlInstance=${google_sql_database_instance.camunda-db.connection_name}&socketFactory=com.google.cloud.sql.postgres.SocketFactory"
         }
-
         env {
           name  = "DB_DRIVER"
           value = "org.postgresql.Driver"
@@ -41,6 +40,10 @@ resource "google_cloud_run_service" "camunda" {
         env {
           name  = "DB_USERNAME"
           value = google_sql_user.user.name
+        }
+        env {
+          name  = "nonce"
+          value = "dd"
         }
         env {
           name  = "DB_PASSWORD"

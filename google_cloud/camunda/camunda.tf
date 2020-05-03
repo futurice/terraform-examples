@@ -41,6 +41,7 @@ resource "google_cloud_run_service" "camunda" {
           limits = {
             # Default of 256Mb is not enough to start Camunda 
             memory = "2Gi"
+            cpu    = "1000m"
           }
         }
         env {

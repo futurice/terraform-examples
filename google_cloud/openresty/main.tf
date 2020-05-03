@@ -41,6 +41,15 @@ resource "google_cloud_run_service_iam_policy" "noauth" {
   policy_data = data.google_iam_policy.noauth.policy_data
 }
 
+# Hydrate config into .build directory
+resource "local_file" "config" {
+  content = templatefile("${path.module}/default.template.conf", {
+    // camunda_url = "https://camunda-flxotk3pnq-ew.a.run.app"
+    camunda_url = "https://camunda-secure-flxotk3pnq-ew.a.run.app"
+  })
+  filename = "${path.module}/.build/default.conf"
+}
+
 # Cloud Run Openresty
 resource "google_cloud_run_service" "openresty" {
   name     = "openresty"
