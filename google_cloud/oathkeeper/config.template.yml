@@ -1,0 +1,69 @@
+serve:
+  proxy:
+    host: 0.0.0.0 # Cloud Run requirements
+    port: 8080 
+  api:
+    port: 4456 # run the api at port 4456
+
+access_rules:
+  repositories: # overwritten elsewhere
+
+errors:
+  fallback:
+    - json
+  handlers:
+    json:
+      enabled: true
+      config:
+        verbose: true
+    redirect:
+      enabled: true
+      config:
+        to: https://www.ory.sh/docs
+
+mutators:
+  header:
+    enabled: true
+    config:
+      headers:
+        X-User: "{{ print .Subject }}"
+        # You could add some other headers, for example with data from the
+        # session.
+        # X-Some-Arbitrary-Data: "{{ print .Extra.some.arbitrary.data }}"
+  noop:
+    enabled: true
+  id_token:
+    enabled: true
+    config:
+      issuer_url: http://localhost:4455/
+      jwks_url: file:///jwks.json
+
+authorizers:
+  allow:
+    enabled: true
+  deny:
+    enabled: true
+
+authenticators:
+  anonymous:
+    enabled: true
+    config:
+      subject: guest
+  noop:
+    enabled: true
+
+  oauth2_introspection:
+    enabled: false # Does not work with google as they do not have an RFC 7662 endpoint 
+
+  jwt:
+    enabled: true
+    config:
+      jwks_urls:
+        - https://www.googleapis.com/oauth2/v3/certs
+      scope_strategy: hierarchic
+      required_scope:
+        - email
+      trusted_issuers:
+        - https://accounts.google.com
+      allowed_algorithms:
+        - RS256

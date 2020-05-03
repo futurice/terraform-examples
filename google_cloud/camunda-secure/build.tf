@@ -39,7 +39,7 @@ resource "null_resource" "camunda_cloudsql_image" {
   depends_on = [module.docker-mirror-camunda-bpm-platform]
   triggers = {
     # Rebuild if we change the base image, dockerfile, or bpm-platform config
-    image = "eu.gcr.io/${local.project}/camunda_cloudsql:${local.config.base_image_tag}_${
+    image = "eu.gcr.io/${local.project}/camunda_secure:${local.config.base_image_tag}_${
       sha1(
         "${sha1(local_file.dockerfile.content)}${sha1(local_file.bpm-platform.content)}"
       )  

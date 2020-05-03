@@ -1,0 +1,2 @@
+FROM eu.gcr.io/${project}/${image}:${tag}
+ADD default.conf /etc/nginx/conf.d/default.conf

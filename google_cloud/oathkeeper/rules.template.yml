@@ -1,0 +1,57 @@
+- id: camunda-apps
+  upstream:
+    url: ${camunda_url}
+    preserve_host: false
+  match: 
+    url: ${oathkeeper_url}/camunda/<.*>
+    methods: ["GET", "POST", "DELETE", "PUT"]
+  authorizer: 
+    handler: allow
+  authenticators:
+      - handler: anonymous
+  mutators: [{handler: noop}]
+  errors: [{handler: json}]
+
+- id: camunda-welcome
+  upstream:
+    url: ${camunda_url}
+    preserve_host: false
+  match: 
+    url: ${oathkeeper_url}/camunda-welcome/<.*>
+    methods: ["GET", "POST", "DELETE", "PUT"]
+  authorizer: 
+    handler: allow
+  authenticators:
+      - handler: anonymous
+  mutators: [{handler: noop}]
+  errors: [{handler: json}]
+
+
+- id: camunda-invoice
+  upstream:
+    url: ${camunda_url}
+    preserve_host: false
+  match: 
+    url: ${oathkeeper_url}/camunda-invoice/<.*>
+    methods: ["GET", "POST", "DELETE", "PUT"]
+  authorizer: 
+    handler: allow
+  authenticators:
+      - handler: anonymous
+  mutators: [{handler: noop}]
+  errors: [{handler: json}]
+
+# Protected
+- id: camunda-rest
+  upstream:
+    url: ${camunda_url}
+    preserve_host: false
+  match:
+    url: ${oathkeeper_url}/engine-rest/<.*>
+    methods: ["GET", "POST", "DELETE", "PUT"]
+  authorizer: 
+    handler: allow
+  authenticators:
+      - handler: jwt
+  mutators: [{handler: noop}]
+  errors: [{handler: json}]

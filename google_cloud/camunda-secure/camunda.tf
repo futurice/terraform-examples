@@ -1,24 +1,7 @@
-
-# Policy to allow public access to Cloud Run endpoint
-data "google_iam_policy" "noauth" {
-  binding {
-    role    = "roles/run.invoker"
-    members = ["allUsers"]
-  }
-}
-
-# Bind public policy to our Camunda Cloud Run service
-resource "google_cloud_run_service_iam_policy" "noauth" {
-  location    = google_cloud_run_service.camunda.location
-  project     = google_cloud_run_service.camunda.project
-  service     = google_cloud_run_service.camunda.name
-  policy_data = data.google_iam_policy.noauth.policy_data
-}
-
 # Create service account to run service
 resource "google_service_account" "camunda" {
-  account_id   = "camunda-worker"
-  display_name = "Camunda Worker"
+  account_id   = "camunda-secure-worker"
+  display_name = "Camunda Secure Worker"
 }
 
 # Give the service account access to Cloud SQL
@@ -29,7 +12,7 @@ resource "google_project_iam_member" "project" {
 
 # Cloud Run Camunda service
 resource "google_cloud_run_service" "camunda" {
-  name     = "camunda"
+  name     = "camunda-secure"
   location = local.config.region
   template {
     spec {
@@ -50,7 +33,6 @@ resource "google_cloud_run_service" "camunda" {
           # See https://github.com/GoogleCloudPlatform/cloud-sql-jdbc-socket-factory
           value = "jdbc:postgresql:///${google_sql_database.database.name}?cloudSqlInstance=${google_sql_database_instance.camunda-db.connection_name}&socketFactory=com.google.cloud.sql.postgres.SocketFactory"
         }
-
         env {
           name  = "DB_DRIVER"
           value = "org.postgresql.Driver"
@@ -58,6 +40,10 @@ resource "google_cloud_run_service" "camunda" {
         env {
           name  = "DB_USERNAME"
           value = google_sql_user.user.name
+        }
+        env {
+          name  = "nonce"
+          value = "dd"
         }
         env {
           name  = "DB_PASSWORD"
