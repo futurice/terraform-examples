@@ -5,6 +5,12 @@ locals {
   region          = "europe-west1"
   base_image_name = "openresty/openresty"
   base_image_tag  = "1.15.8.3-buster-fat"
+  # Chicken and egg: You can only figure this out after first Cloud Run deploy
+  service_url     = "https://openresty-flxotk3pnq-ew.a.run.app"
+
+  # You provision this manually at https://console.developers.google.com/apis/credentials
+  # We are building a Web Application and do not need the client_secret
+  oauth_client_id = "455826092000-oi4h9ul0b943oi8f8in89pnjiroj1d4u.apps.googleusercontent.com"
 }
 
 terraform {
@@ -49,11 +55,20 @@ resource "google_cloud_run_service_iam_policy" "noauth" {
 
 # Hydrate config into .build directory
 resource "local_file" "config" {
-  content = templatefile("${path.module}/default.template.conf", {
+  content = templatefile("${path.module}/files/default.template.conf", {
     // camunda_url = "https://camunda-flxotk3pnq-ew.a.run.app"
     camunda_url = "https://camunda-secure-flxotk3pnq-ew.a.run.app"
   })
   filename = "${path.module}/.build/default.conf"
+}
+
+# Hydrate login into .build directory
+resource "local_file" "login" {
+  content = templatefile("${path.module}/files/login.template.html", {
+    OAUTH_CLIENT_ID = local.oauth_client_id
+    SERVICE_URL     = local.service_url
+  })
+  filename = "${path.module}/.build/login.html"
 }
 
 # Cloud Run Openresty

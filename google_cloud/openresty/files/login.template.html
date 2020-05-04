@@ -1,0 +1,26 @@
+<html>
+  <head>
+    <title>Google Sign-in + Run</title>
+    <script src="https://apis.google.com/js/platform.js"></script>
+    <script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js'></script>
+    <meta name="google-signin-client_id" content="${OAUTH_CLIENT_ID}">
+  </head>
+
+  <body>
+    <div class="g-signin2" data-onsuccess="onSignIn"></div></br>
+    <script>
+    var id_token;
+
+    function onSignIn(googleUser) {
+      //https://developers.google.com/identity/sign-in/web/sign-in
+      var expires_in = googleUser.getAuthResponse().expires_in;
+      var id_token = googleUser.getAuthResponse().id_token;
+      // https://stackoverflow.com/questions/14573223/set-cookie-and-get-cookie-with-javascript
+      var date = new Date();
+      date.setTime(date.getTime() + (expires_in*1000 - 60));
+      document.cookie = "id=test; SameSite=Strict; expires=" + date.toUTCString() + "; secure; HttpOnly;";
+      document.location.href="/";
+    }
+    </script>
+  </body>
+</html>

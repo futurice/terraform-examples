@@ -23,7 +23,7 @@ resource "null_resource" "openresty_image" {
     # Rebuild if we change the base image, dockerfile, or bpm-platform config
     image = "eu.gcr.io/${local.project}/openresty:${local.base_image_tag}_${
       sha1(
-        "${sha1(local_file.dockerfile.content)}${sha1(local_file.config.content)}"
+        "${sha1(local_file.dockerfile.content)}${sha1(local_file.config.content)}${sha1(local_file.login.content)}"
       )  
     }"
   }
