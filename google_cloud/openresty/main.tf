@@ -4,7 +4,10 @@ locals {
   location        = "EU"
   region          = "europe-west1"
   base_image_name = "openresty/openresty"
-  base_image_tag  = "1.15.8.3-stretch"
+  // Avoiding bug https://github.com/openresty/lua-nginx-module/issues/587
+  # base_image_tag  = "1.13.6.1-2-wheezy"
+  # base_image_tag  = "1.15.8.3-stretch"
+  base_image_tag  = "1.15.8.3-alpine"
   # Chicken and egg: You can only figure this out after first Cloud Run deploy
   service_url     = "https://openresty-flxotk3pnq-ew.a.run.app"
 
