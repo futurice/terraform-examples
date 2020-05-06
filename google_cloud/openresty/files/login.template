@@ -15,11 +15,9 @@
       //https://developers.google.com/identity/sign-in/web/sign-in
       var expires_in = googleUser.getAuthResponse().expires_in;
       var id_token = googleUser.getAuthResponse().id_token;
-      // https://stackoverflow.com/questions/14573223/set-cookie-and-get-cookie-with-javascript
-      var date = new Date();
-      date.setTime(date.getTime() + (expires_in*1000 - 60));
-      document.cookie = "id=test; SameSite=Strict; expires=" + date.toUTCString() + "; secure; HttpOnly;";
-      document.location.href="/";
+      document.cookie = "IDTOKEN=" + id_token + 
+        "; path=/; samesite=strict; max-age=" + expires_in + 
+        "; secure";
     }
     </script>
   </body>

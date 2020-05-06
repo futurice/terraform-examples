@@ -4,7 +4,7 @@ locals {
   location        = "EU"
   region          = "europe-west1"
   base_image_name = "openresty/openresty"
-  base_image_tag  = "1.15.8.3-buster-fat"
+  base_image_tag  = "1.15.8.3-stretch"
   # Chicken and egg: You can only figure this out after first Cloud Run deploy
   service_url     = "https://openresty-flxotk3pnq-ew.a.run.app"
 
@@ -56,19 +56,19 @@ resource "google_cloud_run_service_iam_policy" "noauth" {
 # Hydrate config into .build directory
 resource "local_file" "config" {
   content = templatefile("${path.module}/files/default.template.conf", {
-    // camunda_url = "https://camunda-flxotk3pnq-ew.a.run.app"
-    camunda_url = "https://camunda-secure-flxotk3pnq-ew.a.run.app"
+    OAUTH_CLIENT_ID = local.oauth_client_id
+    UPSTREAM_URL = "https://camunda-secure-flxotk3pnq-ew.a.run.app"
   })
   filename = "${path.module}/.build/default.conf"
 }
 
 # Hydrate login into .build directory
 resource "local_file" "login" {
-  content = templatefile("${path.module}/files/login.template.html", {
+  content = templatefile("${path.module}/files/login.template", {
     OAUTH_CLIENT_ID = local.oauth_client_id
     SERVICE_URL     = local.service_url
   })
-  filename = "${path.module}/.build/login.html"
+  filename = "${path.module}/.build/login"
 }
 
 # Cloud Run Openresty
