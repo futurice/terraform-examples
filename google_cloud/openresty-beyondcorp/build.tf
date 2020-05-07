@@ -12,9 +12,6 @@ resource "local_file" "dockerfile" {
     project = local.project
     image   = local.base_image_name
     tag     = local.base_image_tag
-    OPM_VERSION = "0.0.5"
-    LUA_RESTY_HTTP_VERSION = "1.13.6.2"
-    _prefix="/usr/local"
   })
   filename = "${path.module}/.build/Dockerfile"
 }

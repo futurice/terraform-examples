@@ -7,13 +7,14 @@ locals {
   // Avoiding bug https://github.com/openresty/lua-nginx-module/issues/587
   # base_image_tag  = "1.13.6.1-2-wheezy"
   # base_image_tag  = "1.15.8.3-stretch"
-  base_image_tag  = "1.15.8.3-alpine"
-  # Chicken and egg: You can only figure this out after first Cloud Run deploy
-  service_url     = "https://openresty-flxotk3pnq-ew.a.run.app"
-
-  # You provision this manually at https://console.developers.google.com/apis/credentials
+  base_image_tag    = "1.15.8.3-alpine"
+  upstream_url      = "https://camunda-secure-flxotk3pnq-ew.a.run.app"
+  authorized_domain = "futurice.com"
+  # You need to provision this manually at https://console.developers.google.com/apis/credentials
   # We are building a Web Application and do not need the client_secret
   oauth_client_id = "455826092000-oi4h9ul0b943oi8f8in89pnjiroj1d4u.apps.googleusercontent.com"
+  # Chicken and egg: You can only figure this out after deploying once!
+  service_url = "https://openresty-flxotk3pnq-ew.a.run.app"
 }
 
 terraform {
@@ -59,9 +60,9 @@ resource "google_cloud_run_service_iam_policy" "noauth" {
 # Hydrate config into .build directory
 resource "local_file" "config" {
   content = templatefile("${path.module}/files/default.template.conf", {
-    OAUTH_CLIENT_ID = local.oauth_client_id
-    UPSTREAM_URL = "https://camunda-secure-flxotk3pnq-ew.a.run.app"
-    AUTHORIZED_DOMAIN = "futurice.com"
+    OAUTH_CLIENT_ID   = local.oauth_client_id
+    UPSTREAM_URL      = local.upstream_url
+    AUTHORIZED_DOMAIN = local.authorized_domain
   })
   filename = "${path.module}/.build/default.conf"
 }
@@ -70,7 +71,6 @@ resource "local_file" "config" {
 resource "local_file" "login" {
   content = templatefile("${path.module}/files/login.template", {
     OAUTH_CLIENT_ID = local.oauth_client_id
-    SERVICE_URL     = local.service_url
   })
   filename = "${path.module}/.build/login"
 }
