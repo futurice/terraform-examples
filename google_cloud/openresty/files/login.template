@@ -13,11 +13,14 @@
 
     function onSignIn(googleUser) {
       //https://developers.google.com/identity/sign-in/web/sign-in
-      var expires_in = googleUser.getAuthResponse().expires_in;
-      var id_token = googleUser.getAuthResponse().id_token;
+      const expires_in = googleUser.getAuthResponse().expires_in;
+      const id_token = googleUser.getAuthResponse().id_token;
       document.cookie = "IDTOKEN=" + id_token + 
         "; path=/; samesite=strict; max-age=" + expires_in + 
         "; secure";
+      const urlParams = new URLSearchParams(window.location.search);
+      const returnurl = urlParams.get('returnurl');
+      window.location.replace(returnurl);
     }
     </script>
   </body>

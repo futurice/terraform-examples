@@ -61,6 +61,7 @@ resource "local_file" "config" {
   content = templatefile("${path.module}/files/default.template.conf", {
     OAUTH_CLIENT_ID = local.oauth_client_id
     UPSTREAM_URL = "https://camunda-secure-flxotk3pnq-ew.a.run.app"
+    AUTHORIZED_DOMAIN = "futurice.com"
   })
   filename = "${path.module}/.build/default.conf"
 }
