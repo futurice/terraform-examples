@@ -4,9 +4,6 @@ locals {
   location        = "EU"
   region          = "europe-west1"
   base_image_name = "openresty/openresty"
-  // Avoiding bug https://github.com/openresty/lua-nginx-module/issues/587
-  # base_image_tag  = "1.13.6.1-2-wheezy"
-  # base_image_tag  = "1.15.8.3-stretch"
   base_image_tag    = "1.15.8.3-alpine"
   upstream_url      = "https://camunda-secure-flxotk3pnq-ew.a.run.app"
   authorized_domain = "futurice.com"

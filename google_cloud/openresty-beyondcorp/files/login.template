@@ -1,27 +1,31 @@
-<html>
-  <head>
-    <title>Google Sign-in + Run</title>
-    <script src="https://apis.google.com/js/platform.js"></script>
-    <script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js'></script>
-    <meta name="google-signin-client_id" content="${OAUTH_CLIENT_ID}">
-  </head>
+<head>
+  <title>Futurice IAP</title>
+  <script src="https://apis.google.com/js/platform.js"></script>
+  <script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js'></script>
+  <meta name="google-signin-client_id" content="${OAUTH_CLIENT_ID}">
+</head>
 
-  <body>
-    <div class="g-signin2" data-onsuccess="onSignIn"></div></br>
-    <script>
-    var id_token;
-
+<body>
+  <div class="g-signin2" data-onsuccess="onSignIn"></div></br>
+  <script>
     function onSignIn(googleUser) {
       //https://developers.google.com/identity/sign-in/web/sign-in
       const expires_in = googleUser.getAuthResponse().expires_in;
       const id_token = googleUser.getAuthResponse().id_token;
-      document.cookie = "IDTOKEN=" + id_token + 
+      const access_token = googleUser.getAuthResponse(true).access_token;
+      document.cookie = "ACCESSTOKEN=" + access_token + 
         "; path=/; samesite=strict; max-age=" + expires_in + 
         "; secure";
       const urlParams = new URLSearchParams(window.location.search);
-      const returnurl = urlParams.get('returnurl');
-      window.location.replace(returnurl);
+      if (urlParams.get('token')) {
+        $("#token").text(access_token);
+      } else if (urlParams.get('returnurl')) {
+        const returnurl = urlParams.get('returnurl');
+        window.location.replace(returnurl);
+      }
     }
-    </script>
-  </body>
-</html>
+  </script>
+  <div>
+    <p id="token"></p>
+  </div>
+</body>
