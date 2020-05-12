@@ -57,7 +57,7 @@ resource "google_cloud_run_service" "camunda" {
         }
         env {
           name  = "DB_CONN_MAXIDLE"
-          value = "5"
+          value = "0"
         }
         env {
           name  = "DB_CONN_MINIDLE"
