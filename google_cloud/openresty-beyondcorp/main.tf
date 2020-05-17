@@ -1,9 +1,9 @@
 
 locals {
-  project         = "larkworthy-tester"
-  location        = "EU"
-  region          = "europe-west1"
-  base_image_name = "openresty/openresty"
+  project           = "larkworthy-tester"
+  location          = "EU"
+  region            = "europe-west1"
+  base_image_name   = "openresty/openresty"
   base_image_tag    = "1.15.8.3-alpine"
   upstream_url      = "https://camunda-secure-flxotk3pnq-ew.a.run.app"
   authorized_domain = "futurice.com"
@@ -38,6 +38,17 @@ resource "google_project_iam_member" "openresty_invoker" {
   member  = "serviceAccount:${google_service_account.openresty.email}"
 }
 
+resource "google_project_iam_member" "openresty_publisher" {
+  project = local.project
+  role    = "roles/pubsub.publisher"
+  member  = "serviceAccount:${google_service_account.openresty.email}"
+}
+resource "google_project_iam_member" "openresty_subscriber" {
+  project = local.project
+  role    = "roles/pubsub.subscriber"
+  member  = "serviceAccount:${google_service_account.openresty.email}"
+}
+
 # Policy to allow public access to Cloud Run endpoint
 data "google_iam_policy" "noauth" {
   binding {
@@ -60,6 +71,7 @@ resource "local_file" "config" {
     OAUTH_CLIENT_ID   = local.oauth_client_id
     UPSTREAM_URL      = local.upstream_url
     AUTHORIZED_DOMAIN = local.authorized_domain
+    WAL_TOPIC         = google_pubsub_topic.httpwal.id
   })
   filename = "${path.module}/.build/default.conf"
 }
@@ -90,4 +102,8 @@ resource "google_cloud_run_service" "openresty" {
     percent         = 100
     latest_revision = true
   }
+}
+
+resource "google_pubsub_topic" "httpwal" {
+  name = "openresty_wal"
 }
