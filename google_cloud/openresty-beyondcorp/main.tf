@@ -107,3 +107,18 @@ resource "google_cloud_run_service" "openresty" {
 resource "google_pubsub_topic" "httpwal" {
   name = "openresty_wal"
 }
+
+resource "google_pubsub_subscription" "httpwal" {
+  name  = "httpwal"
+  topic = google_pubsub_topic.httpwal.name
+
+  ack_deadline_seconds = 120
+
+  push_config {
+    push_endpoint = "${local.service_url}/wal-playback/"
+
+    attributes = {
+      x-goog-version = "v1"
+    }
+  }
+}
