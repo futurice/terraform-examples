@@ -12,3 +12,4 @@ RUN wget --directory-prefix=/camunda/lib https://repo1.maven.org/maven2/net/mini
 RUN wget --directory-prefix=/camunda/lib https://repo1.maven.org/maven2/net/minidev/accessors-smart/1.2/accessors-smart-1.2.jar
 
 COPY bpm-platform.xml /camunda/conf/
+# COPY server.xml /camunda/conf/

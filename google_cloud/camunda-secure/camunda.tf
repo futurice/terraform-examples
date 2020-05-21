@@ -24,7 +24,7 @@ resource "google_cloud_run_service" "camunda" {
           limits = {
             # Default of 256Mb is not enough to start Camunda 
             memory = "2Gi"
-            cpu    = "1000m"
+            cpu    = "2000m"
           }
         }
         env {
@@ -43,7 +43,7 @@ resource "google_cloud_run_service" "camunda" {
         }
         env {
           name  = "nonce"
-          value = "dd"
+          value = "ddd"
         }
         env {
           name  = "DB_PASSWORD"
@@ -62,6 +62,10 @@ resource "google_cloud_run_service" "camunda" {
         env {
           name  = "DB_CONN_MINIDLE"
           value = "0"
+        }
+        env {
+          name  = "DB_VALIDATE_ON_BORROW"
+          value = "true"
         }
       }
     }
