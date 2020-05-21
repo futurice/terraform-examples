@@ -77,6 +77,10 @@ resource "google_cloud_run_service" "camunda" {
           name  = "DB_CONN_MINIDLE"
           value = "0"
         }
+        env {
+          name  = "DB_VALIDATE_ON_BORROW"
+          value = "true"
+        }
       }
     }
 
