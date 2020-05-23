@@ -14,5 +14,26 @@ Firebase Auth is an alternative choice for the authenticating technology, but du
 
 ## OpenResty
 
-Build on top of OpenResty with a smattering of Lua
+Build on top of OpenResty
+
+
+## Local testing
+
+Generate the docker artifacts
+
+```
+terraform apply \
+  -target=local_file.login \
+  -target=local_file.config \
+  -target=local_file.dockerfile \
+  --auto-approve
+```
+
+Generate a local service account key in .secret
+
+`gcloud iam service-accounts keys create .secret/sa.json --iam-account=openresty@larkworthy-tester.iam.gserviceaccount.com`
+
+Bring up docker compose
+
+`docker-compose up`
 
