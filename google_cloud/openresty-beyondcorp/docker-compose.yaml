@@ -1,0 +1,12 @@
+version: '3'
+services:
+  openresty:
+    build: .build/
+    ports:
+      - "8080:8080"
+  metadata.google.internal:
+    image: salrashid123/gcemetadataserver
+    command: "-port :80
+              --serviceAccountFile /conf/sa.json"
+    volumes:
+      - .secret/:/conf/
