@@ -2,6 +2,7 @@ FROM eu.gcr.io/${project}/${image}:${tag}
 RUN apk add --no-cache curl perl
 RUN opm get ledgetech/lua-resty-http
 RUN opm get bungle/lua-resty-reqargs
+RUN opm get jkeys089/lua-resty-hmac
 
 ADD default.conf /etc/nginx/conf.d/default.conf
 ADD login /assets/login

@@ -19,21 +19,16 @@ Build on top of OpenResty
 
 ## Local testing
 
-Generate the docker artifacts
-
-```
-terraform apply \
-  -target=local_file.login \
-  -target=local_file.config \
-  -target=local_file.dockerfile \
-  --auto-approve
-```
-
 Generate a local service account key in .secret
 
 `gcloud iam service-accounts keys create .secret/sa.json --iam-account=openresty@larkworthy-tester.iam.gserviceaccount.com`
 
-Bring up docker compose
+run this script to get a setup that reloads on CTRL + C
 
-`docker-compose up`
+`/bin/bash test/dev.sh`
+
+The use of bash to start the script gives it an easier name to find to kill
+
+killall "bash"
+
 
