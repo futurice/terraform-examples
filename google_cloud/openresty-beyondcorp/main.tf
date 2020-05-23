@@ -68,10 +68,11 @@ resource "google_cloud_run_service_iam_policy" "noauth" {
 # Hydrate config into .build directory
 resource "local_file" "config" {
   content = templatefile("${path.module}/files/default.template.conf", {
-    OAUTH_CLIENT_ID   = local.oauth_client_id
-    UPSTREAM_URL      = local.upstream_url
-    AUTHORIZED_DOMAIN = local.authorized_domain
-    WAL_TOPIC         = google_pubsub_topic.httpwal.id
+    OAUTH_CLIENT_ID      = local.oauth_client_id
+    UPSTREAM_URL         = local.upstream_url
+    AUTHORIZED_DOMAIN    = local.authorized_domain
+    WAL_TOPIC            = google_pubsub_topic.httpwal.id
+    SLACK_SIGNING_SECRET = "projects/455826092000/secrets/SlackSigningSecret/versions/latest"
   })
   filename = "${path.module}/.build/default.conf"
 }

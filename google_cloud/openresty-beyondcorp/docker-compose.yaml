@@ -6,7 +6,10 @@ services:
       - "8080:8080"
   metadata.google.internal:
     image: salrashid123/gcemetadataserver
+    # Fix (tokenScopes): https://github.com/salrashid123/gce_metadata_server/issues/5 
     command: "-port :80
-              --serviceAccountFile /conf/sa.json"
+              --serviceAccountFile /conf/sa.json
+              --tokenScopes https://www.googleapis.com/auth/cloud-platform
+             "
     volumes:
       - .secret/:/conf/
