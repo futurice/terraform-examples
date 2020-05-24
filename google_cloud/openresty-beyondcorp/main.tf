@@ -1,6 +1,7 @@
 
 locals {
   project           = "larkworthy-tester"
+  project_number    = "455826092000"
   location          = "EU"
   region            = "europe-west1"
   base_image_name   = "openresty/openresty"
@@ -73,6 +74,7 @@ resource "local_file" "config" {
     AUTHORIZED_DOMAIN    = local.authorized_domain
     WAL_TOPIC            = google_pubsub_topic.httpwal.id
     SLACK_SIGNING_SECRET = "projects/455826092000/secrets/SlackSigningSecret/versions/latest"
+    AUTHORIZED_WAL_USER  = google_service_account.openresty.email
   })
   filename = "${path.module}/.build/default.conf"
 }
@@ -109,6 +111,13 @@ resource "google_pubsub_topic" "httpwal" {
   name = "openresty_wal"
 }
 
+# grant Cloud Pub/Sub the permission to create tokens for authenticating the subscription
+resource "google_project_iam_member" "pubsub_token_creator" {
+  project = local.project
+  role    = "roles/iam.serviceAccountTokenCreator"
+  member  = "serviceAccount:service-${local.project_number}@gcp-sa-pubsub.iam.gserviceaccount.com"
+}
+
 resource "google_pubsub_subscription" "httpwal" {
   name  = "httpwal"
   topic = google_pubsub_topic.httpwal.name
@@ -117,6 +126,10 @@ resource "google_pubsub_subscription" "httpwal" {
 
   push_config {
     push_endpoint = "${local.service_url}/wal-playback/"
+
+    oidc_token {
+      service_account_email = google_service_account.openresty.email
+    }
 
     attributes = {
       x-goog-version = "v1"
