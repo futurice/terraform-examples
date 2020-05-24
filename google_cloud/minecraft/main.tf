@@ -148,7 +148,7 @@ resource "google_project_iam_custom_role" "minecraftSwitcher" {
   role_id     = "MinecraftSwitcher"
   title       = "Minecraft Switcher"
   description = "Can turn a VM on and off"
-  permissions = ["compute.instances.start", "compute.instances.start", "compute.instances.get"]
+  permissions = ["compute.instances.start", "compute.instances.stop", "compute.instances.get"]
 }
 
 resource "google_project_iam_custom_role" "instanceLister" {
