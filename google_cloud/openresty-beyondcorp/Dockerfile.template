@@ -6,5 +6,6 @@ RUN opm get jkeys089/lua-resty-hmac
 
 ADD default.conf /etc/nginx/conf.d/default.conf
 ADD login /assets/login
+ADD swiss/ /usr/local/openresty/lualib/swiss/
 
 

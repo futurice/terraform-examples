@@ -42,10 +42,20 @@ The use of bash to start the script gives it an easier name to find to kill
 
 killall "bash"
 
+# Get prod tokens
+
+    https://openresty-flxotk3pnq-ew.a.run.app/login?token=true
+
 # Test WAL verification
 
-curl -X POST -d "{}" http://localhost:8080/wal-playback/
+    curl -X POST -d "{}" http://localhost:8080/wal-playback/
 
 # Test token validation
-curl http://localhost:8080/httptokeninfo?id_token=foo
-curl http://localhost:8080/httptokeninfo?access_token=foo
+
+    curl http://localhost:8080/httptokeninfo?id_token=foo
+    curl http://localhost:8080/httptokeninfo?access_token=foo
+
+
+# Test slack
+
+    curl http://localhost:8080/slack/command

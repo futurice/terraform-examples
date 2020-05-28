@@ -2,11 +2,10 @@ while :
 do
   # Generate local artifacts
   terraform apply \
-    -target=local_file.login \
-    -target=local_file.config \
+    -target=template_dir.swiss \
     -target=local_file.dockerfile \
+    -target=local_file.config \
     --auto-approve
-  docker-compose build
-  # Run local container
-  docker-compose up
+  docker-compose build  # Rebuild local image
+  docker-compose up     # Run local container
 done
