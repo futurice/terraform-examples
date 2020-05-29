@@ -1,11 +1,11 @@
 local _M = {
     _VERSION = '0.01',
 }
+local cjson = require "cjson"
+local http = require "resty.http"
+local b64 = require("ngx.base64")
 
 function _M.fetch(location, access_token)
-    local cjson = require "cjson"
-    local http = require "resty.http"
-    local b64 = require("ngx.base64")
     local httpc = http.new()
     local secretlocation = location
     ngx.log(ngx.WARN, "fetching secret from: " .. secretlocation)
