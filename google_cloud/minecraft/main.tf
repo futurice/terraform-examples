@@ -91,7 +91,7 @@ resource "google_compute_instance" "minecraft" {
   #  docker exec -i mc rcon-cli
   # Once in rcon-cli you can "op <player_id>" to make someone an operator (admin)
   # Use 'sudo journalctl -u google-startup-scripts.service' to retrieve the startup script output
-  metadata_startup_script = "docker run -d -p 25565:25565 -e EULA=TRUE -v /var/minecraft:/data --name mc --rm=true itzg/minecraft-server:latest;"
+  metadata_startup_script = "docker run -d -p 25565:25565 -e EULA=TRUE -v /var/minecraft:/data --name mc -e TYPE=FORGE -e MEMORY=2G --rm=true itzg/minecraft-server:latest;"
 
   boot_disk {
     auto_delete = false # Keep disk after shutdown (game data)
