@@ -8,6 +8,7 @@ module "docker-mirror" {
 
 # Hydrate docker template file into .build directory
 resource "local_file" "dockerfile" {
+  depends_on = [template_dir.swiss]
   content = templatefile("${path.module}/Dockerfile.template", {
     project = local.project
     image   = local.base_image_name
@@ -23,7 +24,7 @@ resource "null_resource" "openresty_image" {
     # Rebuild if we change the base image, dockerfile, or bpm-platform config
     image = "eu.gcr.io/${local.project}/openresty:${local.base_image_tag}_${
       sha1(
-        "${sha1(local_file.dockerfile.content)}${sha1(local_file.config.content)}${sha1(local_file.login.content)}"
+        "${sha1(local_file.dockerfile.content)}${sha1(local_file.config.content)}${sha1(local_file.login.content)}${data.archive_file.swiss.output_sha}"
       )  
     }"
   }

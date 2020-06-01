@@ -87,6 +87,19 @@ resource "local_file" "login" {
   filename = "${path.module}/.build/login"
 }
 
+# Copy files into .build directory
+resource "template_dir" "swiss" {
+  source_dir      = "${path.module}/files/swiss"
+  destination_dir = "${path.module}/.build/swiss"
+}
+
+# Create a zip just to generate a sha
+data "archive_file" "swiss" {
+  type        = "zip"
+  source_dir = "${path.module}/.build/swiss"
+  output_path = "/tmp/swiss.zip"
+}
+
 # Cloud Run Openresty
 resource "google_cloud_run_service" "openresty" {
   name     = "openresty"
@@ -123,14 +136,12 @@ resource "google_pubsub_subscription" "httpwal" {
   topic = google_pubsub_topic.httpwal.name
 
   ack_deadline_seconds = 120
-
   push_config {
     push_endpoint = "${local.service_url}/wal-playback/"
 
     oidc_token {
       service_account_email = google_service_account.openresty.email
     }
-
     attributes = {
       x-goog-version = "v1"
     }
