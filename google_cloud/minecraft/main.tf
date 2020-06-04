@@ -47,8 +47,8 @@ locals {
   # through the Cloud Console mobile app or https://console.cloud.google.com
   # Create a group at https://groups.google.com/forum/#!creategroup
   # and invite members by their email address.
-  enable_switch_access_group = 0 # Replace with 1 to enable google group admins
-  minecraft_switch_access_group = "GROUP_EM@IL_ADDRESS@googlegroups.com"
+  enable_switch_access_group = 1 # Replace with 1 to enable google group admins
+  minecraft_switch_access_group = "minecraft-switchers-lark@googlegroups.com"
 }
 
 
