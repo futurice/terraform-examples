@@ -6,7 +6,7 @@ Very fast Serverless OpenResty based proxy that can wrap upstream binaries with 
 - A Write Ahead Log
 - Google Secret Manager intergration
 
-Read more on the [blog](https://futurice.com/blog/openresty-a-swiss-army-proxy-for-serverless)
+Read more on the [OpenResty: a Swiss Army Proxy for Serverless; WAL, Slack, Zapier and Auth](https://futurice.com/blog/openresty-a-swiss-army-proxy-for-serverless) blog.
 
 An earlier version is linked to in the [Minimalist BeyondCorp style Identity Aware Proxy for Cloud Run](https://futurice.com/blog/identity-aware-proxy-for-google-cloud-run) blog that is just the login part.
 
