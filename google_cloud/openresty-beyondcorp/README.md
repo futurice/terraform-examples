@@ -1,18 +1,18 @@
-# Minimalist BeyondCorp style Identity Aware Proxy for Cloud Run
+# Swiss Army Identity Aware Proxy
 
-This creates an identity aware proxy that
-- Redirects all unauthenticated requests to /login and serves a Google Signin
-- Exchanges user supplied identity tokens for a system token and proxies upstream
+Very fast Serverless OpenResty based proxy that can wrap upstream binaries with a login. Furthermore, we have examples of 
+- Local development environment
+- Slack/Zapier intergration.
+- A Write Ahead Log
+- Google Secret Manager intergration
 
-We assume upstream is a private Cloud Run application, thus the proxies service account
-is given the cloud.run invoker role enabling it and its proxied users access to the internal resource. Of course, you can change what roles you give the proxy to enable users to call other services.
+Read more on the [blog](https://futurice.com/blog/openresty-a-swiss-army-proxy-for-serverless)
 
-I expect Google Cloud will develop an fully featured Identity Aware Proxy for Cloud Run at some point. Meanwhile, this is a short term solution that allows me to offer  secured Terraformed internal applications to other employees in my organization.
+An earlier version is linked to in the [Minimalist BeyondCorp style Identity Aware Proxy for Cloud Run](https://futurice.com/blog/identity-aware-proxy-for-google-cloud-run) blog that is just the login part.
 
+## OpenResty and Cloud Run
 
-## OpenResty
-
-Build on top of OpenResty
+Build on top of OpenResty, hosted on Cloud Run (and excellent match)
 
 ## Extensions Fast Response using a Write Ahead Log
 

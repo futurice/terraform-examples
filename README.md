@@ -1112,7 +1112,8 @@ Hosting static website using S3 is a very cost effective approach. Since, S3 web
 
 ## Architecture
 
-![Architecture](aws/static_website_ssl_cloudfront_private_s3/images/s3-static-website.png)
+![Architecture](images/s3-static-website.png)
+
 
 
 # [aws/wordpress_fargate](aws/wordpress_fargate)
@@ -1164,6 +1165,7 @@ terraform init -backend-config="bucket=<BUCKET_NAME>" -backend-config="profile=<
 ```
 
 p.s. Instead of environment variables, you can obviously use .tfvar files for assigning values to terraform variables.
+
 
 
 # [azure](azure)
@@ -1356,7 +1358,11 @@ Read more on the blog
 - [Call external services with at-least-once delevery](https://www.futurice.com/blog/at-least-once-delivery-for-serverless-camunda-workflow-automation)
 
 
-    #Camunda # Cloud Run #Cloud SQL #Cloud Build #Container Registry #Docker
+    #Camunda # Cloud Run #Cloud SQL #Cloud Build #Container Regi
+
+
+# [google_cloud/camunda](google_cloud/camunda)
+stry #Docker
 
 ### Terraform setup
 
@@ -1445,21 +1451,21 @@ and add it to an upstream header, required to make an authenticated call to a pr
 
 
 # [google_cloud/openresty-beyondcorp](google_cloud/openresty-beyondcorp)
-# Minimalist BeyondCorp style Identity Aware Proxy for Cloud Run
+# Swiss Army Identity Aware Proxy
 
-This creates an identity aware proxy that
-- Redirects all unauthenticated requests to /login and serves a Google Signin
-- Exchanges user supplied identity tokens for a system token and proxies upstream
+Very fast Serverless OpenResty based proxy that can wrap upstream binaries with a login. Furthermore, we have examples of 
+- Local development environment
+- Slack/Zapier intergration.
+- A Write Ahead Log
+- Google Secret Manager intergration
 
-We assume upstream is a private Cloud Run application, thus the proxies service account
-is given the cloud.run invoker role enabling it and its proxied users access to the internal resource. Of course, you can change what roles you give the proxy to enable users to call other services.
+Read more on the [blog](https://futurice.com/blog/openresty-a-swiss-army-proxy-for-serverless)
 
-I expect Google Cloud will develop an fully featured Identity Aware Proxy for Cloud Run at some point. Meanwhile, this is a short term solution that allows me to offer  secured Terraformed internal applications to other employees in my organization.
+An earlier version is linked to in the [Minimalist BeyondCorp style Identity Aware Proxy for Cloud Run](https://futurice.com/blog/identity-aware-proxy-for-google-cloud-run) blog that is just the login part.
 
+## OpenResty and Cloud Run
 
-## OpenResty
-
-Build on top of OpenResty
+Build on top of OpenResty, hosted on Cloud Run (and excellent match)
 
 ## Extensions Fast Response using a Write Ahead Log
 
@@ -1489,11 +1495,22 @@ The use of bash to start the script gives it an easier name to find to kill
 
 killall "bash"
 
+# Get prod tokens
+
+    https://openresty-flxotk3pnq-ew.a.run.app/login?token=true
+
 # Test WAL verification
 
-curl -X POST -d "{}" http://localhost:8080/wal-playback/
+    curl -X POST -d "{}" http://localhost:8080/wal-playback/
 
 # Test token validation
-curl http://localhost:8080/httptokeninfo?id_token=foo
-curl http://localhost:8080/httptokeninfo?access_token=foo
+
+    curl http://localhost:8080/httptokeninfo?id_token=foo
+    curl http://localhost:8080/httptokeninfo?access_token=foo
+
+
+# Test slack
+
+    curl http://localhost:8080/slack/command
+
 
