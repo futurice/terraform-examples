@@ -46,7 +46,7 @@ class AddSection extends Transform {
               let resources = [...str.toString().matchAll(hclResourceRegex)].map(
                 match => match[1]
               ).sort();
-              this.push(`\n${indentation}  - [${file}](${file})`);
+              this.push(`\n${indentation}  - [${file}](${file}) uses:`);
               new Set(resources).forEach(resource => {
                 this.push(`\n${indentation}    - resource ${resource}`);
               })
