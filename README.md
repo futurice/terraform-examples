@@ -10,25 +10,227 @@ Lots of Terraform recipes for doing things, aimed for copy and pasting into proj
 
 - [aws](aws)
   - [aws/aws_domain_redirect](aws/aws_domain_redirect)
+    - [aws/aws_domain_redirect/main.tf](aws/aws_domain_redirect/main.tf)
+    - [aws/aws_domain_redirect/variables.tf](aws/aws_domain_redirect/variables.tf)
   - [aws/aws_ec2_ebs_docker_host](aws/aws_ec2_ebs_docker_host)
+    - [aws/aws_ec2_ebs_docker_host/data.tf](aws/aws_ec2_ebs_docker_host/data.tf)
+    - [aws/aws_ec2_ebs_docker_host/main.tf](aws/aws_ec2_ebs_docker_host/main.tf)
+      - aws_instance
+      - aws_volume_attachment
+      - null_resource
+    - [aws/aws_ec2_ebs_docker_host/outputs.tf](aws/aws_ec2_ebs_docker_host/outputs.tf)
+    - [aws/aws_ec2_ebs_docker_host/security.tf](aws/aws_ec2_ebs_docker_host/security.tf)
+      - aws_key_pair
+      - aws_security_group
+      - aws_security_group_rule
+    - [aws/aws_ec2_ebs_docker_host/variables.tf](aws/aws_ec2_ebs_docker_host/variables.tf)
   - [aws/aws_lambda_api](aws/aws_lambda_api)
+    - [aws/aws_lambda_api/api_gateway_config.tf](aws/aws_lambda_api/api_gateway_config.tf)
+      - aws_api_gateway_base_path_mapping
+      - aws_api_gateway_deployment
+      - aws_api_gateway_domain_name
+      - aws_api_gateway_method_settings
+      - aws_api_gateway_rest_api
+      - aws_api_gateway_stage
+    - [aws/aws_lambda_api/api_gateway_resources.tf](aws/aws_lambda_api/api_gateway_resources.tf)
+      - aws_api_gateway_integration
+      - aws_api_gateway_integration_response
+      - aws_api_gateway_method
+      - aws_api_gateway_method_response
+      - aws_api_gateway_resource
+    - [aws/aws_lambda_api/certificate.tf](aws/aws_lambda_api/certificate.tf)
+      - aws_acm_certificate
+      - aws_acm_certificate_validation
+      - aws_route53_record
+    - [aws/aws_lambda_api/data.tf](aws/aws_lambda_api/data.tf)
+    - [aws/aws_lambda_api/main.tf](aws/aws_lambda_api/main.tf)
+      - aws_lambda_function
+    - [aws/aws_lambda_api/outputs.tf](aws/aws_lambda_api/outputs.tf)
+    - [aws/aws_lambda_api/permissions.tf](aws/aws_lambda_api/permissions.tf)
+      - aws_iam_policy
+      - aws_iam_role
+      - aws_iam_role_policy_attachment
+      - aws_lambda_permission
+    - [aws/aws_lambda_api/route53.tf](aws/aws_lambda_api/route53.tf)
+      - aws_route53_record
+    - [aws/aws_lambda_api/variables.tf](aws/aws_lambda_api/variables.tf)
   - [aws/aws_lambda_cronjob](aws/aws_lambda_cronjob)
+    - [aws/aws_lambda_cronjob/main.tf](aws/aws_lambda_cronjob/main.tf)
+      - aws_lambda_function
+    - [aws/aws_lambda_cronjob/outputs.tf](aws/aws_lambda_cronjob/outputs.tf)
+    - [aws/aws_lambda_cronjob/permissions.tf](aws/aws_lambda_cronjob/permissions.tf)
+      - aws_cloudwatch_event_rule
+      - aws_cloudwatch_event_target
+      - aws_iam_policy
+      - aws_iam_role
+      - aws_iam_role_policy_attachment
+      - aws_lambda_permission
+    - [aws/aws_lambda_cronjob/variables.tf](aws/aws_lambda_cronjob/variables.tf)
   - [aws/aws_mailgun_domain](aws/aws_mailgun_domain)
+    - [aws/aws_mailgun_domain/data.tf](aws/aws_mailgun_domain/data.tf)
+    - [aws/aws_mailgun_domain/main.tf](aws/aws_mailgun_domain/main.tf)
+      - aws_route53_record
+      - mailgun_domain
+    - [aws/aws_mailgun_domain/outputs.tf](aws/aws_mailgun_domain/outputs.tf)
+    - [aws/aws_mailgun_domain/variables.tf](aws/aws_mailgun_domain/variables.tf)
   - [aws/aws_reverse_proxy](aws/aws_reverse_proxy)
+    - [aws/aws_reverse_proxy/certificate.tf](aws/aws_reverse_proxy/certificate.tf)
+      - aws_acm_certificate
+      - aws_acm_certificate_validation
+      - aws_route53_record
+    - [aws/aws_reverse_proxy/cloudfront.tf](aws/aws_reverse_proxy/cloudfront.tf)
+      - aws_cloudfront_distribution
+    - [aws/aws_reverse_proxy/data.tf](aws/aws_reverse_proxy/data.tf)
+    - [aws/aws_reverse_proxy/lambda.tf](aws/aws_reverse_proxy/lambda.tf)
+      - aws_iam_policy
+      - aws_iam_role
+      - aws_iam_role_policy_attachment
+      - aws_lambda_function
+    - [aws/aws_reverse_proxy/outputs.tf](aws/aws_reverse_proxy/outputs.tf)
+    - [aws/aws_reverse_proxy/route53.tf](aws/aws_reverse_proxy/route53.tf)
+      - aws_route53_record
+    - [aws/aws_reverse_proxy/variables.tf](aws/aws_reverse_proxy/variables.tf)
   - [aws/aws_static_site](aws/aws_static_site)
+    - [aws/aws_static_site/data.tf](aws/aws_static_site/data.tf)
+      - random_string
+    - [aws/aws_static_site/main.tf](aws/aws_static_site/main.tf)
+    - [aws/aws_static_site/outputs.tf](aws/aws_static_site/outputs.tf)
+    - [aws/aws_static_site/s3.tf](aws/aws_static_site/s3.tf)
+      - aws_s3_bucket
+      - aws_s3_bucket_policy
+    - [aws/aws_static_site/variables.tf](aws/aws_static_site/variables.tf)
   - [aws/static_website_ssl_cloudfront_private_s3](aws/static_website_ssl_cloudfront_private_s3)
+    - [aws/static_website_ssl_cloudfront_private_s3/init.tf](aws/static_website_ssl_cloudfront_private_s3/init.tf)
+    - [aws/static_website_ssl_cloudfront_private_s3/main.tf](aws/static_website_ssl_cloudfront_private_s3/main.tf)
+      - aws_cloudfront_distribution
+      - aws_cloudfront_origin_access_identity
+      - aws_route53_record
+      - aws_s3_bucket
+      - aws_s3_bucket_policy
+      - aws_s3_bucket_public_access_block
+    - [aws/static_website_ssl_cloudfront_private_s3/variables.tf](aws/static_website_ssl_cloudfront_private_s3/variables.tf)
   - [aws/wordpress_fargate](aws/wordpress_fargate)
+    - [aws/wordpress_fargate/alb.tf](aws/wordpress_fargate/alb.tf)
+      - aws_security_group
+    - [aws/wordpress_fargate/cloudfront.tf](aws/wordpress_fargate/cloudfront.tf)
+      - aws_cloudfront_distribution
+    - [aws/wordpress_fargate/data.tf](aws/wordpress_fargate/data.tf)
+    - [aws/wordpress_fargate/db.tf](aws/wordpress_fargate/db.tf)
+      - aws_db_subnet_group
+      - aws_rds_cluster
+      - aws_security_group
+      - aws_ssm_parameter
+      - random_string
+    - [aws/wordpress_fargate/efs.tf](aws/wordpress_fargate/efs.tf)
+      - aws_efs_file_system
+      - aws_efs_mount_target
+      - aws_security_group
+    - [aws/wordpress_fargate/fargate.tf](aws/wordpress_fargate/fargate.tf)
+      - aws_appautoscaling_policy
+      - aws_appautoscaling_target
+      - aws_cloudwatch_log_group
+      - aws_cloudwatch_metric_alarm
+      - aws_ecs_cluster
+      - aws_ecs_service
+      - aws_ecs_task_definition
+      - aws_iam_policy
+      - aws_iam_role
+      - aws_iam_role_policy_attachment
+      - aws_lb_listener_rule
+      - aws_lb_target_group
+      - aws_route53_record
+      - aws_security_group
+    - [aws/wordpress_fargate/output.tf](aws/wordpress_fargate/output.tf)
+    - [aws/wordpress_fargate/provider.tf](aws/wordpress_fargate/provider.tf)
+    - [aws/wordpress_fargate/route53.tf](aws/wordpress_fargate/route53.tf)
+      - aws_route53_record
+    - [aws/wordpress_fargate/variables.tf](aws/wordpress_fargate/variables.tf)
+    - [aws/wordpress_fargate/vpc.tf](aws/wordpress_fargate/vpc.tf)
 - [azure](azure)
   - [azure/layers](azure/layers)
+    - [azure/layers/layers.tf](azure/layers/layers.tf)
+      - null_resource
+    - [azure/layers/main.tf](azure/layers/main.tf)
+      - azurerm_resource_group
+      - azurerm_storage_account
+      - azurerm_storage_blob
+      - azurerm_storage_container
+      - azurerm_subnet
+      - azurerm_virtual_network
+    - [azure/layers/variables.tf](azure/layers/variables.tf)
 - [generic](generic)
   - [generic/docker_compose_host](generic/docker_compose_host)
+    - [generic/docker_compose_host/main.tf](generic/docker_compose_host/main.tf)
+      - null_resource
+    - [generic/docker_compose_host/outputs.tf](generic/docker_compose_host/outputs.tf)
+    - [generic/docker_compose_host/variables.tf](generic/docker_compose_host/variables.tf)
 - [google_cloud](google_cloud)
   - [google_cloud/camunda-secure](google_cloud/camunda-secure)
+    - [google_cloud/camunda-secure/build.tf](google_cloud/camunda-secure/build.tf)
+      - local_file
+      - null_resource
+    - [google_cloud/camunda-secure/camunda.tf](google_cloud/camunda-secure/camunda.tf)
+      - google_cloud_run_service
+      - google_project_iam_member
+      - google_service_account
+    - [google_cloud/camunda-secure/cloudsql.tf](google_cloud/camunda-secure/cloudsql.tf)
+      - google_sql_database
+      - google_sql_database_instance
+      - google_sql_user
+    - [google_cloud/camunda-secure/main.tf](google_cloud/camunda-secure/main.tf)
   - [google_cloud/camunda](google_cloud/camunda)
+    - [google_cloud/camunda/build.tf](google_cloud/camunda/build.tf)
+      - local_file
+      - null_resource
+    - [google_cloud/camunda/camunda.tf](google_cloud/camunda/camunda.tf)
+      - google_cloud_run_service
+      - google_cloud_run_service_iam_policy
+      - google_project_iam_member
+      - google_service_account
+    - [google_cloud/camunda/cloudsql.tf](google_cloud/camunda/cloudsql.tf)
+      - google_sql_database
+      - google_sql_database_instance
+      - google_sql_user
+    - [google_cloud/camunda/main.tf](google_cloud/camunda/main.tf)
   - [google_cloud/CQRS_bigquery_memorystore](google_cloud/CQRS_bigquery_memorystore)
+    - [google_cloud/CQRS_bigquery_memorystore/main.tf](google_cloud/CQRS_bigquery_memorystore/main.tf)
+      - google_storage_bucket
+      - google_storage_bucket_object
   - [google_cloud/minecraft](google_cloud/minecraft)
+    - [google_cloud/minecraft/main.tf](google_cloud/minecraft/main.tf)
+      - google_compute_address
+      - google_compute_disk
+      - google_compute_firewall
+      - google_compute_instance
+      - google_compute_instance_iam_member
+      - google_compute_network
+      - google_project_iam_custom_role
+      - google_project_iam_member
+      - google_service_account
   - [google_cloud/oathkeeper](google_cloud/oathkeeper)
+    - [google_cloud/oathkeeper/build.tf](google_cloud/oathkeeper/build.tf)
+      - local_file
+      - null_resource
+    - [google_cloud/oathkeeper/main.tf](google_cloud/oathkeeper/main.tf)
+      - google_cloud_run_service
+      - google_cloud_run_service_iam_policy
+      - google_service_account
+      - google_storage_bucket
+      - google_storage_bucket_iam_member
+      - google_storage_bucket_object
   - [google_cloud/openresty-beyondcorp](google_cloud/openresty-beyondcorp)
+    - [google_cloud/openresty-beyondcorp/build.tf](google_cloud/openresty-beyondcorp/build.tf)
+      - local_file
+      - null_resource
+    - [google_cloud/openresty-beyondcorp/main.tf](google_cloud/openresty-beyondcorp/main.tf)
+      - google_cloud_run_service
+      - google_cloud_run_service_iam_policy
+      - google_project_iam_member
+      - google_pubsub_subscription
+      - google_pubsub_topic
+      - google_service_account
+      - local_file
+      - template_dir
 
 
 # [aws](aws)

@@ -8,6 +8,8 @@ function directory(path) {
   return path.match(/(?<dir>.*)\/[^/]*/)[1];
 }
 
+const hclResourceRegex = /resource\s+"([^"]*)"/g
+
 class AddSection extends Transform {
   constructor(options) {
     super(options);
@@ -23,24 +25,52 @@ class AddSection extends Transform {
     this.push(data);
 
     if (this.source == "_header_/README.md") {
+      var work = Promise.resolve();
       this.push("\n## Directory layout\n")
-      // ToC
+      // Generate ToC
       this.files.map(file => {
         if (file.indexOf("node_modules") >= 0) return;
         const link = directory(file);
         if (link == "_header_") return;
-        const level = (link.match(/\//g) || []).length;
-        console.log(level, link)
-        const indentation = new Array(level * 2 + 1).join(" ")
-        this.push(`\n${indentation}- [${link}](${link})`);
+        // Add resources used in Terraform recipe
+        work = work.then(() => new Promise( (resolve) => {
+
+          const level = (link.match(/\//g) || []).length;
+          const indentation = new Array(level * 2 + 1).join(" ")
+  
+          this.push(`\n${indentation}- [${link}](${link})`); 
+          console.log("glob")
+          glob(link + '/*.tf', (err, tffiles) => {
+            tffiles.map((file) => {
+              const str = fs.readFileSync(file);
+              let resources = [...str.toString().matchAll(hclResourceRegex)].map(
+                match => match[1]
+              ).sort();
+              this.push(`\n${indentation}  - [${file}](${file})`);
+              new Set(resources).forEach(resource => {
+                this.push(`\n${indentation}    - ${resource}`);
+              })
+              console.log("resources: " + resources)
+            });
+            console.log("resolve glob")
+            resolve();
+          });
+        }));
+      });
+      work.then(() => {
+        console.log("finish work")
+        this.push("\n\n");
+        callback();
       })
+    } else {
+      this.push("\n\n");
+      callback();
     }
 
-    this.push("\n\n");
-    callback();
   }
 }
 
+// BUGGY
 // Convert
 //  ![test1](./myImage1.png)
 // to
@@ -62,6 +92,7 @@ class RebaseImages extends Transform {
   }
 }
 
+// NOTE SURE IF THIS WORKS
 // Convert
 //  [a b c](./b.md)
 // to
@@ -97,14 +128,14 @@ glob('*/**/*.md', (err, files) => {
         work = work.then(() => new Promise( (resolve) => {
             console.log(file);
             fs.createReadStream(file)
-                .pipe(new AddSection({
-                  source: file,
-                  files: files
-                }))
-                .pipe(new RebaseImages())
-                .pipe(new ConvertLinksToAnchors())
-                .on("finish", (err) => resolve())
-                .pipe(output, {end: false})
+              .pipe(new AddSection({
+                source: file,
+                files: files
+              }))
+              .pipe(new RebaseImages())
+              .pipe(new ConvertLinksToAnchors())
+              .on("finish", (err) => resolve())
+              .pipe(output, {end: false})
         }));
     });
 });
