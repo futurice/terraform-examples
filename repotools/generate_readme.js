@@ -48,7 +48,7 @@ class AddSection extends Transform {
               ).sort();
               this.push(`\n${indentation}  - [${file}](${file})`);
               new Set(resources).forEach(resource => {
-                this.push(`\n${indentation}    - ${resource}`);
+                this.push(`\n${indentation}    - resource ${resource}`);
               })
               console.log("resources: " + resources)
             });
