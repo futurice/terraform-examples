@@ -39,27 +39,24 @@ class AddSection extends Transform {
           const indentation = new Array(level * 2 + 1).join(" ")
   
           this.push(`\n${indentation}- [${link}](${link})`); 
-          console.log("glob")
           glob(link + '/*.tf', (err, tffiles) => {
+            let resources = [];
             tffiles.map((file) => {
               const str = fs.readFileSync(file);
-              let resources = [...str.toString().matchAll(hclResourceRegex)].map(
-                match => match[1]
-              ).sort();
-              this.push(`\n${indentation}  - [${file}](${file})` +
-                        (resources.length > 0 ? " uses:": ""));
-              new Set(resources).forEach(resource => {
-                this.push(`\n${indentation}    - resource ${resource}`);
-              })
-              console.log("resources: " + resources)
+              resources = resources.concat(
+                [...str.toString().matchAll(hclResourceRegex)].map(
+                  match => match[1]
+                )
+              );
             });
-            console.log("resolve glob")
+            new Set(resources.sort()).forEach(resource => {
+              this.push(`\n${indentation}  - resource ${resource}`);
+            })
             resolve();
           });
         }));
       });
       work.then(() => {
-        console.log("finish work")
         this.push("\n\n");
         callback();
       })
