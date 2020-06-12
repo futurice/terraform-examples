@@ -1,4 +1,6 @@
-# Repository containing various terraform code
+![Hero](/hero.png)
+
+# Repository containing various Terraform code
 
 Lots of Terraform recipes for doing things, aimed for copy and pasting into projects.
 
