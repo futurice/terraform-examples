@@ -68,22 +68,21 @@ class AddSection extends Transform {
   }
 }
 
-// BUGGY
 // Convert
-//  ![test1](./myImage1.png)
+//  ![test1](<path>/<filename>.png) in <dir>
 // to
-//  ![image](/download/attachments/37064693/myImage1.png)
+//  ![image](<dir>/<path>/<filename>.png)
 class RebaseImages extends Transform {
   constructor(options) {
     super(options);
+    this.directory = options.directory;
   }
   _transform(data, encoding, callback) {
-    const pattern = /!\[.+\]\(\.(\/.+\.png)\)/g;
-    const replace = "![image](/download/attachments/37064693$1)";
+    const pattern = /!\[(?<label>[^\]]*)\]\((?<filepath>[^)]*)\)/g;
+    const replace = `![$1](${this.directory}/$2)`;
 
     const newData = data.toString()
       .replace(pattern, replace);
-
     this.push(newData);
 
     callback();
@@ -130,7 +129,9 @@ glob('*/**/*.md', (err, files) => {
                 source: file,
                 files: files
               }))
-              .pipe(new RebaseImages())
+              .pipe(new RebaseImages({
+                directory: directory(file)
+              }))
               .pipe(new ConvertLinksToAnchors())
               .on("finish", (err) => resolve())
               .pipe(output, {end: false})

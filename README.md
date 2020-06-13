@@ -1,4 +1,4 @@
-![Hero](/hero.png)
+![Hero](_header_/hero.png)
 
 # Repository containing various Terraform code
 
@@ -1239,7 +1239,7 @@ Hosting static website using S3 is a very cost effective approach. Since, S3 web
 
 ## Architecture
 
-![Architecture](images/s3-static-website.png)
+![Architecture](aws/static_website_ssl_cloudfront_private_s3/images/s3-static-website.png)
 
 
 
