@@ -4,7 +4,7 @@ do
   terraform apply \
     -target=template_dir.swiss \
     -target=local_file.dockerfile \
-    -target=local_file.config \
+    -target=local_file.login \
     --auto-approve
   docker-compose build  # Rebuild local image
   docker-compose up     # Run local container

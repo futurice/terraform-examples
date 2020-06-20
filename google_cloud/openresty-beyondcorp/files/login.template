@@ -1,31 +1,47 @@
 <head>
   <title>Futurice IAP</title>
-  <script src="https://apis.google.com/js/platform.js"></script>
   <script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js'></script>
   <meta name="google-signin-client_id" content="${OAUTH_CLIENT_ID}">
 </head>
 
 <body>
-  <div class="g-signin2" data-onsuccess="onSignIn"></div></br>
-  <script>
-    function onSignIn(googleUser) {
-      //https://developers.google.com/identity/sign-in/web/sign-in
-      const expires_in = googleUser.getAuthResponse().expires_in;
-      const id_token = googleUser.getAuthResponse().id_token;
-      const access_token = googleUser.getAuthResponse(true).access_token;
-      document.cookie = "ACCESSTOKEN=" + access_token + 
-        "; path=/; samesite=strict; max-age=" + expires_in + 
-        "; secure";
-      const urlParams = new URLSearchParams(window.location.search);
-      if (urlParams.get('token')) {
-        $("#token").text(access_token);
-      } else if (urlParams.get('returnurl')) {
-        const returnurl = urlParams.get('returnurl');
-        window.location.replace(returnurl);
-      }
-    }
-  </script>
   <div>
-    <p id="token"></p>
+    <div id="g_signin" class="g-signin2"/>
+    <script>
+      function onSignIn(googleUser) {
+        console.log("onSignIn", googleUser);
+        //https://developers.google.com/identity/sign-in/web/sign-in
+        const expires_in = googleUser.getAuthResponse().expires_in;
+        const id_token = googleUser.getAuthResponse().id_token;
+        const access_token = googleUser.getAuthResponse(true).access_token;
+        document.cookie = "ACCESSTOKEN=" + access_token + 
+          "; path=/; samesite=strict; max-age=" + expires_in + 
+          "; secure";
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('token')) {
+          console.log("Token requested: ", access_token);
+          $("#token").text(access_token);
+        } else if (urlParams.get('returnurl')) {
+          const returnurl = urlParams.get('returnurl');
+          console.log("Returnng to: ", returnurl);
+          window.location.replace(returnurl);
+        }
+      }
+
+      function renderButton() {
+        console.log("renderButton");
+        gapi.signin2.render('g_signin', {
+          'scope': 'profile email https://www.googleapis.com/auth/analytics.readonly',
+          'width': 240,
+          'height': 50,
+          'longtitle': true,
+          'theme': 'dark',
+          'onsuccess': onSignIn
+        });
+      }
+    </script>
   </div>
+  
+  <div><p id="token">ACCESS_TOKEN></p></div>
+  <script src="https://apis.google.com/js/platform.js?onload=renderButton" async defer></script>  
 </body>
