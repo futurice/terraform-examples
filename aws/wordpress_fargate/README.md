@@ -2,6 +2,8 @@
 
 This terraform example demonstrates how to run a scalable wordpress site. In this exmaple, we have tried to use serverless technologies as much as possible. Hence, we chose to run the site on fargate and are using Aurora serverless as DB.
 
+Read more about this on the blog [Terraform Recipe for WordPress on Fargate](https://futurice.com/blog/terraform-recipe-wordpress-fargate)
+
 ## AWS Services
 
 We used the below AWS services in our example. The main motivation behind the selection of services is that we select as many serverless components as possible.
