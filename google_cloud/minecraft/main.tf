@@ -47,7 +47,7 @@ locals {
   # through the Cloud Console mobile app or https://console.cloud.google.com
   # Create a group at https://groups.google.com/forum/#!creategroup
   # and invite members by their email address.
-  enable_switch_access_group = 1 # Replace with 1 to enable google group admins
+  enable_switch_access_group = 1
   minecraft_switch_access_group = "minecraft-switchers-lark@googlegroups.com"
 }
 
@@ -91,8 +91,12 @@ resource "google_compute_instance" "minecraft" {
   #  docker exec -i mc rcon-cli
   # Once in rcon-cli you can "op <player_id>" to make someone an operator (admin)
   # Use 'sudo journalctl -u google-startup-scripts.service' to retrieve the startup script output
-  metadata_startup_script = "docker run -d -p 25565:25565 -e EULA=TRUE -v /var/minecraft:/data --name mc -e TYPE=FORGE -e MEMORY=2G --rm=true itzg/minecraft-server:latest;"
+  metadata_startup_script = "docker run -d -p 25565:25565 -e EULA=TRUE -e VERSION=1.12.2 -v /var/minecraft:/data --name mc -e TYPE=FORGE -e FORGEVERSION=14.23.0.2552 -e MEMORY=2G --rm=true itzg/minecraft-server:latest;"
 
+  metadata = {
+    enable-oslogin = "TRUE"
+  }
+      
   boot_disk {
     auto_delete = false # Keep disk after shutdown (game data)
     source      = google_compute_disk.minecraft.self_link
