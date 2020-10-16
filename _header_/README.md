@@ -21,7 +21,7 @@ A few of the recipes have associated blog posts.
 - [Low cost Friends and Family Minecraft server](https://www.futurice.com/blog/friends-and-family-minecraft-server-terraform-recipe)
 - [Minimalist BeyondCorp style Identity Aware Proxy for Cloud Run](https://futurice.com/blog/identity-aware-proxy-for-google-cloud-run)
 - [Serverless Camunda Business Workflow Engine on Cloud Run](https://www.futurice.com/blog/serverless-camunda-terraform-recipe-using-cloud-run-and-cloud-sql)
-- [Serverless Camunda Business Workflow Engine on Cloud Run](https://futurice.com/blog/a-detailed-look-at-camunda-bpmn-application-development)
+- [A Detailed Look at Camunda BPMN Application Development](https://futurice.com/blog/a-detailed-look-at-camunda-bpmn-application-development)
 - [Exporting Bigquery to Cloud Memorystore](https://www.futurice.com/blog/bigquery-to-memorystore)
  
 # Contribution
