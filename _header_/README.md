@@ -16,10 +16,12 @@ Terraform is an ideal knowledge transfer tool that can communicate the minutea o
  
 A few of the recipes have associated blog posts.
  
+- [Terraform Recipe for WordPress on Fargate](https://futurice.com/blog/terraform-recipe-wordpress-fargate)
 - [OpenResty: a Swiss Army Proxy for Serverless; WAL, Slack, Zapier and Auth](https://futurice.com/blog/openresty-a-swiss-army-proxy-for-serverless)
 - [Low cost Friends and Family Minecraft server](https://www.futurice.com/blog/friends-and-family-minecraft-server-terraform-recipe)
 - [Minimalist BeyondCorp style Identity Aware Proxy for Cloud Run](https://futurice.com/blog/identity-aware-proxy-for-google-cloud-run)
 - [Serverless Camunda Business Workflow Engine on Cloud Run](https://www.futurice.com/blog/serverless-camunda-terraform-recipe-using-cloud-run-and-cloud-sql)
+- [Serverless Camunda Business Workflow Engine on Cloud Run](https://futurice.com/blog/a-detailed-look-at-camunda-bpmn-application-development)
 - [Exporting Bigquery to Cloud Memorystore](https://www.futurice.com/blog/bigquery-to-memorystore)
  
 # Contribution

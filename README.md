@@ -16,10 +16,12 @@ Terraform is an ideal knowledge transfer tool that can communicate the minutea o
  
 A few of the recipes have associated blog posts.
  
+- [Terraform Recipe for WordPress on Fargate](https://futurice.com/blog/terraform-recipe-wordpress-fargate)
 - [OpenResty: a Swiss Army Proxy for Serverless; WAL, Slack, Zapier and Auth](https://futurice.com/blog/openresty-a-swiss-army-proxy-for-serverless)
 - [Low cost Friends and Family Minecraft server](https://www.futurice.com/blog/friends-and-family-minecraft-server-terraform-recipe)
 - [Minimalist BeyondCorp style Identity Aware Proxy for Cloud Run](https://futurice.com/blog/identity-aware-proxy-for-google-cloud-run)
 - [Serverless Camunda Business Workflow Engine on Cloud Run](https://www.futurice.com/blog/serverless-camunda-terraform-recipe-using-cloud-run-and-cloud-sql)
+- [Serverless Camunda Business Workflow Engine on Cloud Run](https://futurice.com/blog/a-detailed-look-at-camunda-bpmn-application-development)
 - [Exporting Bigquery to Cloud Memorystore](https://www.futurice.com/blog/bigquery-to-memorystore)
  
 # Contribution
@@ -1461,12 +1463,12 @@ Terraform receipe for running Camunda BPMN workflow engine serverlessly on Cloud
 Customize the base image in the main.tf locals.
 
 Read more on the blog
-- [Provisioning Serverless Camunda on Cloud Run](https://www.futurice.com/blog/serverless-camunda-terraform-recipe-using-cloud-run-and-cloud-sql) 
-- [Call external services with at-least-once delevery](https://www.futurice.com/blog/at-least-once-delivery-for-serverless-camunda
+- [Provisioning Serverless Ca
 
 
 # [google_cloud/camunda-secure](google_cloud/camunda-secure)
--workflow-automation)
+munda on Cloud Run](https://www.futurice.com/blog/serverless-camunda-terraform-recipe-using-cloud-run-and-cloud-sql) 
+- [Call external services with at-least-once delevery](https://www.futurice.com/blog/at-least-once-delivery-for-serverless-camunda-workflow-automation)
 
 
     #Camunda # Cloud Run #Cloud SQL #Cloud Build #Container Registry #Docker
