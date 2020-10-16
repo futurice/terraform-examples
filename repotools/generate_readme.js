@@ -4,7 +4,7 @@ const glob = require('glob');
 
 
 function directory(path) {
-  try {return path.match(/^(.*)\/_header_\/.*$/)[1]} catch {};
+  try {return path.match(/^(.*)\/_header_\/.*$/)[1]} catch(err) {};
   return path.match(/(?<dir>.*)\/[^/]*/)[1];
 }
 

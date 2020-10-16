@@ -1268,6 +1268,8 @@ Hosting static website using S3 is a very cost effective approach. Since, S3 web
 
 This terraform example demonstrates how to run a scalable wordpress site. In this exmaple, we have tried to use serverless technologies as much as possible. Hence, we chose to run the site on fargate and are using Aurora serverless as DB.
 
+Read more about this on the blog [Terraform Recipe for WordPress on Fargate](https://futurice.com/blog/terraform-recipe-wordpress-fargate)
+
 ## AWS Services
 
 We used the below AWS services in our example. The main motivation behind the selection of services is that we select as many serverless components as possible.
@@ -1460,18 +1462,18 @@ Customize the base image in the main.tf locals.
 
 Read more on the blog
 - [Provisioning Serverless Camunda on Cloud Run](https://www.futurice.com/blog/serverless-camunda-terraform-recipe-using-cloud-run-and-cloud-sql) 
-- [Call external services with at-least-once delevery](https://www.futurice.com/blog/at-least-once-delivery-for-serverless-camunda-workflow-automation)
+- [Call external services with at-least-once delevery](https://www.futurice.com/blog/at-least-once-delivery-for-serverless-camunda
+
+
+# [google_cloud/camunda-secure](google_cloud/camunda-secure)
+-workflow-automation)
 
 
     #Camunda # Cloud Run #Cloud SQL #Cloud Build #Container Registry #Docker
 
 ### Terraform setup
 
-Create service accoun
-
-
-# [google_cloud/camunda-secure](google_cloud/camunda-secure)
-t credentials for running terraform locally. Then
+Create service account credentials for running terraform locally. Then
 
     export GOOGLE_CREDENTIALS=<PATH TO SERVICE ACCOUNT JSON CREDS>
     gcloud auth activate-service-account --key-file $GOOGLE_CREDENTIALS
