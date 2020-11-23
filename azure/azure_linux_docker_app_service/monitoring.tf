@@ -1,5 +1,5 @@
 locals {
-  healthcheck_endpoint = "https://${azurerm_app_service.current.name}.azurewebsites.net/api/healthcheck"
+  healthcheck_endpoint = "https://${azurerm_app_service.current.default_site_hostname}/api/healthcheck"
 }
 
 # Action group to send an email for alerts
@@ -123,4 +123,3 @@ QUERY
     ]
   }
 }
-
