@@ -85,6 +85,28 @@ To regenerate the readme, run `npm run readme`
     - resource aws_s3_bucket
     - resource aws_s3_bucket_policy
     - resource random_string
+  - [aws/aws_vpc_msk](aws/aws_vpc_msk)
+    - resource aws_acmpca_certificate_authority
+    - resource aws_cloudwatch_log_group
+    - resource aws_eip
+    - resource aws_iam_instance_profile
+    - resource aws_iam_role
+    - resource aws_iam_role_policy_attachment
+    - resource aws_instance
+    - resource aws_internet_gateway
+    - resource aws_key_pair
+    - resource aws_kms_alias
+    - resource aws_kms_key
+    - resource aws_msk_cluster
+    - resource aws_msk_configuration
+    - resource aws_nat_gateway
+    - resource aws_route_table
+    - resource aws_route_table_association
+    - resource aws_security_group
+    - resource aws_subnet
+    - resource aws_vpc
+    - resource random_id
+    - resource random_uuid
   - [aws/static_website_ssl_cloudfront_private_s3](aws/static_website_ssl_cloudfront_private_s3)
     - resource aws_cloudfront_distribution
     - resource aws_cloudfront_origin_access_identity
@@ -1269,6 +1291,17 @@ Learn more about [effective caching strategies on CloudFront](../aws_reverse_pro
 
 
 
+# [aws/aws_vpc_msk](aws/aws_vpc_msk)
+# tf-msk
+Terraform deployment of an AWS VPC, MSK Cluster, (optional) ACM-PCA &amp; MSK Client
+
+[![Infrastructure Tests](aws/aws_vpc_msk/https://www.bridgecrew.cloud/badges/github/troydieter/tf-msk/general)](https://www.bridgecrew.cloud/link/badge?vcs=github&fullRepo=troydieter%2Ftf-msk&benchmark=INFRASTRUCTURE+SECURITY)
+<br>
+[![Infrastructure Tests](aws/aws_vpc_msk/https://www.bridgecrew.cloud/badges/github/troydieter/tf-msk/cis_aws)](https://www.bridgecrew.cloud/link/badge?vcs=github&fullRepo=troydieter%2Ftf-msk&benchmark=CIS+AWS+V1.2)
+<br>
+[![Infrastructure Tests](aws/aws_vpc_msk/https://www.bridgecrew.cloud/badges/github/troydieter/tf-msk/hipaa)](https://www.bridgecrew.cloud/link/badge?vcs=github&fullRepo=troydieter%2Ftf-msk&benchmark=HIPAA)
+
+
 # [aws/static_website_ssl_cloudfront_private_s3](aws/static_website_ssl_cloudfront_private_s3)
 # Static website hosted using S3 and cloudfront with SSL support
 
@@ -1436,7 +1469,11 @@ An example of a Node.js application can be found in `./example-app` directory.
 # [azure/layers](azure/layers)
 # Terraform Azure Layers example
 
-Azure resources may take a long time to create. Sometimes Terraform fails to spot that some resource actually requires another resource that has not been fully created yet. Layers help to ensure that all prerequisite resources for later ones are created before them.
+Azure resources may take a long time to create. Sometimes Terraform fails to spot that some resource actually requires another resourc
+
+
+# [azure/layers](azure/layers)
+e that has not been fully created yet. Layers help to ensure that all prerequisite resources for later ones are created before them.
 
 ## Try it out
 
@@ -1458,11 +1495,7 @@ sh destroy.sh ${USER}trylayers
 - `destroy.sh` takes a quick, resource-group based approach to wiping out the whole deployment.
 - `layers.tf` lists each layer with associated dependencies.
 - `main.tf` contains sample resources used on different layers.
-- `variables.sh` declares associated variables with sane defaults
-
-
-# [azure/layers](azure/layers)
-.
+- `variables.sh` declares associated variables with sane defaults.
 
 
 
