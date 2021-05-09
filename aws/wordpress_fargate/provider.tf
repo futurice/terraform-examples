@@ -1,5 +1,4 @@
 provider "aws" {
-  version = "~> 2.0"
 }
 
 terraform {
@@ -12,9 +11,7 @@ terraform {
 provider "aws" {
   alias   = "us_east_1"
   region  = "us-east-1"
-  version = "~> 2.0"
 }
 
 provider "random" {
-  version = "~> 2.2"
 }
