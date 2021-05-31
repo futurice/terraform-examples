@@ -14,7 +14,7 @@ resource "aws_efs_mount_target" "this" {
 
 resource "aws_security_group" "efs" {
   name        = "${var.prefix}-efs-${var.environment}"
-  description = "Allow traffic ffrom self"
+  description = "EFS security group"
   vpc_id      = module.vpc.vpc_id
 
   egress {
@@ -25,10 +25,10 @@ resource "aws_security_group" "efs" {
   }
 
   ingress {
-    from_port = 2049
-    to_port   = 2049
-    protocol  = "tcp"
-    self      = true
+    from_port       = 2049
+    to_port         = 2049
+    protocol        = "tcp"
+    security_groups = [aws_security_group.wordpress.id]
   }
   tags = var.tags
 }

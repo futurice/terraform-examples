@@ -114,10 +114,10 @@ resource "aws_security_group" "wordpress" {
   }
 
   ingress {
-    from_port       = 0
-    to_port         = 0
+    from_port       = 80
+    to_port         = 80
     protocol        = "tcp"
-    security_groups = [aws_security_group.alb.id, aws_security_group.efs.id]
+    security_groups = [aws_security_group.alb.id]
   }
 
   tags = var.tags
@@ -131,7 +131,7 @@ resource "aws_ecs_service" "this" {
   launch_type      = "FARGATE"
   platform_version = "1.4.0" // required for mounting efs
   network_configuration {
-    security_groups = [aws_security_group.alb.id, aws_security_group.db.id, aws_security_group.efs.id]
+    security_groups = [aws_security_group.wordpress.id]
     subnets         = module.vpc.private_subnets
   }
 

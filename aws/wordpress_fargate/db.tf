@@ -27,19 +27,20 @@ resource "aws_rds_cluster" "this" {
 }
 
 resource "aws_db_subnet_group" "this" {
-  name       = "${var.prefix}-${var.environment}"
-  subnet_ids = module.vpc.private_subnets
-  tags       = var.tags
+  name        = "${var.prefix}-${var.environment}"
+  description = "database security group"
+  subnet_ids  = module.vpc.private_subnets
+  tags        = var.tags
 }
 
 resource "aws_security_group" "db" {
   vpc_id = module.vpc.vpc_id
   name   = "${var.prefix}-db-${var.environment}"
   ingress {
-    protocol  = "tcp"
-    from_port = 3306
-    to_port   = 3306
-    self      = true
+    protocol        = "tcp"
+    from_port       = 3306
+    to_port         = 3306
+    security_groups = [aws_security_group.wordpress.id]
   }
 
   egress {
