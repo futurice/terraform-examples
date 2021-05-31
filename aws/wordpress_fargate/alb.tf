@@ -49,6 +49,7 @@ module "alb" {
     {
       "certificate_arn" = module.acm_alb.this_acm_certificate_arn
       "port"            = 443
+      "ssl_policy"      = "ELBSecurityPolicy-FS-1-2-Res-2020-10"
     },
   ]
 
