@@ -1,5 +1,6 @@
 resource "aws_efs_file_system" "this" {
   creation_token = "${var.prefix}-${var.environment}"
+  encrypted      = true
   tags           = var.tags
 }
 
