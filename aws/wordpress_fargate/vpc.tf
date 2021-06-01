@@ -8,7 +8,6 @@ module "vpc" {
   enable_nat_gateway     = true
   single_nat_gateway     = false
   one_nat_gateway_per_az = false
-  tags                   = var.tags
-  version                = "~>2.0"
+  version                = "~>3.0"
   enable_dns_hostnames   = true
 }

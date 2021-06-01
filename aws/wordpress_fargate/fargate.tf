@@ -1,7 +1,6 @@
 # Ref - https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_execution_IAM_role.html
 resource "aws_iam_role" "task_execution_role" {
   name = "${var.prefix}-task-execution-role-${var.environment}"
-  tags = var.tags
 
   assume_role_policy = <<EOF
 {
@@ -53,7 +52,6 @@ resource "aws_iam_role_policy_attachment" "task_execution_policy_attach" {
 
 resource "aws_iam_role" "task_role" {
   name = "${var.prefix}-task-role-${var.environment}"
-  tags = var.tags
 
   assume_role_policy = <<EOF
 {
@@ -119,8 +117,6 @@ resource "aws_security_group" "wordpress" {
     protocol        = "tcp"
     security_groups = [aws_security_group.alb.id, aws_security_group.efs.id]
   }
-
-  tags = var.tags
 }
 
 resource "aws_ecs_service" "this" {
@@ -215,7 +211,6 @@ CONTAINER_DEFINITION
 
 resource "aws_cloudwatch_log_group" "wordpress" {
   name              = "/${var.prefix}/${var.environment}/fg-task"
-  tags              = var.tags
   retention_in_days = var.log_retention_in_days
 }
 
@@ -337,8 +332,8 @@ resource "aws_route53_record" "wordpress" {
   type    = "A"
 
   alias {
-    name                   = module.alb.this_lb_dns_name
-    zone_id                = module.alb.this_lb_zone_id
+    name                   = module.alb.lb_dns_name
+    zone_id                = module.alb.lb_zone_id
     evaluate_target_health = true
   }
 }

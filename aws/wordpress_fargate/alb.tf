@@ -1,9 +1,8 @@
 module "acm_alb" {
   source      = "terraform-aws-modules/acm/aws"
-  version     = "~> v2.0"
+  version     = "~> v3.0"
   domain_name = var.public_alb_domain
   zone_id     = data.aws_route53_zone.this.zone_id
-  tags        = var.tags
 }
 
 resource "aws_security_group" "alb" {
@@ -31,14 +30,12 @@ resource "aws_security_group" "alb" {
     protocol  = "-1"
     self      = true
   }
-
-  tags = var.tags
 }
 
 
 module "alb" {
   source             = "terraform-aws-modules/alb/aws"
-  version            = "~> 5.0"
+  version            = "~> 6.0"
   name               = "${var.prefix}-${var.environment}"
   load_balancer_type = "application"
   vpc_id             = module.vpc.vpc_id
@@ -47,7 +44,7 @@ module "alb" {
 
   https_listeners = [
     {
-      "certificate_arn" = module.acm_alb.this_acm_certificate_arn
+      "certificate_arn" = module.acm_alb.acm_certificate_arn
       "port"            = 443
     },
   ]
@@ -59,5 +56,4 @@ module "alb" {
       backend_port     = 80
     }
   ]
-  tags = var.tags
 }
