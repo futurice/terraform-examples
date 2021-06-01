@@ -5,12 +5,12 @@ resource "random_string" "snapshot_suffix" {
 
 resource "aws_rds_cluster" "this" {
   cluster_identifier      = "${var.prefix}-${var.environment}"
-  engine                  = "aurora"
+  engine                  = "aurora-mysql"
   engine_mode             = "serverless"
   vpc_security_group_ids  = [aws_security_group.db.id]
   db_subnet_group_name    = aws_db_subnet_group.this.name
   engine_version          = var.db_engine_version
-  availability_zones      = data.aws_availability_zones.this.names
+  availability_zones      = slice(data.aws_availability_zones.this.names, 0, 3)
   database_name           = "wordpress"
   master_username         = var.db_master_username
   master_password         = var.db_master_password
