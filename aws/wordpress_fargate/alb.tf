@@ -3,7 +3,6 @@ module "acm_alb" {
   version     = "~> v3.0"
   domain_name = var.public_alb_domain
   zone_id     = data.aws_route53_zone.this.zone_id
-  tags        = var.tags
 }
 
 resource "aws_security_group" "alb" {
@@ -31,8 +30,6 @@ resource "aws_security_group" "alb" {
     protocol  = "-1"
     self      = true
   }
-
-  tags = var.tags
 }
 
 
@@ -59,5 +56,4 @@ module "alb" {
       backend_port     = 80
     }
   ]
-  tags = var.tags
 }

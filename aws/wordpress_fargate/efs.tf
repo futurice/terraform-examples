@@ -1,6 +1,5 @@
 resource "aws_efs_file_system" "this" {
   creation_token = "${var.prefix}-${var.environment}"
-  tags           = var.tags
 }
 
 resource "aws_efs_mount_target" "this" {
@@ -30,5 +29,4 @@ resource "aws_security_group" "efs" {
     protocol  = "tcp"
     self      = true
   }
-  tags = var.tags
 }
