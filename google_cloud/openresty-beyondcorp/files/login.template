@@ -23,7 +23,7 @@
           $("#token").text(access_token);
         } else if (urlParams.get('returnurl')) {
           const returnurl = urlParams.get('returnurl');
-          console.log("Returnng to: ", returnurl);
+          console.log("Returning to: ", returnurl);
           window.location.replace(returnurl);
         }
       }
