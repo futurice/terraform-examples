@@ -2,9 +2,9 @@
 
 Very fast Serverless OpenResty based proxy that can wrap upstream binaries with a login. Furthermore, we have examples of 
 - Local development environment
-- Slack/Zapier intergration.
+- Slack/Zapier integration
 - A Write Ahead Log
-- Google Secret Manager intergration
+- Google Secret Manager integration
 
 Read more on the [OpenResty: a Swiss Army Proxy for Serverless; WAL, Slack, Zapier and Auth](https://futurice.com/blog/openresty-a-swiss-army-proxy-for-serverless) blog.
 
@@ -19,12 +19,12 @@ Build on top of OpenResty, hosted on Cloud Run (and excellent match)
 If upstream is slow (e.g. scaling up), you can redirect to a WAL. Latency is the time to store the message. 
 A different location plays back the WAL with retries so you can be sure the request is eventially handled.
 
-## Extensions Securing a Slack Intergration
+## Extensions Securing a Slack Integration
 
-Intergration with Slack
+Integration with Slack
 Reads a secret from Google secrets manager and verifies the signature HMAC
 
-## Extensions Securing a Zapier Intergration
+## Extensions Securing a Zapier Integration
 
 Zapier can be protected with an Oauth account
 
