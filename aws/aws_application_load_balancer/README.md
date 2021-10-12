@@ -1,43 +1,21 @@
 # aws_application_load_balancer
   
-These templates implements a application load balancer, and associated necessary steps require for loadbalancing. This includes:
+These templates implements a application load balancer, and associated necessary steps require for loadbalancing. We used below services : 
 
 - Security groups for instances and loadbalancer
 - Target grout attachment for instances
 - Template for launching instances
 - Load balancer
 
-## Step 1: Provider.tf
-First write down provider template, enter region you want to provision load-balancer and provide access key and secret key
+
+-- Mention your region, secret and access keys, vpc_id, subnet_ids and ami_id required in the templates.
+
+To run these templates, clone the repository and run `terraform apply` within its own directory.
+
+For example:
 
 ```tf
-provider "aws" {
-  region     = "Enter_Region"
-  access_key = "Enter_Your_Access_Key"
-  secret_key = "Enter_Secret_Key"
-}
+$ git clone https://github.com/futurice/terraform-examples.git
+$ cd terraform-examples/aws/aws_application_load_balancer/
+$ terraform apply
 ```
-
-Assuming you have the [AWS provider](https://www.terraform.io/docs/providers/aws/index.html) set up, and a DNS zone for `example.com` configured on Route 53:
-
-```tf
-# Lambda functions can only be uploaded as ZIP files, so we need to package our JS file into one
-data "archive_file" "lambda_zip" {
-  type        = "zip"
-  source_file = "${path.module}/index.js"
-  output_path = "${path.module}/lambda.zip"
-}
-
-module "my_api" {
-  # Available inputs: https://github.com/futurice/terraform-utils/tree/master/aws_lambda_api#inputs
-  # Check for updates: https://github.com/futurice/terraform-utils/compare/v11.0...master
-  source = "git::ssh://git@github.com/futurice/terraform-utils.git//aws_lambda_api?ref=v11.0"
-
-  api_domain             = "api.example.com"
-  lambda_logging_enabled = true
-
-  # lambda_zip.output_path will be absolute, i.e. different on different machines.
-  # This can cause Terraform to notice differences that aren't actually there, so let's convert it to a relative one.
-  # https://github.com/hashicorp/terraform/issues/7613#issuecomment-332238441
-  function_zipfile = "${substr(data.archive_file.lambda_zip.output_path, length(path.cwd) + 1, -1)}"
-}
