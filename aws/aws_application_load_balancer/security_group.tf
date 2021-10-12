@@ -1,7 +1,7 @@
 resource "aws_security_group" "allow_http" {
   name        = "alb_http"
   description = "Allow http traffic to alb"
-  vpc_id      = "enter_your_vpc_id"
+  vpc_id      = "enter_vpc_id"
 
   ingress {
     description = "http for alb"
@@ -26,7 +26,7 @@ resource "aws_security_group" "allow_http" {
 resource "aws_security_group" "allow_http_instances" {
   name        = "instances_http"
   description = "Allow http traffic to instances"
-  vpc_id      = "vpc-0286b0e40e1e91265"
+  vpc_id      = "enter_vpc_id"
 
   ingress {
     description = "http for instances"
