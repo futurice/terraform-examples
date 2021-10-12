@@ -1,9 +1,9 @@
 resource "aws_instance" "web1" {
-  ami           = "enter-your-ami-id"
+  ami           = "enter-ami-id"
   instance_type = "t2.micro"
   subnet_id   = "enter-subnet-id"
   vpc_security_group_ids = [aws_security_group.allow_http_instances.id]
-  key_name = "enter-your-key-name"
+  key_name = "enter-key-name"
   provisioner "remote-exec" {
     inline = [
       "sudo yum install httpd -y",
@@ -26,7 +26,7 @@ resource "aws_instance" "web2" {
   instance_type = "t2.micro"
   subnet_id   = "enter-your-subnet-id"
   vpc_security_group_ids = [aws_security_group.allow_http_instances.id]
-  key_name = "enter-your-key-name"
+  key_name = "enter-key-name"
   provisioner "remote-exec" {
     inline = [
       "sudo yum install https -y",
