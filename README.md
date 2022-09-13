@@ -10,7 +10,7 @@ Lots of Terraform recipes for doing things, aimed for copy and pasting into proj
  
 # Knowledge-as-code
  
-Terraform is an ideal knowledge transfer tool that can communicate the minutea of using certain technology combinations. We use this at [Futurice](https://futurice.com?source=terraform-examples) to disseminate hard won learnings across projects and industries, increasing the development velocity for all of our clients.
+Terraform is an ideknowledge transfer tool that can communicate the minutea of using certain technology combinations. We use this at [Futurice](https://futurice.com?source=terraform-examples) to disseminate hard won learnings across projects and industries, increasing the development velocity for all of our clients.
  
 # Read more about specific projects
  
