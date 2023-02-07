@@ -48,7 +48,8 @@ module "alb" {
   https_listeners = [
     {
       "certificate_arn" = module.acm_alb.this_acm_certificate_arn
-      "port"            = 443
+      #"port"            = 443 佐藤テスト変更
+       "port"            = *
     },
   ]
 
